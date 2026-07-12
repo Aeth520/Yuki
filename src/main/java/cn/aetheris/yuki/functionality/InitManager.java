@@ -37,7 +37,7 @@ public final class InitManager {
         initializersOnStart.put(AntiCheatAPInit.class, new AntiCheatAPInit());
         initializersOnStart.put(TickInit.class, new TickInit());
         initializersOnStart.put(AntiCheatUtil.class, PluginLoader.INSTANCE.getExternalAPI());
-        initializersOnStart.put(SpectateManager.class, new SpectateManager());
+        initializersOnStart.put(SpectateManager.class, PluginLoader.INSTANCE.getSpectateManager());
         initializersOnStart.put(ExperimentalWarnInit.class, new ExperimentalWarnInit());
 
         initializersOnHook.put(HookInit.class, new HookInit());
