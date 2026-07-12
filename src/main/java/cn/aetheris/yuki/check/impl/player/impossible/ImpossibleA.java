@@ -18,13 +18,11 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerVe
 @CheckData(name = "ImpossibleA (Pitch)", configName = "ImpossibleA", description = "Invalid Pitch", type = CheckType.IMPOSSIBLE)
 public final class ImpossibleA extends Check implements PacketCheck {
 
-    private boolean teleport;
     private int sinceTeleportTick;
     private int leavingVehicleTick;
 
     public ImpossibleA(PlayerData player) {
         super(player);
-        teleport = false;
     }
 
     @Override
@@ -50,7 +48,6 @@ public final class ImpossibleA extends Check implements PacketCheck {
         sinceTeleportTick++;
 
         if (sinceTeleportTick <= 10 || player.getSetbackTeleportUtil().shouldBlockMovement()) {
-            teleport = false;
             return;
         }
 
@@ -99,7 +96,6 @@ public final class ImpossibleA extends Check implements PacketCheck {
             }
         } else if (event.getPacketType() == PacketType.Play.Server.PLAYER_POSITION_AND_LOOK) {
             WrapperPlayServerPlayerPositionAndLook playerPositionAndLook = new WrapperPlayServerPlayerPositionAndLook(event);
-            teleport = true;
             sinceTeleportTick = 0;
             if (shouldModifyPackets()) {
                 final float pitch = playerPositionAndLook.getPitch();
@@ -110,7 +106,6 @@ public final class ImpossibleA extends Check implements PacketCheck {
             }
         } else if (event.getPacketType() == PacketType.Play.Server.VEHICLE_MOVE) {
             WrapperPlayServerVehicleMove vehicleMove = new WrapperPlayServerVehicleMove(event);
-            teleport = true;
             sinceTeleportTick = 0;
             final float pitch = vehicleMove.getPitch();
             if (shouldModifyPackets()) {

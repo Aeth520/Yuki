@@ -37,6 +37,7 @@ public final class PlayerJoinQuitListener extends AbstractListener {
                 attachment.setPermission("yuki.commands.*", true);
                 attachment.setPermission("yuki.commands", true);
                 player.recalculatePermissions();
+                tempAttachments.put(player.getUniqueId(), attachment);
                 if (data != null) data.updatePermissions();
             }
         }
