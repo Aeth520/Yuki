@@ -21,7 +21,6 @@ public class ExpressCommandInstance {
                 CheckerFactory.assignable(Float.class),
                 CheckerFactory.assignable(Character.class),
                 CheckerFactory.assignable(Integer.class),
-                CheckerFactory.assignable(System.class),
                 CheckerFactory.assignable(ExpressAPI.class)
         ));
         QLExpressRunStrategy.setForbidInvokeSecurityRiskMethods(true);
