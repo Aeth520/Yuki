@@ -42,40 +42,36 @@ public final class KillAuraD extends Check implements PacketCheck {
                     this.snapAngle = angle;
                 }
             }
-            if (event.getPacketType() == PacketType.Play.Client.PLAYER_DIGGING) {
-                WrapperPlayClientPlayerDigging digType = new WrapperPlayClientPlayerDigging(event);
-                if (digType.getAction() == DiggingAction.FINISHED_DIGGING
-                        || digType.getAction() == DiggingAction.CANCELLED_DIGGING) {
-                    lastDoStuffTime = time();
-                }
+        } else if (event.getPacketType() == PacketType.Play.Client.PLAYER_DIGGING) {
+            WrapperPlayClientPlayerDigging digType = new WrapperPlayClientPlayerDigging(event);
+            if (digType.getAction() == DiggingAction.FINISHED_DIGGING
+                    || digType.getAction() == DiggingAction.CANCELLED_DIGGING) {
+                lastDoStuffTime = time();
             }
-            if (event.getPacketType() == PacketType.Play.Client.USE_ITEM) {
-                if (event.getPacketType() == PacketType.Play.Client.INTERACT_ENTITY) {
-                    WrapperPlayClientInteractEntity interact = new WrapperPlayClientInteractEntity(event);
-                    if (interact.getAction() == WrapperPlayClientInteractEntity.InteractAction.ATTACK) {
-                        final double stuffDiff = time() - lastDoStuffTime;
-                        if (stuffDiff <= 100) {
-                            if (buffer2++ > 3) {
-                                if (flagAndAlert("(Stuff)\ndiff= " + stuffDiff)) {
-                                    player.mitigateDamage();
-                                    buffer2 -= getDecay();
-                                }
-                            } else {
-                                buffer2 -= getDecay();
-                            }
+        } else if (event.getPacketType() == PacketType.Play.Client.INTERACT_ENTITY) {
+            WrapperPlayClientInteractEntity interact = new WrapperPlayClientInteractEntity(event);
+            if (interact.getAction() == WrapperPlayClientInteractEntity.InteractAction.ATTACK) {
+                final double stuffDiff = time() - lastDoStuffTime;
+                if (stuffDiff <= 100) {
+                    if (buffer2++ > 3) {
+                        if (flagAndAlert("(Stuff)\ndiff= " + stuffDiff)) {
+                            player.mitigateDamage();
+                            buffer2 -= getDecay();
                         }
-                        final double snapDiff = time() - lastSnapTime;
-                        if (snapDiff <= 150L) {
-                            if (buffer3++ > 2) {
-                                if (flagAndAlert("(Snap)\ndiff= " + snapDiff + "\nangle= " + Math.round(snapAngle * 1000) / 1000F)) {
-                                    player.mitigateDamage();
-                                    buffer3 -= getDecay();
-                                }
-                                lastSnapTime = 0L;
-                            } else {
-                                buffer3 -= getDecay();
-                            }
+                    } else {
+                        buffer2 -= getDecay();
+                    }
+                }
+                final double snapDiff = time() - lastSnapTime;
+                if (snapDiff <= 150L) {
+                    if (buffer3++ > 2) {
+                        if (flagAndAlert("(Snap)\ndiff= " + snapDiff + "\nangle= " + Math.round(snapAngle * 1000) / 1000F)) {
+                            player.mitigateDamage();
+                            buffer3 -= getDecay();
                         }
+                        lastSnapTime = 0L;
+                    } else {
+                        buffer3 -= getDecay();
                     }
                 }
             }
