@@ -39,7 +39,7 @@ public final class ViaPipelineEnforcer {
         for (Player player : Bukkit.getOnlinePlayers()) {
             enforce(player, true);
         }
-        LogUtils.console("&3Yuki &8» &aEnforced ViaVersion pipeline order for all online players");
+        LogUtils.consolePrefixed("&aEnforced ViaVersion pipeline order for all online players");
     }
 
     public static void scheduleEnforce(Player player, long delayTicks) {
@@ -62,12 +62,12 @@ public final class ViaPipelineEnforcer {
 
             if (relocated) {
                 if (!silent) {
-                    LogUtils.console("&3Yuki &8» &aViaVersion pipeline order corrected for &b" + playerName);
+                    LogUtils.consolePrefixed("&aViaVersion pipeline order corrected for &b" + playerName);
                 }
             }
         } catch (Exception e) {
             if (!silent) {
-                LogUtils.console("&3Yuki &8» &cFailed to verify ViaVersion pipeline order for &b" + playerName + "&c: " + e.getMessage());
+                LogUtils.consolePrefixed("&cFailed to verify ViaVersion pipeline order for &b" + playerName + "&c: " + e.getMessage());
             }
         }
 
@@ -114,7 +114,7 @@ public final class ViaPipelineEnforcer {
         }
 
         if (!silent) {
-            LogUtils.console("&3Yuki &8» &eViaVersion decoder is ahead of PacketEvents decoder for &b" + playerName + "&e, relocating...");
+            LogUtils.consolePrefixed("&eViaVersion decoder is ahead of PacketEvents decoder for &b" + playerName + "&e, relocating...");
         }
         ChannelHandler handler = pipeline.get(PacketEvents.DECODER_NAME);
         if (handler == null) return false;
@@ -136,7 +136,7 @@ public final class ViaPipelineEnforcer {
         }
 
         if (!silent) {
-            LogUtils.console("&3Yuki &8» &eViaVersion encoder is ahead of PacketEvents encoder for &b" + playerName + "&e, relocating...");
+            LogUtils.consolePrefixed("&eViaVersion encoder is ahead of PacketEvents encoder for &b" + playerName + "&e, relocating...");
         }
         ChannelHandler handler = pipeline.get(PacketEvents.ENCODER_NAME);
         if (handler == null) return false;

@@ -59,7 +59,7 @@ public final class PluginLoader {
         initManager.hook();
 
         MHDFScheduler.getAsyncScheduler().runTaskLater(Yuki.getInstance(), () -> {
-            LogUtils.console("&3Yuki &8» &aAntiCheat enabled &7(&3" + (System.currentTimeMillis() - startTime) + "&7ms&a)");
+            LogUtils.consolePrefixed("&aAntiCheat enabled &7(&3" + (System.currentTimeMillis() - startTime) + "&7ms&a)");
         }, 10L);
     }
 
@@ -91,7 +91,7 @@ public final class PluginLoader {
                 MHDFScheduler.cancel(plugin);
                 plugin.disablePlugin();
             }, 20L);
-            LogUtils.console("&3Yuki &8» &cGoodbye!");
+            LogUtils.consolePrefixed("&cGoodbye!");
         }
     }
 }

@@ -18,10 +18,10 @@ public final class PayPluginHook extends AbstractHook {
                     && !serverName.contains("大厅")
                     && !serverName.contains("lobby")
                     && !serverName.contains("主城")) {
-                LogUtils.console("&3Yuki &8» &c请你将DataManager配置中的ServerName改为带有hub或者大厅,否则该Hook将不会生效!");
+                LogUtils.consolePrefixed("&c请你将DataManager配置中的ServerName改为带有hub或者大厅,否则该Hook将不会生效!");
             return;
         }
-        LogUtils.console("&3Yuki &8» &c检查到您开启了7yPay的Hook,这可能会造成服务器崩溃或者刷物品的漏洞!");
+        LogUtils.consolePrefixed("&c检查到您开启了7yPay的Hook,这可能会造成服务器崩溃或者刷物品的漏洞!");
             enabled = true;
         }
     }

@@ -27,7 +27,7 @@ public final class PacketPlayerJoinQuit extends AbstractPacketListener {
     public void onPacketSend(PacketSendEvent event) {
         if (event.getPacketType() == PacketType.Login.Server.LOGIN_SUCCESS) {
             User user = event.getUser();
-            LogUtils.console("&3Yuki &8» &aRegistering user &b" + user.getName() +
+            LogUtils.consolePrefixed("&aRegistering user &b" + user.getName() +
                     " &7(" + user.getClientVersion().getReleaseName() + ") &awith uuid " + user.getUUID());
             event.getTasksAfterSend().add(() -> PluginLoader.INSTANCE.getPlayerDataManager().addUser(user));
             MHDFScheduler.getAsyncScheduler().runTaskLater(Yuki.getInstance(), () -> {
@@ -74,7 +74,7 @@ public final class PacketPlayerJoinQuit extends AbstractPacketListener {
                 PluginLoader.INSTANCE.getAlertManager().handlePlayerQuit(player.getUniqueId());
                 PluginLoader.INSTANCE.getSpectateManager().onQuit(player.getUniqueId());
                 AnalysisA.DEBUG_PLAYERS.remove(player.getName());
-                LogUtils.console("&3Yuki &8» &fHandling disconnection for " + user.getName());
+                LogUtils.consolePrefixed("&fHandling disconnection for " + user.getName());
             }
         }, 5L);
     }

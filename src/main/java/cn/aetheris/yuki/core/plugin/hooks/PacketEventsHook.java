@@ -58,10 +58,10 @@ public final class PacketEventsHook extends AbstractHook {
             return;
         }
         if (type.equalsIgnoreCase("bukkit") && Yuki.getInstance().getPacketEventsManager().getServerVersion().isOlderThan(ServerVersion.V_1_17)) {
-            LogUtils.console("&3Yuki &8» &c检查到您的服务器低于 &b1.17 &c而您使用了 &bBukkit &c的动作收包 这很可能造成一些错误或者误判!!!");
+            LogUtils.consolePrefixed("&c检查到您的服务器低于 &b1.17 &c而您使用了 &bBukkit &c的动作收包 这很可能造成一些错误或者误判!!!");
         }
         if (type.equalsIgnoreCase("packet") && Yuki.getInstance().getPacketEventsManager().getServerVersion().isNewerThanOrEquals(ServerVersion.V_1_17)) {
-            LogUtils.console("&3Yuki &8» &c检查到您的服务器高于 &b1.17 &c而您使用了 &bPacket &c的动作收包 这很可能造成一些错误或者误判!!!");
+            LogUtils.consolePrefixed("&c检查到您的服务器高于 &b1.17 &c而您使用了 &bPacket &c的动作收包 这很可能造成一些错误或者误判!!!");
         }
     }
 
@@ -84,7 +84,7 @@ public final class PacketEventsHook extends AbstractHook {
         for (String[] pluginInfo : CONFLICT_PLUGINS) {
             Plugin plugin = pluginManager.getPlugin(pluginInfo[0]);
             if (plugin != null && plugin.isEnabled()) {
-                LogUtils.console("&3Yuki &8» &c" + pluginInfo[1]);
+                LogUtils.consolePrefixed("&c" + pluginInfo[1]);
             }
         }
     }
@@ -92,7 +92,7 @@ public final class PacketEventsHook extends AbstractHook {
     
     @Override
     public void unhook() {
-        LogUtils.console("&3Yuki &8» &fTerminate PacketEvent...");
+        LogUtils.consolePrefixed("&fTerminate PacketEvent...");
 
 
         if (Bukkit.getOnlinePlayers().isEmpty()) {

@@ -22,7 +22,7 @@ public final class ExemptInit implements Init {
                 User user = PacketEvents.getAPI().getPlayerManager().getUser(player);
                 if (user != null) {
                     PluginLoader.INSTANCE.getPlayerDataManager().exemptUsers.add(user);
-                    LogUtils.console("&3Yuki &8» &f" + player.getName() + " exempt " + user.getName() + " &7(Online Player?)");
+                    LogUtils.consolePrefixed("&f" + player.getName() + " exempt " + user.getName() + " &7(Online Player?)");
                 }
             }
         });

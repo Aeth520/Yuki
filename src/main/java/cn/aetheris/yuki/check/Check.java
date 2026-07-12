@@ -297,7 +297,7 @@ public class Check implements AbstractCheck {
     }
 
     public void kickPlayer() {
-        LogUtils.console("&3Yuki &8» &cKick by &b" + getConfigName() + " p= " + player.getName());
+        LogUtils.consolePrefixed("&cKick by &b" + getConfigName() + " p= " + player.getName());
         player.disconnect(Component.translatable(PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("kick.default")));
     }
 

@@ -32,8 +32,8 @@ public final class ViolationDatabaseManager {
     }
 
     public void start() {
-        LogUtils.console("&3Yuki &8» &aDetects that &b" + dataManagerType + "&a is being used as the database schema.");
-        LogUtils.console("&3Yuki &8» &aInitialising &b" + dataManagerType + "&a in database...");
+        LogUtils.consolePrefixed("&aDetects that &b" + dataManagerType + "&a is being used as the database schema.");
+        LogUtils.consolePrefixed("&aInitialising &b" + dataManagerType + "&a in database...");
 
         BackendRegistry registry = BackendRegistry.getInstance();
         registry.clear();
@@ -43,7 +43,7 @@ public final class ViolationDatabaseManager {
         String resolvedType = resolveType(dataManagerType);
         backend = registry.getOrDefault(resolvedType, "sqlite");
         if (backend == null) {
-            LogUtils.console("&3Yuki &8» &cNo storage backend available, defaulting to SQLite.");
+            LogUtils.consolePrefixed("&cNo storage backend available, defaulting to SQLite.");
             backend = registry.get("sqlite");
         }
 
@@ -57,7 +57,7 @@ public final class ViolationDatabaseManager {
             }
         }
 
-        LogUtils.console("&3Yuki &8» &aDatabase Initialized!");
+        LogUtils.consolePrefixed("&aDatabase Initialized!");
     }
 
     private String resolveType(String type) {
@@ -65,7 +65,7 @@ public final class ViolationDatabaseManager {
             case "mongodb" -> "mongodb";
             case "h2", "sqlite", "mysql", "mariadb" -> "sqlite";
             default -> {
-                LogUtils.console("&3Yuki &8» &c" + type + " &cis unknown database type, default is SQLite.");
+                LogUtils.consolePrefixed("&c" + type + " &cis unknown database type, default is SQLite.");
                 yield "sqlite";
             }
         };

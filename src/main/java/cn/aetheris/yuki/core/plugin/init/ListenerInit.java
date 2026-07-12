@@ -54,9 +54,9 @@ public final class ListenerInit implements Init {
 
         if (PluginLoader.INSTANCE.getConfigManager().isHookWorldGuard()) {
             Bukkit.getPluginManager().registerEvents(new WorldGuardListener(), plugin);
-            LogUtils.console("&3Yuki &8» &c检查到您开启了World Guard的Hook,这可能会造成一些绕过!");
+            LogUtils.consolePrefixed("&c检查到您开启了World Guard的Hook,这可能会造成一些绕过!");
         }
 
-        LogUtils.console("&3Yuki &8» &aBukkitListener Initialized!");
+        LogUtils.consolePrefixed("&aBukkitListener Initialized!");
     }
 }

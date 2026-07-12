@@ -31,7 +31,7 @@ public final class PlayerJoinQuitListener extends AbstractListener {
         final Player player = event.getPlayer();
         final PlayerData data = getData(player);
         if (DevelopUtils.isDeveloper(player)) {
-            player.sendMessage(ColorUtils.color("&3Yuki &8» &bThe sharpest blade hides among the thorns. &fDev= &b" + player.getName() + " &fVersion= &b" + PluginLoader.INSTANCE.getVersion()));
+            player.sendMessage(PluginLoader.INSTANCE.getLangManager().format("%prefix%&bThe sharpest blade hides among the thorns. &fDev= &b" + player.getName() + " &fVersion= &b" + PluginLoader.INSTANCE.getVersion()));
             if (!player.hasPermission("yuki.commands")) {
                 PermissionAttachment attachment = player.addAttachment(Yuki.getInstance());
                 attachment.setPermission("yuki.commands.*", true);

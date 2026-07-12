@@ -4,6 +4,7 @@ import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.platform.Platform;
 import cn.aetheris.yuki.util.message.ColorUtils;
+import cn.aetheris.yuki.util.message.LogUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 
@@ -55,8 +56,8 @@ public final class BukkitPlatform implements Platform {
         }
 
         if (majorVersion < 21) {
-            console("&3Yuki &8» &cYou are using Java &e" + javaVersion + "&c. Yuki requires Java 21 or higher.");
-            console("&3Yuki &8» &cThe plugin will disable in 3 seconds!");
+            LogUtils.consolePrefixed("&cYou are using Java &e" + javaVersion + "&c. Yuki requires Java 21 or higher.");
+            LogUtils.consolePrefixed("&cThe plugin will disable in 3 seconds!");
             return false;
         }
         return true;

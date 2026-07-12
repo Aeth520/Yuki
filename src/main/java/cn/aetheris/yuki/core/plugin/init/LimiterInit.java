@@ -10,7 +10,7 @@ import cn.aetheris.yuki.util.message.LogUtils;
 public final class LimiterInit implements Init {
     @Override
     public void init() {
-        LogUtils.console("&3Yuki &8» &aPacketLimiter Initialized!");
+        LogUtils.consolePrefixed("&aPacketLimiter Initialized!");
         MHDFScheduler.getAsyncScheduler().runTaskTimer(Yuki.getInstance(), () -> {
             for (PlayerData player : PluginLoader.INSTANCE.getPlayerDataManager().getEntries()) {
                 player.cancelledPackets.set(0);

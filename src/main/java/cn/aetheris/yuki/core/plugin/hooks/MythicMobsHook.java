@@ -14,7 +14,7 @@ public final class MythicMobsHook extends AbstractHook {
         final Plugin mythicMobs = Bukkit.getPluginManager().getPlugin("MythicMobs");
         if (PluginLoader.INSTANCE.getConfigManager().isHookMythicMobs() && mythicMobs != null) {
             if (!mythicMobs.getDescription().getVersion().startsWith("5")) {
-                LogUtils.console("&3Yuki &8» &cMythicMobs的版本不受支持! (" + mythicMobs.getDescription().getVersion() + ")!");
+                LogUtils.consolePrefixed("&cMythicMobs的版本不受支持! (" + mythicMobs.getDescription().getVersion() + ")!");
                 return;
             }
             enabled = true;

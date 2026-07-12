@@ -13,6 +13,6 @@ public final class AntiCheatAPInit implements Init {
     @Override
     public void init() {
         Bukkit.getServicesManager().register(AbstractAPI.class, PluginLoader.INSTANCE.getExternalAPI(), Yuki.getInstance(), ServicePriority.Normal);
-        LogUtils.console("&3Yuki &8» &aPlayerAPI Initialized!");
+        LogUtils.consolePrefixed("&aPlayerAPI Initialized!");
     }
 }

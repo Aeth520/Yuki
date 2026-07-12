@@ -10,7 +10,7 @@ public final class PaperMCHook extends AbstractHook {
     public void hook() {
         if (Yuki.getInstance().getPacketEventsManager().getServerVersion().isNewerThan(ServerVersion.V_1_11_2)
                 && !Boolean.getBoolean("paper.explicit-flush")) {
-            LogUtils.console("&3Yuki &8» &c您需要为您的服务器启动参数添加 &e-Dpaper.explicit-flush=true &c参数才能获取Reach/HitBoxs额外的精准度!");
+            LogUtils.consolePrefixed("&c您需要为您的服务器启动参数添加 &e-Dpaper.explicit-flush=true &c参数才能获取Reach/HitBoxs额外的精准度!");
             super.enabled = true;
         }
     }

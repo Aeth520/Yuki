@@ -106,7 +106,7 @@ public final class PunishmentManager {
                 groups.add(new PunishGroup(checksList, parsed, removeViolationsAfter));
             }
         } catch (Exception e) {
-            LogUtils.console("&3Yuki &8» &cPunishment.yml Error" + "\n&c" + e.getMessage());
+            LogUtils.consolePrefixed("&cPunishment.yml Error" + "\n&c" + e.getMessage());
         }
     }
 

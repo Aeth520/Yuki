@@ -56,8 +56,8 @@ public final class TickInit implements Init, Listener {
             logUnsupportedCoreError();
         }
 
-        LogUtils.console("&3Yuki &8» &aTickManager Initialized!");
-        LogUtils.console("&3Yuki &8» &aAntiCheat Initialized!");
+        LogUtils.consolePrefixed("&aTickManager Initialized!");
+        LogUtils.consolePrefixed("&aAntiCheat Initialized!");
     }
 
     private void onEndOfTick(PlayerData player) {
@@ -109,7 +109,7 @@ public final class TickInit implements Init, Listener {
 
     private void logUnsupportedCoreError() {
         for (int i = 0; i < 4; i++) {
-            LogUtils.console("&3Yuki &8» &c检测到不支持的服务器核心！");
+            LogUtils.consolePrefixed("&c检测到不支持的服务器核心！");
         }
     }
 }

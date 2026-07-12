@@ -22,7 +22,7 @@ public final class BackendRegistry {
     public void register(Backend backend) {
         String type = backend.getType().toLowerCase();
         backends.put(type, backend);
-        LogUtils.console("&3Yuki &8» &7Registered storage backend: &b" + type);
+        LogUtils.consolePrefixed("&7Registered storage backend: &b" + type);
     }
 
     public void unregister(String type) {

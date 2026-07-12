@@ -60,6 +60,6 @@ public final class PacketListenerInit implements Init {
             PacketEvents.getAPI().getEventManager().registerListener(new BasePacketWorldReader());
         }
 
-        LogUtils.console("&3Yuki &8» &aPacketManager Initialized!");
+        LogUtils.consolePrefixed("&aPacketManager Initialized!");
     }
 }

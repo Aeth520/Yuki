@@ -13,8 +13,8 @@ public final class TABHook extends AbstractHook {
         if (Bukkit.getPluginManager().getPlugin("TAB") != null
                 && HookInit.getViaPluginHook().isEnabled()
                 && Yuki.getInstance().getPacketEventsManager().getServerVersion().isNewerThanOrEquals(ServerVersion.V_1_13)) {
-            LogUtils.console("&3Yuki &8» &c如果您的 &fTAB &c插件中的配置关闭了 &f'compensate-for-packetevents-bug' &c!");
-            LogUtils.console("&3Yuki &8» &c这很有可能造成绕过和误判,请立刻关闭这个选项!");
+            LogUtils.consolePrefixed("&c如果您的 &fTAB &c插件中的配置关闭了 &f'compensate-for-packetevents-bug' &c!");
+            LogUtils.consolePrefixed("&c这很有可能造成绕过和误判,请立刻关闭这个选项!");
             super.enabled = true;
         }
     }

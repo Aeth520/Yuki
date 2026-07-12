@@ -16,7 +16,7 @@ public final class BadPacketsO extends Check implements PacketCheck {
 
     public void startFlag(String flag, int skips) {
         if (flagAndAlert(flag)) {
-            LogUtils.console("&3Yuki &8» &f" + player.getName() + " Skipped &b" + skips + " transaction!");
+            LogUtils.consolePrefixed("&f" + player.getName() + " Skipped &b" + skips + " transaction!");
         }
     }
 }

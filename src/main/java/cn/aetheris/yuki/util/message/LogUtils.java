@@ -28,6 +28,12 @@ public final class LogUtils {
     }
 
     
+    public static void consolePrefixed(final String info) {
+        String prefix = PluginLoader.INSTANCE.getConfigManager().getConfig().getStringElse("anticheat-prefix", "&3Yuki &8» &f");
+        console(prefix + info);
+    }
+
+    
     public static void debug(final String info) {
         if (isDevelopEnabled()) {
             processLogging(info, "debug", DEBUG_PREFIX, PluginLoader.INSTANCE.getAlertManager().getEnabledDebug());

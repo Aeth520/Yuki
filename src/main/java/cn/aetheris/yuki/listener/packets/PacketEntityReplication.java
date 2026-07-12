@@ -337,7 +337,7 @@ public class PacketEntityReplication extends Check implements PacketCheck {
                     }
                 } else {
                     
-                    LogUtils.console("&3Yuki &8» &cServer sent invalid attach entity packet: " + vehicleID + " -> " + attachID);
+                    LogUtils.consolePrefixed("&cServer sent invalid attach entity packet: " + vehicleID + " -> " + attachID);
                 }
             }
         } else if (event.getPacketType() == PacketType.Play.Server.DESTROY_ENTITIES) {

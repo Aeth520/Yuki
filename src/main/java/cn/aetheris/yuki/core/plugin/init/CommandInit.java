@@ -14,6 +14,6 @@ public final class CommandInit implements Init {
         
         registerCommand(Yuki.getInstance(), new MainCommand(), "主命令", "yuki", "gr");
 
-        LogUtils.console("&3Yuki &8» &aCommands Initialized!");
+        LogUtils.consolePrefixed("&aCommands Initialized!");
     }
 }

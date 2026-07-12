@@ -6,6 +6,7 @@ import cn.aetheris.yuki.listener.bukkit.ViaVersionCompatListener;
 import cn.aetheris.yuki.functionality.PacketEventsManager;
 import cn.aetheris.yuki.platform.Platform;
 import cn.aetheris.yuki.platform.bukkit.BukkitPlatform;
+import cn.aetheris.yuki.util.message.LogUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.Validate;
@@ -46,7 +47,7 @@ public final class Yuki extends JavaPlugin {
         packetEventsManager = new PacketEventsManager();
         packetEventsManager.load();
 
-        console("&3Yuki &8» &aPacketEvent Initialized!");
+        LogUtils.consolePrefixed("&aPacketEvent Initialized!");
     }
 
     @Override
