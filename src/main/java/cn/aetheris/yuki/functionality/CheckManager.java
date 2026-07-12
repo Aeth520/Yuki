@@ -197,15 +197,38 @@ public final class CheckManager {
         return map;
     }
 
-    
+
     private ClassLoadingMap<PacketCheck> initializePacketChecks(PlayerData player) {
         ClassLoadingMap<PacketCheck> map = new ClassLoadingMap<>(null);
+        registerReachChecks(map, player);
+        registerPacketHandlers(map, player);
+        registerGroundSpoofChecks(map, player);
+        registerFastBreakChecks(map, player);
+        registerClientChecks(map, player);
+        registerChatChecks(map, player);
+        registerImpossibleChecks(map, player);
+        registerExploitChecks(map, player);
+        registerCrashChecks(map, player);
+        registerPingSpoofChecks(map, player);
+        registerInventoryChecks(map, player);
+        registerAutoClickerChecks(map, player);
+        registerKillAuraChecks(map, player);
+        registerVehicleChecks(map, player);
+        registerMiscPacketChecks(map, player);
+        registerBadPacketsChecks(map, player);
+        registerMitigationChecks(map, player);
+        registerMultiActionsChecks(map, player);
+        return map;
+    }
 
+    private void registerReachChecks(ClassLoadingMap<PacketCheck> map, PlayerData player) {
         map.putAndMoveToLast(ReachA.class, new ReachA(player));
         map.putAndMoveToLast(ReachB.class, new ReachB(player));
         map.putAndMoveToLast(ReachC.class, new ReachC(player));
         map.putAndMoveToLast(ReachD.class, new ReachD(player));
+    }
 
+    private void registerPacketHandlers(ClassLoadingMap<PacketCheck> map, PlayerData player) {
         map.putAndMoveToLast(PacketEntityReplication.class, new PacketEntityReplication(player));
         map.putAndMoveToLast(PayloadHandler.class, new PayloadHandler(player));
         map.putAndMoveToLast(PacketChangeGameState.class, new PacketChangeGameState(player));
@@ -215,19 +238,29 @@ public final class CheckManager {
         map.putAndMoveToLast(TeamHandler.class, new TeamHandler(player));
         map.putAndMoveToLast(ClickProcessor.class, player.getClickProcessor());
         map.putAndMoveToLast(PacketActionProcessor.class, player.getPacketActionProcessor());
+    }
 
+    private void registerGroundSpoofChecks(ClassLoadingMap<PacketCheck> map, PlayerData player) {
         map.putAndMoveToLast(GroundSpoofA.class, new GroundSpoofA(player));
+    }
 
+    private void registerFastBreakChecks(ClassLoadingMap<PacketCheck> map, PlayerData player) {
         map.putAndMoveToLast(FastBreakB.class, new FastBreakB(player));
         map.putAndMoveToLast(FastBreakC.class, new FastBreakC(player));
+    }
 
+    private void registerClientChecks(ClassLoadingMap<PacketCheck> map, PlayerData player) {
         map.putAndMoveToLast(ClientA.class, new ClientA(player));
+    }
 
+    private void registerChatChecks(ClassLoadingMap<PacketCheck> map, PlayerData player) {
         map.putAndMoveToLast(ChatA.class, new ChatA(player));
         map.putAndMoveToLast(ChatB.class, new ChatB(player));
         map.putAndMoveToLast(ChatC.class, new ChatC(player));
         map.putAndMoveToLast(ChatD.class, new ChatD(player));
+    }
 
+    private void registerImpossibleChecks(ClassLoadingMap<PacketCheck> map, PlayerData player) {
         map.putAndMoveToLast(ImpossibleB.class, new ImpossibleB(player));
         map.putAndMoveToLast(ImpossibleC.class, new ImpossibleC(player));
         map.putAndMoveToLast(ImpossibleD.class, new ImpossibleD(player));
@@ -239,7 +272,9 @@ public final class CheckManager {
         map.putAndMoveToLast(ImpossibleJ.class, new ImpossibleJ(player));
         map.putAndMoveToLast(ImpossibleK.class, new ImpossibleK(player));
         map.putAndMoveToLast(ImpossibleL.class, new ImpossibleL(player));
+    }
 
+    private void registerExploitChecks(ClassLoadingMap<PacketCheck> map, PlayerData player) {
         map.putAndMoveToLast(ExploitA.class, new ExploitA(player));
         map.putAndMoveToLast(ExploitB.class, new ExploitB(player));
         map.putAndMoveToLast(ExploitC.class, new ExploitC(player));
@@ -247,7 +282,9 @@ public final class CheckManager {
         map.putAndMoveToLast(ExploitE.class, new ExploitE(player));
         map.putAndMoveToLast(ExploitF.class, new ExploitF(player));
         map.putAndMoveToLast(ExploitG.class, new ExploitG(player));
+    }
 
+    private void registerCrashChecks(ClassLoadingMap<PacketCheck> map, PlayerData player) {
         map.putAndMoveToLast(CrashA.class, new CrashA(player));
         map.putAndMoveToLast(CrashB.class, new CrashB(player));
         map.putAndMoveToLast(CrashC.class, new CrashC(player));
@@ -261,14 +298,18 @@ public final class CheckManager {
         map.putAndMoveToLast(CrashK.class, new CrashK(player));
         map.putAndMoveToLast(CrashL.class, new CrashL(player));
         map.putAndMoveToLast(CrashM.class, new CrashM(player));
+    }
 
+    private void registerPingSpoofChecks(ClassLoadingMap<PacketCheck> map, PlayerData player) {
         map.putAndMoveToLast(PingSpoofA.class, new PingSpoofA(player));
         map.putAndMoveToLast(PingSpoofB.class, new PingSpoofB(player));
         map.putAndMoveToLast(PingSpoofC.class, new PingSpoofC(player));
         map.putAndMoveToLast(PingSpoofD.class, new PingSpoofD(player));
         map.putAndMoveToLast(PingSpoofE.class, new PingSpoofE(player));
         map.putAndMoveToLast(PingSpoofF.class, new PingSpoofF(player));
+    }
 
+    private void registerInventoryChecks(ClassLoadingMap<PacketCheck> map, PlayerData player) {
         map.putAndMoveToLast(InventoryH.class, new InventoryH(player));
         map.putAndMoveToLast(InventoryE.class, new InventoryE(player));
         map.putAndMoveToLast(InventoryF.class, new InventoryF(player));
@@ -279,9 +320,10 @@ public final class CheckManager {
         map.putAndMoveToLast(InventoryL.class, new InventoryL(player));
         map.putAndMoveToLast(InventoryM.class, new InventoryM(player));
         map.putAndMoveToLast(InventoryN.class, new InventoryN(player));
-
         map.putAndMoveToLast(BadPacketsG.class, new BadPacketsG(player));
+    }
 
+    private void registerAutoClickerChecks(ClassLoadingMap<PacketCheck> map, PlayerData player) {
         map.putAndMoveToLast(AutoClickerS.class, new AutoClickerS(player));
         map.putAndMoveToLast(AutoClickerT.class, new AutoClickerT(player));
         map.putAndMoveToLast(AutoClickerA.class, new AutoClickerA(player));
@@ -301,7 +343,9 @@ public final class CheckManager {
         map.putAndMoveToLast(AutoClickerO.class, new AutoClickerO(player));
         map.putAndMoveToLast(AutoClickerP.class, new AutoClickerP(player));
         map.putAndMoveToLast(AutoClickerQ.class, new AutoClickerQ(player));
+    }
 
+    private void registerKillAuraChecks(ClassLoadingMap<PacketCheck> map, PlayerData player) {
         map.putAndMoveToLast(KillAuraA.class, new KillAuraA(player));
         map.putAndMoveToLast(KillAuraB.class, new KillAuraB(player));
         map.putAndMoveToLast(KillAuraC.class, new KillAuraC(player));
@@ -315,21 +359,23 @@ public final class CheckManager {
         map.putAndMoveToLast(KillAuraK.class, new KillAuraK(player));
         map.putAndMoveToLast(KillAuraL.class, new KillAuraL(player));
         map.putAndMoveToLast(KillAuraM.class, new KillAuraM(player));
-
         map.putAndMoveToLast(AnalysisG.class, new AnalysisG(player));
+    }
 
+    private void registerVehicleChecks(ClassLoadingMap<PacketCheck> map, PlayerData player) {
         map.putAndMoveToLast(NoSaddleA.class, new NoSaddleA(player));
         map.putAndMoveToLast(VehicleFlyA.class, new VehicleFlyA(player));
         map.putAndMoveToLast(VehicleFlyB.class, new VehicleFlyB(player));
+    }
 
+    private void registerMiscPacketChecks(ClassLoadingMap<PacketCheck> map, PlayerData player) {
         map.putAndMoveToLast(XRayA.class, new XRayA(player));
-
         map.putAndMoveToLast(BlinkA.class, new BlinkA(player));
-
         map.putAndMoveToLast(TimerC.class, new TimerC(player));
-
         map.putAndMoveToLast(GeyserManager.class, new GeyserManager(player));
+    }
 
+    private void registerBadPacketsChecks(ClassLoadingMap<PacketCheck> map, PlayerData player) {
         map.putAndMoveToLast(BadPacketsA.class, new BadPacketsA(player));
         map.putAndMoveToLast(BadPacketsAA.class, new BadPacketsAA(player));
         map.putAndMoveToLast(BadPacketsB.class, new BadPacketsB(player));
@@ -337,11 +383,16 @@ public final class CheckManager {
         map.putAndMoveToLast(BadPacketsE.class, new BadPacketsE(player));
         map.putAndMoveToLast(BadPacketsH.class, new BadPacketsH(player));
         map.putAndMoveToLast(BadPacketsY.class, new BadPacketsY(player));
+    }
 
+    private void registerMitigationChecks(ClassLoadingMap<PacketCheck> map, PlayerData player) {
         map.putAndMoveToLast(PacketMitigation.class, new PacketMitigation(player));
         map.putAndMoveToLast(MetaDataHider.class, new MetaDataHider(player));
         map.putAndMoveToLast(EquipmentHider.class, new EquipmentHider(player));
         map.putAndMoveToLast(CancelHandler.class, new CancelHandler(player));
+    }
+
+    private void registerMultiActionsChecks(ClassLoadingMap<PacketCheck> map, PlayerData player) {
         map.putAndMoveToLast(MultiActionsA.class, new MultiActionsA(player));
         map.putAndMoveToLast(MultiActionsB.class, new MultiActionsB(player));
         map.putAndMoveToLast(MultiActionsC.class, new MultiActionsC(player));
@@ -349,7 +400,6 @@ public final class CheckManager {
         map.putAndMoveToLast(MultiActionsE.class, new MultiActionsE(player));
         map.putAndMoveToLast(MultiActionsF.class, new MultiActionsF(player));
         map.putAndMoveToLast(MultiActionsG.class, new MultiActionsG(player));
-        return map;
     }
 
     

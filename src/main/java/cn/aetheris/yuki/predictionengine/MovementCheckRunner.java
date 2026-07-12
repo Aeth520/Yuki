@@ -46,12 +46,21 @@ public class MovementCheckRunner extends Check implements PositionCheck {
     
     public static double longPredictionNanos = 0.3 * 1e6;
 
+    // Tick-local state (overwritten each check() call, safe because check() is sequential per player)
+    private PacketEntity riding;
+    private boolean wasChecked;
+    private double offset;
+    private boolean clientClaimsRiptide;
+    private boolean oldFlying;
+    private boolean oldGliding;
+    private boolean oldSprinting;
+    private boolean oldSneaking;
+
     public MovementCheckRunner(PlayerData player) {
         super(player);
     }
 
     public void processAndCheckMovementPacket(PositionUpdate data) {
-        
         
         
         
@@ -82,8 +91,6 @@ public class MovementCheckRunner extends Check implements PositionCheck {
         player.lastY = player.y;
         player.lastZ = player.z;
 
-        
-        
         
         
         
@@ -125,17 +132,34 @@ public class MovementCheckRunner extends Check implements PositionCheck {
         }
 
         player.movementPackets++;
-
         player.onGround = update.isOnGround();
 
-        
-        
-        
+        handleEdgeStuckDetection();
+
+        player.compensatedWorld.tickPlayerInPistonPushingArea();
+        player.compensatedEntities.tick();
+
+        if (handleVehicleSwitch(update)) return;
+
+        if (player.isInBed != player.lastInBed) {
+            update.setTeleport(true);
+        }
+        player.lastInBed = player.isInBed;
+        if (player.isInBed) return;
+
+        setupPreMovementState();
+        calculateAndValidateMovement(update);
+        trackStateChanges();
+        handleRiptide();
+        scanBlockMaterialsAndUncertainty();
+        runPredictionEngine();
+        handleOffsetAndSetbackValidation(update);
+        handlePostPredictionCleanup();
+        handleEndOfTickUpdates();
+    }
+
+    private void handleEdgeStuckDetection() {
         if (!player.isFlying && player.isSneaking && Collisions.isAboveGround(player)) {
-            
-            
-            
-            
             double posX = Math.max(0.05, MathUtil.clamp(player.actualMovement.getX(), -16, 16) + 0.05);
             double posZ = Math.max(0.05, MathUtil.clamp(player.actualMovement.getZ(), -16, 16) + 0.05);
             double negX = Math.min(-0.05, MathUtil.clamp(player.actualMovement.getX(), -16, 16) - 0.05);
@@ -160,17 +184,9 @@ public class MovementCheckRunner extends Check implements PositionCheck {
                 player.uncertaintyHandler.stuckOnEdge.reset();
             }
         }
+    }
 
-        player.compensatedWorld.tickPlayerInPistonPushingArea();
-        player.compensatedEntities.tick();
-
-        
-        
-        
-        
-        
-        
-        
+    private boolean handleVehicleSwitch(PositionUpdate update) {
         if (player.vehicleData.wasVehicleSwitch || player.vehicleData.lastDummy) {
             player.uncertaintyHandler.lastVehicleSwitch.reset();
         }
@@ -179,42 +195,31 @@ public class MovementCheckRunner extends Check implements PositionCheck {
             player.clientVelocity.multiply(0.98); 
         }
 
-        final PacketEntity riding = player.compensatedEntities.self.getRiding();
+        this.riding = player.compensatedEntities.self.getRiding();
         if (player.vehicleData.wasVehicleSwitch || player.vehicleData.lastDummy) {
             update.setTeleport(true);
 
             player.vehicleData.lastDummy = false;
             player.vehicleData.wasVehicleSwitch = false;
 
-            if (riding != null) {
+            if (this.riding != null) {
                 Vector3dm pos = new Vector3dm(player.x, player.y, player.z);
-                SimpleCollisionBox interTruePositions = riding.getPossibleCollisionBoxes();
+                SimpleCollisionBox interTruePositions = this.riding.getPossibleCollisionBoxes();
 
-                
-                final float scale = (float) riding.getAttributeValue(Attributes.SCALE);
-                float width = BoundingBoxSize.getWidth(player, riding) * scale;
-                float height = BoundingBoxSize.getHeight(player, riding) * scale;
+                final float scale = (float) this.riding.getAttributeValue(Attributes.SCALE);
+                float width = BoundingBoxSize.getWidth(player, this.riding) * scale;
+                float height = BoundingBoxSize.getHeight(player, this.riding) * scale;
                 interTruePositions.expand(-width, 0, -width);
                 interTruePositions.expandMax(0, -height, 0);
 
                 Vector3dm cutTo = VectorUtils.cutBoxToVector(pos, interTruePositions);
 
-                
-                
-                
-                
-                
-                
-                
-                
                 player.lastX = cutTo.getX();
                 player.lastY = cutTo.getY();
                 player.lastZ = cutTo.getZ();
 
                 player.boundingBox = GetBoundingBox.getCollisionBoxForPlayer(player, player.lastX, player.lastY, player.lastZ);
             } else {
-                
-                
                 if (new Vector3dm(player.lastX, player.lastY, player.lastZ).distance(new Vector3dm(player.x, player.y, player.z)) > 3) {
                     player.getSetbackTeleportUtil().executeForceResync(); 
                 }
@@ -226,18 +231,13 @@ public class MovementCheckRunner extends Check implements PositionCheck {
                     PredictionEngineNormal.staticVectorEndOfTick(player, ladder);
                     player.lastWasClimbing = ladder.getY();
                 }
-                return;
+                return true;
             }
         }
+        return false;
+    }
 
-        if (player.isInBed != player.lastInBed) {
-            update.setTeleport(true);
-        }
-        player.lastInBed = player.isInBed;
-
-        
-        if (player.isInBed) return;
-
+    private void setupPreMovementState() {
         if (!player.inVehicle()) {
             player.speed = player.compensatedEntities.self.getAttributeValue(Attributes.MOVEMENT_SPEED);
             if (player.hasGravity != player.playerEntityHasGravity) {
@@ -246,37 +246,26 @@ public class MovementCheckRunner extends Check implements PositionCheck {
             player.hasGravity = player.playerEntityHasGravity;
         }
 
-        
-        
-        
-        
-        
-        
-        
-        
         if (player.inVehicle()) {
-            
             player.checkManager.getExplosionHandler().forceExempt();
 
-            
-            riding.setPositionRaw(player, new SimpleCollisionBox(player.x, player.y, player.z, player.x, player.y, player.z));
+            this.riding.setPositionRaw(player, new SimpleCollisionBox(player.x, player.y, player.z, player.x, player.y, player.z));
 
-            if (riding instanceof PacketEntityTrackYaw boat) {
+            if (this.riding instanceof PacketEntityTrackYaw boat) {
                 boat.packetYaw = player.yaw;
                 boat.interpYaw = player.yaw;
                 boat.steps = 0;
             }
 
-            if (player.hasGravity != riding.hasGravity) {
+            if (player.hasGravity != this.riding.hasGravity) {
                 player.pointThreeEstimator.updatePlayerGravity();
             }
-            player.hasGravity = riding.hasGravity;
+            player.hasGravity = this.riding.hasGravity;
 
-            
-            if (riding instanceof PacketEntityRideable) {
+            if (this.riding instanceof PacketEntityRideable) {
                 NoSaddleB control = player.checkManager.getCheck(NoSaddleB.class);
 
-                ItemType requiredItem = riding.type == EntityTypes.PIG ? ItemTypes.CARROT_ON_A_STICK : ItemTypes.WARPED_FUNGUS_ON_A_STICK;
+                ItemType requiredItem = this.riding.type == EntityTypes.PIG ? ItemTypes.CARROT_ON_A_STICK : ItemTypes.WARPED_FUNGUS_ON_A_STICK;
                 ItemStack mainHand = player.getInventory().getHeldItem();
                 ItemStack offHand = player.getInventory().getOffHand();
 
@@ -284,7 +273,6 @@ public class MovementCheckRunner extends Check implements PositionCheck {
                 boolean correctOffhand = offHand.getType() == requiredItem;
 
                 if (!correctMainHand && !correctOffhand) {
-                    
                     control.flagAndAlert();
                 } else {
                     control.rewardPlayer();
@@ -296,12 +284,13 @@ public class MovementCheckRunner extends Check implements PositionCheck {
             player.fallDistance = 0;
             player.uncertaintyHandler.lastFlyingTicks.reset();
         }
+    }
 
+    private void calculateAndValidateMovement(PositionUpdate update) {
         player.isClimbing = Collisions.onClimbable(player, player.lastX, player.lastY, player.lastZ);
 
         player.clientControlledVerticalCollision = Math.abs(player.y % (1 / 64D)) < 0.00001;
 
-        
         player.actualMovement = new Vector3dm(player.x - player.lastX, player.y - player.lastY, player.z - player.lastZ);
 
         final double deltaX = player.x - player.lastX;
@@ -321,7 +310,9 @@ public class MovementCheckRunner extends Check implements PositionCheck {
                 if (check2 != null) check2.flipPlayerGroundStatus = true;
             }
         }
+    }
 
+    private void trackStateChanges() {
         if (player.isSprinting != player.lastSprinting) {
             player.compensatedEntities.hasSprintingAttributeEnabled = player.isSprinting;
         }
@@ -329,37 +320,29 @@ public class MovementCheckRunner extends Check implements PositionCheck {
         player.lastJumping = player.isJumping;
         player.isJumping = player.packetStateData.knownInput.jump();
 
-        boolean oldFlying = player.isFlying;
-        boolean oldGliding = player.isGliding;
-        boolean oldSprinting = player.isSprinting;
-        boolean oldSneaking = player.isSneaking;
+        this.oldFlying = player.isFlying;
+        this.oldGliding = player.isGliding;
+        this.oldSprinting = player.isSprinting;
+        this.oldSneaking = player.isSneaking;
 
-        
-        
         if (player.inVehicle()) {
-            
-            
             player.isFlying = false;
             player.isGliding = false;
-            player.isSprinting &= riding instanceof PacketEntityCamel; 
+            player.isSprinting &= this.riding instanceof PacketEntityCamel; 
             player.isSneaking = false;
 
-            if (riding.type != EntityTypes.PIG && riding.type != EntityTypes.STRIDER) {
+            if (this.riding.type != EntityTypes.PIG && this.riding.type != EntityTypes.STRIDER) {
                 player.isClimbing = false;
             }
         }
+    }
 
-        
-        
-        
-        
-        
-        
+    private void handleRiptide() {
         if (!player.inVehicle()) {
             player.speed += player.compensatedEntities.hasSprintingAttributeEnabled ? player.speed * 0.3f : 0;
         }
 
-        boolean clientClaimsRiptide = player.packetStateData.tryingToRiptide;
+        this.clientClaimsRiptide = player.packetStateData.tryingToRiptide;
         if (player.packetStateData.tryingToRiptide) {
             long currentTime = System.currentTimeMillis();
             boolean isInWater = player.isInWaterOrRain();
@@ -370,7 +353,9 @@ public class MovementCheckRunner extends Check implements PositionCheck {
 
             player.packetStateData.lastRiptide = currentTime;
         }
+    }
 
+    private void scanBlockMaterialsAndUncertainty() {
         SimpleCollisionBox steppingOnBB = GetBoundingBox.getCollisionBoxForPlayer(player, player.x, player.y, player.z).copy().expand(player.getMovementThreshold()).offset(0, -1, 0);
         SimpleCollisionBox fixedSteppingOnBB = GetBoundingBox.getCollisionBoxForPlayer(player, player.x, player.y, player.z).copy().expand(player.getMovementThreshold() + 0.15).offset(0, -1, 0);
         Collisions.hasMaterial(player, fixedSteppingOnBB, (pair) -> {
@@ -411,16 +396,12 @@ public class MovementCheckRunner extends Check implements PositionCheck {
 
         SimpleCollisionBox expandedBB = GetBoundingBox.getBoundingBoxFromPosAndSize(player, player.lastX, player.lastY, player.lastZ, 0.001f, 0.001f);
 
-        
         if (player.actualMovement.lengthSquared() < 2500)
             expandedBB.expandToAbsoluteCoordinates(player.x, player.y, player.z);
 
         expandedBB.expand(Pose.STANDING.width / 2, 0, Pose.STANDING.width / 2);
         expandedBB.expandMax(0, Pose.STANDING.height, 0);
 
-        
-        
-        
         boolean isGlitchy = player.uncertaintyHandler.isNearGlitchyBlock;
 
         player.uncertaintyHandler.isNearGlitchyBlock = player.getClientVersion().isOlderThan(ClientVersion.V_1_9)
@@ -449,38 +430,31 @@ public class MovementCheckRunner extends Check implements PositionCheck {
         if (couldBeStuckSpeed) {
             player.uncertaintyHandler.lastStuckSpeedMultiplier.reset();
         }
+    }
 
+    private void runPredictionEngine() {
         player.startTickClientVel = player.clientVelocity;
 
-        boolean wasChecked = false;
+        this.wasChecked = false;
 
-        
-        if (player.compensatedEntities.self.isDead || (riding != null && riding.isDead)) {
-            
+        if (player.compensatedEntities.self.isDead || (this.riding != null && this.riding.isDead)) {
             player.predictedVelocity = new VectorData(new Vector3dm(), VectorData.VectorType.Dead);
             player.clientVelocity = new Vector3dm();
 
         } else if (player.bypass || (Yuki.getInstance().getPacketEventsManager().getServerVersion().isNewerThanOrEquals(ServerVersion.V_1_8) && player.gamemode == GameMode.SPECTATOR) || player.isFlying) {
-            
-            
-            
-            
             player.predictedVelocity = new VectorData(player.actualMovement, VectorData.VectorType.Spectator);
             player.clientVelocity = player.actualMovement.clone();
             player.gravity = 0;
             player.friction = 0.91f;
             PredictionEngineNormal.staticVectorEndOfTick(player, player.clientVelocity);
-        } else if (riding == null) {
-            wasChecked = true;
+        } else if (this.riding == null) {
+            this.wasChecked = true;
 
             player.depthStriderLevel = (float) player.compensatedEntities.self.getAttributeValue(Attributes.WATER_MOVEMENT_EFFICIENCY);
             player.sneakingSpeedMultiplier = (float) player.compensatedEntities.self.getAttributeValue(Attributes.SNEAKING_SPEED);
 
-            
             player.verticalCollision = false;
 
-            
-            
             if (player.lastOnGround && player.packetStateData.tryingToRiptide && !player.inVehicle()) {
                 Vector3dm pushingMovement = Collisions.collide(player, 0, 1.1999999F, 0);
                 player.verticalCollision = pushingMovement.getY() != 1.1999999F;
@@ -507,27 +481,24 @@ public class MovementCheckRunner extends Check implements PositionCheck {
             PlayerBaseTick.updatePowderSnow(player);
             PlayerBaseTick.updatePlayerPose(player);
         } else if (Yuki.getInstance().getPacketEventsManager().getServerVersion().isNewerThanOrEquals(ServerVersion.V_1_9) && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
-            wasChecked = true;
-            
-            
-            
-            if (riding.isBoat) {
+            this.wasChecked = true;
+
+            if (this.riding.isBoat) {
                 PlayerBaseTick.doBaseTick(player);
-                
                 new PredictionEngineBoat(player).guessBestMovement(0.1f, player);
-            } else if (riding instanceof PacketEntityCamel) {
+            } else if (this.riding instanceof PacketEntityCamel) {
                 PlayerBaseTick.doBaseTick(player);
                 new MovementTickerCamel(player).livingEntityAIStep();
-            } else if (riding instanceof PacketEntityHappyGhast) {
+            } else if (this.riding instanceof PacketEntityHappyGhast) {
                 PlayerBaseTick.doBaseTick(player);
                 new MovementTickerHappyGhast(player).livingEntityAIStep();
-            } else if (riding instanceof PacketEntityHorse) {
+            } else if (this.riding instanceof PacketEntityHorse) {
                 PlayerBaseTick.doBaseTick(player);
                 new MovementTickerHorse(player).livingEntityAIStep();
-            } else if (riding.type == EntityTypes.PIG) {
+            } else if (this.riding.type == EntityTypes.PIG) {
                 PlayerBaseTick.doBaseTick(player);
                 new MovementTickerPig(player).livingEntityAIStep();
-            } else if (riding.type == EntityTypes.STRIDER) {
+            } else if (this.riding.type == EntityTypes.STRIDER) {
                 PlayerBaseTick.doBaseTick(player);
                 new MovementTickerStrider(player).livingEntityAIStep();
                 MovementTickerStrider.floatStrider(player);
@@ -536,30 +507,23 @@ public class MovementCheckRunner extends Check implements PositionCheck {
                 PlayerBaseTick.doBaseTick(player);
                 new MovementTickerNautilus(player).livingEntityAIStep();
             } else {
-                wasChecked = false;
+                this.wasChecked = false;
             }
-        } 
+        }
+    }
 
-        
-        double offset = player.predictedVelocity.vector.distance(player.actualMovement);
-        offset = player.uncertaintyHandler.reduceOffset(offset);
+    private void handleOffsetAndSetbackValidation(PositionUpdate update) {
+        this.offset = player.predictedVelocity.vector.distance(player.actualMovement);
+        this.offset = player.uncertaintyHandler.reduceOffset(this.offset);
 
-        if (player.packetStateData.tryingToRiptide != clientClaimsRiptide && !player.isSwimming && !player.isGliding && PluginLoader.INSTANCE.getConfigManager().isMitigateTridentRiptiding()) {
+        if (player.packetStateData.tryingToRiptide != this.clientClaimsRiptide && !player.isSwimming && !player.isGliding && PluginLoader.INSTANCE.getConfigManager().isMitigateTridentRiptiding()) {
             player.getSetbackTeleportUtil().executeForceResync(); 
             LogUtils.sync("&b" + player.getName() + "&7 ForceResync for use riptide into invalid ground");
         }
 
-
-        
-        
-        
-        
-        
         if (player.getSetbackTeleportUtil().getRequiredSetBack() != null && player.getSetbackTeleportUtil().getRequiredSetBack().getTicksComplete() == 1) {
             Vector3dm setbackVel = player.getSetbackTeleportUtil().getRequiredSetBack().getVelocity();
-            
-            
-            
+
             if (player.predictedVelocity.isJump()
                     && !player.wasTouchingLava && !player.wasTouchingWater
                     && ((setbackVel != null && setbackVel.getY() >= 0) || !Collisions.slowCouldPointThreeHitGround(player, player.lastX, player.lastY, player.lastZ))) {
@@ -572,26 +536,23 @@ public class MovementCheckRunner extends Check implements PositionCheck {
                 boolean exempt = player.getExemptProcessor().isExempt(ExemptType.WEAPON_SHOOT);
                 boolean lavaBugFix = player.wasTouchingLava && player.predictedVelocity.isJump() &&
                         player.predictedVelocity.vector.getY() < 0.06 && player.predictedVelocity.vector.getY() > -0.02;
-                
+
                 if (!player.predictedVelocity.isKnockback() && !exempt && !lavaBugFix && player.getSetbackTeleportUtil().getRequiredSetBack().getVelocity() != null) {
-                    
                     player.getSetbackTeleportUtil().executeForceResync();
                     LogUtils.sync("&b" + player.getName() + "&7 ForceResync for invalid velocity motion");
                 }
             }
         }
-        
-        if (player.getSetbackTeleportUtil().blockOffsets) offset = 0;
 
-        if (player.skippedTickInActualMovement || !wasChecked)
+        if (player.getSetbackTeleportUtil().blockOffsets) this.offset = 0;
+
+        if (player.skippedTickInActualMovement || !this.wasChecked)
             player.uncertaintyHandler.lastPointThree.reset();
 
-        
-        player.checkManager.onPredictionFinish(new PredictionComplete(offset, update, wasChecked));
+        player.checkManager.onPredictionFinish(new PredictionComplete(this.offset, update, this.wasChecked));
 
-        player.wasLastPredictionCompleteChecked = wasChecked;
+        player.wasLastPredictionCompleteChecked = this.wasChecked;
 
-        
         if (player.bukkitPlayer != null && player.isGliding && player.predictedVelocity.isJump() && player.isSprinting
                 && PluginLoader.INSTANCE.getConfigManager().isMitigateElytraSprint()) {
             SetbackTeleportUtil.SetbackPosWithVector lastKnownGoodPosition = player.getSetbackTeleportUtil().lastKnownGoodPosition;
@@ -599,9 +560,10 @@ public class MovementCheckRunner extends Check implements PositionCheck {
             player.getSetbackTeleportUtil().executeNonSimulatingSetback();
             LogUtils.sync("&b" + player.getName() + "&7 ForceResync for invalid eltra motion");
         }
+    }
 
-        if (!wasChecked) {
-            
+    private void handlePostPredictionCleanup() {
+        if (!this.wasChecked) {
             player.checkManager.getExplosionHandler().forceExempt();
             player.checkManager.getKnockbackHandler().forceExempt();
         }
@@ -615,14 +577,15 @@ public class MovementCheckRunner extends Check implements PositionCheck {
         player.wasSneaking = player.isSneaking;
         player.packetStateData.tryingToRiptide = false;
 
-        
         if (player.inVehicle()) {
-            player.isFlying = oldFlying;
-            player.isGliding = oldGliding;
-            player.isSprinting = oldSprinting;
-            player.isSneaking = oldSneaking;
+            player.isFlying = this.oldFlying;
+            player.isGliding = this.oldGliding;
+            player.isSprinting = this.oldSprinting;
+            player.isSneaking = this.oldSneaking;
         }
+    }
 
+    private void handleEndOfTickUpdates() {
         player.riptideSpinAttackTicks--;
         if (player.predictedVelocity.isTrident())
             player.riptideSpinAttackTicks = 20;
@@ -631,10 +594,6 @@ public class MovementCheckRunner extends Check implements PositionCheck {
         player.uncertaintyHandler.lastMovementWasUnknown003VectorReset = !player.inVehicle() && player.couldSkipTick && player.predictedVelocity.isKnockback();
         player.couldSkipTick = false;
 
-        
-        
-        
-        
         player.uncertaintyHandler.wasZeroPointThreeVertically = !player.inVehicle() &&
                 ((player.uncertaintyHandler.lastMovementWasZeroPointZeroThree && player.pointThreeEstimator.controlsVerticalMovement())
                         || !player.pointThreeEstimator.canPredictNextVerticalMovement() || !player.pointThreeEstimator.isWasAlwaysCertain());
@@ -659,20 +618,16 @@ public class MovementCheckRunner extends Check implements PositionCheck {
         player.firstBreadExplosion = null;
         player.likelyExplosions = null;
 
-        player.trigHandler.setOffset(offset);
+        player.trigHandler.setOffset(this.offset);
         player.pointThreeEstimator.endOfTickTick();
     }
 
-    
     private boolean likelyGroundRiptide(Vector3dm pushingMovement) {
-        
         double riptideYResult = Riptide.getRiptideVelocity(player).getY();
 
         double riptideDiffToBase = Math.abs(player.actualMovement.getY() - riptideYResult);
         double riptideDiffToGround = Math.abs(player.actualMovement.getY() - riptideYResult - pushingMovement.getY());
 
-        
-        
         return riptideDiffToGround < riptideDiffToBase;
     }
 }
