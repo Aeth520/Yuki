@@ -53,6 +53,7 @@ dependencies {
     implementation("fr.mrmicky:FastInv:3.1.1")
     implementation("com.alibaba:QLExpress:3.3.4")
     implementation("net.kyori:adventure-text-serializer-plain:4.23.0")
+    implementation("net.kyori:adventure-text-serializer-legacy:4.23.0")
     implementation("net.kyori:adventure-api:4.23.0")
     implementation("org.apache.commons:commons-lang3:3.18.0")
     implementation("it.unimi.dsi:fastutil:8.5.15")
