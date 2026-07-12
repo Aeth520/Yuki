@@ -1,13 +1,14 @@
 package cn.aetheris.yuki.api.event;
 
-import cn.aetheris.yuki.Yuki;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
+import java.util.logging.Logger;
 
 public final class EventBus {
+
+    private static final Logger LOGGER = Logger.getLogger(EventBus.class.getName());
 
     private final Map<Class<?>, CopyOnWriteArraySet<Consumer<?>>> subscribers = new ConcurrentHashMap<>();
 
@@ -35,7 +36,7 @@ public final class EventBus {
             try {
                 ((Consumer<E>) consumer).accept(event);
             } catch (Exception t) {
-                Yuki.getInstance().getLogger().warning(
+                LOGGER.warning(
                     "EventBus subscriber threw exception for " + event.getClass().getSimpleName() + ": " + t.getMessage());
             }
         }
