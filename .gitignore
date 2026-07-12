@@ -69,7 +69,5 @@ nb-configuration.xml
 ##############################
 ## Project-specific
 ##############################
-# Reference decompiles of other anticheats (not part of source)
-AntiCheat/
 # Local jars not referenced by build.gradle.kts
 folia-*.jar
