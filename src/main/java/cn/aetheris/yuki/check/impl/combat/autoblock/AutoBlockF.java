@@ -11,7 +11,7 @@ import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientInteractEntity;
 
 @CheckData(name = "AutoBlockF (DIG)",
-        configName = "AutoBlockE",
+        configName = "AutoBlockF",
         description = "Attacked while sending BlockDig packet",
         type = CheckType.AUTOBLOCK,
         decay = 0.75
