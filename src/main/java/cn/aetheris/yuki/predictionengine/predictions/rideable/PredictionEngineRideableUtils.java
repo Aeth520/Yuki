@@ -3,7 +3,7 @@ package cn.aetheris.yuki.predictionengine.predictions.rideable;
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.predictionengine.predictions.PredictionEngine;
 import cn.aetheris.yuki.predictionengine.predictions.PredictionEngineNormal;
-import cn.aetheris.yuki.data.VectorData;
+import cn.aetheris.yuki.data.movement.VectorData;
 import cn.aetheris.yuki.entity.PacketEntityCamel;
 import cn.aetheris.yuki.entity.PacketEntityHorse;
 import cn.aetheris.yuki.protocol.nms.BlockProperties;

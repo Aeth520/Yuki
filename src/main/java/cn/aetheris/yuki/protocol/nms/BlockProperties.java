@@ -2,7 +2,7 @@ package cn.aetheris.yuki.protocol.nms;
 
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.player.PlayerData;
-import cn.aetheris.yuki.data.MainSupportingBlockData;
+import cn.aetheris.yuki.data.block.MainSupportingBlockData;
 import cn.aetheris.yuki.entity.PacketEntityHorse;
 import cn.aetheris.yuki.entity.PacketEntityStrider;
 import cn.aetheris.yuki.util.materials.Materials;

@@ -1,4 +1,4 @@
-package cn.aetheris.yuki.data;
+package cn.aetheris.yuki.data.player;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

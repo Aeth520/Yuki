@@ -1,7 +1,7 @@
 package cn.aetheris.yuki.predictionengine.predictions;
 
 import cn.aetheris.yuki.player.PlayerData;
-import cn.aetheris.yuki.data.VectorData;
+import cn.aetheris.yuki.data.movement.VectorData;
 import cn.aetheris.yuki.math.vector.Vector3dm;
 
 import java.util.HashSet;

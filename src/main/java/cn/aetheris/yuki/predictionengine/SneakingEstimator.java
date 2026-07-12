@@ -4,7 +4,7 @@ import cn.aetheris.yuki.check.Check;
 import cn.aetheris.yuki.check.type.PostPredictionCheck;
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.block.collision.datatypes.SimpleCollisionBox;
-import cn.aetheris.yuki.data.VectorData;
+import cn.aetheris.yuki.data.movement.VectorData;
 import cn.aetheris.yuki.util.update.PredictionComplete;
 import lombok.Getter;
 

@@ -1,6 +1,6 @@
 package cn.aetheris.yuki.util.lists;
 
-import cn.aetheris.yuki.data.Pair;
+import cn.aetheris.yuki.data.util.Pair;
 import it.unimi.dsi.fastutil.doubles.Double2IntMap;
 import it.unimi.dsi.fastutil.doubles.Double2IntOpenHashMap;
 import lombok.Getter;

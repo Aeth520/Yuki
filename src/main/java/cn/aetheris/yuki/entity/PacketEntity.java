@@ -2,8 +2,8 @@ package cn.aetheris.yuki.entity;
 
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.block.collision.datatypes.SimpleCollisionBox;
-import cn.aetheris.yuki.data.ReachInterpolationData;
-import cn.aetheris.yuki.data.TrackedPosition;
+import cn.aetheris.yuki.data.movement.ReachInterpolationData;
+import cn.aetheris.yuki.data.movement.TrackedPosition;
 import cn.aetheris.yuki.entity.attribute.ValuedAttribute;
 import com.github.retrooper.packetevents.protocol.attribute.Attribute;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;

@@ -7,7 +7,7 @@ import cn.aetheris.yuki.predictionengine.PlayerBaseTick;
 import cn.aetheris.yuki.predictionengine.predictions.PredictionEngine;
 import cn.aetheris.yuki.predictionengine.predictions.PredictionEngineElytra;
 import cn.aetheris.yuki.block.collision.datatypes.SimpleCollisionBox;
-import cn.aetheris.yuki.data.VectorData;
+import cn.aetheris.yuki.data.movement.VectorData;
 import cn.aetheris.yuki.entity.PacketEntity;
 import cn.aetheris.yuki.entity.PacketEntityStrider;
 import cn.aetheris.yuki.math.MathUtil;

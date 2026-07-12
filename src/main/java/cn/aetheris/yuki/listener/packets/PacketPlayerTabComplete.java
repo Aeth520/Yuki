@@ -5,7 +5,7 @@ import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.listener.bukkit.misc.PlayerAsyncChatListener;
 import cn.aetheris.yuki.listener.packets.abstracts.AbstractPacketListener;
-import cn.aetheris.yuki.data.ValidatorData;
+import cn.aetheris.yuki.data.util.ValidatorData;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.event.PacketSendEvent;

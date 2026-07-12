@@ -1,4 +1,4 @@
-package cn.aetheris.yuki.data;
+package cn.aetheris.yuki.data.movement;
 
 import com.github.retrooper.packetevents.protocol.entity.type.EntityType;
 import lombok.Data;

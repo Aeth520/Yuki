@@ -2,8 +2,8 @@ package cn.aetheris.yuki.predictionengine;
 
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.block.collision.datatypes.SimpleCollisionBox;
-import cn.aetheris.yuki.data.LastInstance;
-import cn.aetheris.yuki.data.VectorData;
+import cn.aetheris.yuki.data.util.LastInstance;
+import cn.aetheris.yuki.data.movement.VectorData;
 import cn.aetheris.yuki.entity.PacketEntity;
 import cn.aetheris.yuki.entity.PacketEntityRideable;
 import cn.aetheris.yuki.entity.PacketEntityStrider;

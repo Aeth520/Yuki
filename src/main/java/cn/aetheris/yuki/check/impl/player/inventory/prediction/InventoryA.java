@@ -6,7 +6,7 @@ import cn.aetheris.yuki.check.impl.player.inventory.InventoryG;
 import cn.aetheris.yuki.check.type.InventoryCheck;
 import cn.aetheris.yuki.check.util.exempts.types.ExemptType;
 import cn.aetheris.yuki.player.PlayerData;
-import cn.aetheris.yuki.data.VehicleData;
+import cn.aetheris.yuki.data.movement.VehicleData;
 import cn.aetheris.yuki.util.update.PredictionComplete;
 
 import java.util.StringJoiner;

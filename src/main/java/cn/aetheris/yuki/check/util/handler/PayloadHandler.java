@@ -9,7 +9,7 @@ import cn.aetheris.yuki.check.type.PacketCheck;
 import cn.aetheris.yuki.listener.bukkit.misc.PlayerAsyncChatListener;
 import cn.aetheris.yuki.core.plugin.init.HookInit;
 import cn.aetheris.yuki.player.PlayerData;
-import cn.aetheris.yuki.data.ValidatorData;
+import cn.aetheris.yuki.data.util.ValidatorData;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;

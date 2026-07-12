@@ -4,7 +4,7 @@ import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.listener.bukkit.abstracts.AbstractListener;
-import cn.aetheris.yuki.data.FreezeData;
+import cn.aetheris.yuki.data.player.FreezeData;
 import cn.aetheris.yuki.util.message.ColorUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;

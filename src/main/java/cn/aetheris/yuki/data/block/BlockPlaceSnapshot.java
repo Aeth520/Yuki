@@ -1,4 +1,4 @@
-package cn.aetheris.yuki.data;
+package cn.aetheris.yuki.data.block;
 
 import com.github.retrooper.packetevents.wrapper.PacketWrapper;
 import lombok.AllArgsConstructor;

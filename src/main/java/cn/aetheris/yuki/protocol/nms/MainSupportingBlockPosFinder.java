@@ -2,7 +2,7 @@ package cn.aetheris.yuki.protocol.nms;
 
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.block.collision.datatypes.SimpleCollisionBox;
-import cn.aetheris.yuki.data.MainSupportingBlockData;
+import cn.aetheris.yuki.data.block.MainSupportingBlockData;
 import com.github.retrooper.packetevents.util.Vector3d;
 import com.github.retrooper.packetevents.util.Vector3i;
 import com.google.common.util.concurrent.AtomicDouble;

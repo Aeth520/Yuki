@@ -8,7 +8,7 @@ import cn.aetheris.yuki.block.collision.blocks.DoorHandler;
 import cn.aetheris.yuki.block.collision.datatypes.CollisionBox;
 import cn.aetheris.yuki.block.collision.datatypes.ComplexCollisionBox;
 import cn.aetheris.yuki.block.collision.datatypes.SimpleCollisionBox;
-import cn.aetheris.yuki.data.HitData;
+import cn.aetheris.yuki.data.player.HitData;
 import cn.aetheris.yuki.entity.PacketEntity;
 import cn.aetheris.yuki.util.latency.CompensatedWorld;
 import cn.aetheris.yuki.util.materials.Materials;

@@ -2,7 +2,7 @@ package cn.aetheris.yuki.predictionengine.blockeffects;
 
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.block.collision.datatypes.SimpleCollisionBox;
-import cn.aetheris.yuki.data.Pair;
+import cn.aetheris.yuki.data.util.Pair;
 import cn.aetheris.yuki.protocol.nms.Collisions;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;

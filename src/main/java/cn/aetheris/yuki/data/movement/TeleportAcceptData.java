@@ -1,4 +1,4 @@
-package cn.aetheris.yuki.data;
+package cn.aetheris.yuki.data.movement;
 
 import lombok.Getter;
 import lombok.Setter;

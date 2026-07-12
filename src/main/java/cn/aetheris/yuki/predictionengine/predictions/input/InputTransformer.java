@@ -1,7 +1,7 @@
 package cn.aetheris.yuki.predictionengine.predictions.input;
 
 import cn.aetheris.yuki.player.PlayerData;
-import cn.aetheris.yuki.data.Pair;
+import cn.aetheris.yuki.data.util.Pair;
 import cn.aetheris.yuki.protocol.nms.vec.Vec2;
 import cn.aetheris.yuki.math.vector.Vector3dm;
 

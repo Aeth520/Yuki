@@ -1,5 +1,6 @@
-package cn.aetheris.yuki.data;
+package cn.aetheris.yuki.data.movement;
 
+import cn.aetheris.yuki.data.util.Pair;
 import cn.aetheris.yuki.util.enums.BoatEntityStatus;
 import com.github.retrooper.packetevents.util.Vector3d;
 

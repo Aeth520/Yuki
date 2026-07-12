@@ -4,7 +4,7 @@ import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.player.PlayerData;
-import cn.aetheris.yuki.data.VectorData;
+import cn.aetheris.yuki.data.movement.VectorData;
 import cn.aetheris.yuki.util.message.LogUtils;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;

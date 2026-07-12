@@ -4,7 +4,7 @@ import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.check.Check;
 import cn.aetheris.yuki.check.type.PositionCheck;
 import cn.aetheris.yuki.player.PlayerData;
-import cn.aetheris.yuki.data.CooldownData;
+import cn.aetheris.yuki.data.player.CooldownData;
 import cn.aetheris.yuki.util.update.PositionUpdate;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.component.ComponentTypes;

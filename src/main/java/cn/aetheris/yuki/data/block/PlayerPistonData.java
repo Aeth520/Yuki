@@ -1,4 +1,4 @@
-package cn.aetheris.yuki.data;
+package cn.aetheris.yuki.data.block;
 
 public class PlayerPistonData {
     public final PistonTemplate pistonTemplate;

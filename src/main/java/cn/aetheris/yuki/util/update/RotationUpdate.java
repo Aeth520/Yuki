@@ -2,7 +2,7 @@ package cn.aetheris.yuki.util.update;
 
 import cn.aetheris.yuki.check.util.processor.rotateprocessor.RotateProcessor;
 import cn.aetheris.yuki.player.PlayerData;
-import cn.aetheris.yuki.data.HeadRotation;
+import cn.aetheris.yuki.data.player.HeadRotation;
 import cn.aetheris.yuki.protocol.nms.vec.Vec2f;
 import lombok.Getter;
 import lombok.Setter;

@@ -7,7 +7,7 @@ import cn.aetheris.yuki.listener.packets.multiblockchange.V1160MultiBlockChangeB
 import cn.aetheris.yuki.listener.packets.multiblockchange.VersionedMultiBlockChangeHandler;
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.block.chunk.Column;
-import cn.aetheris.yuki.data.TeleportData;
+import cn.aetheris.yuki.data.movement.TeleportData;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;

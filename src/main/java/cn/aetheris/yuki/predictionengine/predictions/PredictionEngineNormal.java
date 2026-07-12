@@ -2,7 +2,7 @@ package cn.aetheris.yuki.predictionengine.predictions;
 
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.block.collision.datatypes.SimpleCollisionBox;
-import cn.aetheris.yuki.data.VectorData;
+import cn.aetheris.yuki.data.movement.VectorData;
 import cn.aetheris.yuki.math.MathUtil;
 import cn.aetheris.yuki.protocol.nms.Collisions;
 import cn.aetheris.yuki.protocol.nms.JumpPower;

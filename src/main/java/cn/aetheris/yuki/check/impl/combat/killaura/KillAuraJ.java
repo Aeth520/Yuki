@@ -6,7 +6,7 @@ import cn.aetheris.yuki.check.CheckData;
 import cn.aetheris.yuki.check.type.PacketCheck;
 import cn.aetheris.yuki.check.util.exempts.types.ExemptType;
 import cn.aetheris.yuki.player.PlayerData;
-import cn.aetheris.yuki.data.Pair2;
+import cn.aetheris.yuki.data.util.Pair2;
 import cn.aetheris.yuki.util.lists.EvictingList;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerFlying;

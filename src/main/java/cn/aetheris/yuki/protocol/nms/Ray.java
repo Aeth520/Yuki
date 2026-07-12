@@ -2,7 +2,7 @@ package cn.aetheris.yuki.protocol.nms;
 
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.player.PlayerData;
-import cn.aetheris.yuki.data.Pair;
+import cn.aetheris.yuki.data.util.Pair;
 import cn.aetheris.yuki.math.vector.Vector3dm;
 import lombok.Getter;
 import lombok.ToString;

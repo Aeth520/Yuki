@@ -3,7 +3,7 @@ package cn.aetheris.yuki.protocol.nms;
 
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.block.collision.datatypes.SimpleCollisionBox;
-import cn.aetheris.yuki.data.Pair;
+import cn.aetheris.yuki.data.util.Pair;
 import cn.aetheris.yuki.math.MathUtil;
 import cn.aetheris.yuki.math.VectorUtils;
 import cn.aetheris.yuki.math.vector.Vector3dm;

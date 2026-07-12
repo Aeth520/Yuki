@@ -13,7 +13,7 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-package cn.aetheris.yuki.data;
+package cn.aetheris.yuki.data.movement;
 
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.player.PlayerData;

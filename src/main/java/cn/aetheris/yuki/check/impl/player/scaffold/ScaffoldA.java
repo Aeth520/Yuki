@@ -7,7 +7,7 @@ import cn.aetheris.yuki.check.type.BlockPlaceCheck;
 import cn.aetheris.yuki.check.util.exempts.types.ExemptType;
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.block.collision.datatypes.SimpleCollisionBox;
-import cn.aetheris.yuki.data.Pair;
+import cn.aetheris.yuki.data.util.Pair;
 import cn.aetheris.yuki.protocol.nms.Ray;
 import cn.aetheris.yuki.protocol.nms.ReachUtils;
 import cn.aetheris.yuki.util.update.BlockPlace;

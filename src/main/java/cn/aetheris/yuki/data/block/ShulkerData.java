@@ -1,4 +1,4 @@
-package cn.aetheris.yuki.data;
+package cn.aetheris.yuki.data.block;
 
 import cn.aetheris.yuki.block.collision.datatypes.SimpleCollisionBox;
 import cn.aetheris.yuki.entity.PacketEntity;

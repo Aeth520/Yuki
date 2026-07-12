@@ -3,7 +3,7 @@ package cn.aetheris.yuki.listener.packets;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.listener.packets.abstracts.AbstractPacketListener;
 import cn.aetheris.yuki.player.PlayerData;
-import cn.aetheris.yuki.data.ShulkerData;
+import cn.aetheris.yuki.data.block.ShulkerData;
 import cn.aetheris.yuki.util.materials.Materials;
 import com.github.retrooper.packetevents.event.PacketListenerAbstract;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;

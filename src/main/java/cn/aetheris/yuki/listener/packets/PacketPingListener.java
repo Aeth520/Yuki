@@ -5,7 +5,7 @@ import cn.aetheris.yuki.check.impl.player.badpackets.BadPacketsK;
 import cn.aetheris.yuki.check.util.exempts.types.ExemptType;
 import cn.aetheris.yuki.listener.packets.abstracts.AbstractPacketListener;
 import cn.aetheris.yuki.player.PlayerData;
-import cn.aetheris.yuki.data.Pair;
+import cn.aetheris.yuki.data.util.Pair;
 import cn.aetheris.yuki.util.message.ColorUtils;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;

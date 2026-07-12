@@ -6,7 +6,7 @@ import cn.aetheris.yuki.check.Check;
 import cn.aetheris.yuki.check.type.PacketCheck;
 import cn.aetheris.yuki.core.plugin.init.HookInit;
 import cn.aetheris.yuki.player.PlayerData;
-import cn.aetheris.yuki.data.TrackerData;
+import cn.aetheris.yuki.data.movement.TrackerData;
 import cn.aetheris.yuki.entity.PacketEntity;
 import cn.aetheris.yuki.entity.PacketEntityHook;
 import cn.aetheris.yuki.entity.PacketEntityTrackYaw;

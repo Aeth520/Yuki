@@ -5,7 +5,7 @@ import cn.aetheris.yuki.check.Check;
 import cn.aetheris.yuki.check.type.PacketCheck;
 import cn.aetheris.yuki.check.type.RotationCheck;
 import cn.aetheris.yuki.player.PlayerData;
-import cn.aetheris.yuki.data.HeadRotation;
+import cn.aetheris.yuki.data.player.HeadRotation;
 import cn.aetheris.yuki.util.graphing.GraphUtil;
 import cn.aetheris.yuki.math.MathUtil;
 import cn.aetheris.yuki.util.update.RotationUpdate;

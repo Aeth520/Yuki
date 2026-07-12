@@ -1,4 +1,4 @@
-package cn.aetheris.yuki.data;
+package cn.aetheris.yuki.data.player;
 
 import cn.aetheris.yuki.math.vector.Vector3dm;
 import com.github.retrooper.packetevents.protocol.world.BlockFace;

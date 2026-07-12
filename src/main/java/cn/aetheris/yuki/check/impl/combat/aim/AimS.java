@@ -5,7 +5,7 @@ import cn.aetheris.yuki.check.Check;
 import cn.aetheris.yuki.check.CheckData;
 import cn.aetheris.yuki.check.type.RotationCheck;
 import cn.aetheris.yuki.player.PlayerData;
-import cn.aetheris.yuki.data.Pair2;
+import cn.aetheris.yuki.data.util.Pair2;
 import cn.aetheris.yuki.util.lists.EvictingList;
 import cn.aetheris.yuki.math.MathUtil;
 import cn.aetheris.yuki.util.update.RotationUpdate;

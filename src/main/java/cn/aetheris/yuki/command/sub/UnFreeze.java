@@ -2,7 +2,7 @@ package cn.aetheris.yuki.command.sub;
 
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.command.AbstractCommand;
-import cn.aetheris.yuki.data.FreezeData;
+import cn.aetheris.yuki.data.player.FreezeData;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

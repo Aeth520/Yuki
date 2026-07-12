@@ -14,7 +14,7 @@ import cn.aetheris.yuki.predictionengine.movementtick.*;
 import cn.aetheris.yuki.predictionengine.predictions.PredictionEngineNormal;
 import cn.aetheris.yuki.predictionengine.predictions.rideable.PredictionEngineBoat;
 import cn.aetheris.yuki.block.collision.datatypes.SimpleCollisionBox;
-import cn.aetheris.yuki.data.VectorData;
+import cn.aetheris.yuki.data.movement.VectorData;
 import cn.aetheris.yuki.entity.*;
 import cn.aetheris.yuki.util.enums.Pose;
 import cn.aetheris.yuki.math.MathUtil;

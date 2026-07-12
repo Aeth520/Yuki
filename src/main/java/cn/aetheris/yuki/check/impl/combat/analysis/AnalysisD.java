@@ -7,7 +7,7 @@ import cn.aetheris.yuki.check.type.RotationCheck;
 import cn.aetheris.yuki.check.util.exempts.types.ExemptType;
 import cn.aetheris.yuki.check.util.processor.rotateprocessor.RotateProcessor;
 import cn.aetheris.yuki.player.PlayerData;
-import cn.aetheris.yuki.data.HeadRotation;
+import cn.aetheris.yuki.data.player.HeadRotation;
 import cn.aetheris.yuki.math.MathUtil;
 import cn.aetheris.yuki.protocol.nms.vec.Vec2f;
 import cn.aetheris.yuki.util.update.RotationUpdate;

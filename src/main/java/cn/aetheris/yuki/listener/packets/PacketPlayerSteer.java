@@ -5,7 +5,7 @@ import cn.aetheris.yuki.listener.packets.abstracts.AbstractPacketListener;
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.predictionengine.predictions.PredictionEngine;
 import cn.aetheris.yuki.block.collision.datatypes.SimpleCollisionBox;
-import cn.aetheris.yuki.data.KnownInput;
+import cn.aetheris.yuki.data.player.KnownInput;
 import cn.aetheris.yuki.entity.PacketEntity;
 import cn.aetheris.yuki.entity.PacketEntityHorse;
 import cn.aetheris.yuki.protocol.nms.vec.Vec2;
