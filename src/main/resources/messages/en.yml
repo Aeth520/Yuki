@@ -1,0 +1,469 @@
+# ******************************************************************************************************************************
+#                     Message Configuration
+# This section defines text messages for plugin notifications, warnings, errors, and command usages.
+##############################################
+# Command Prefix
+##############################################
+# Defines the prefix text for all plugin messages and command responses.
+anticheat-prefix: "&3Yuki &8» &f"
+
+##############################################
+# Error and Information Outputs
+##############################################
+# Display corresponding error messages when commands or operations fail.
+only-player: "&c✘ Only players can execute this command!"   # Only players can execute this command!
+no-permission: "&c✘ You do not have permission!"              # You do not have permission to execute this command!
+unknown-command: "&c✘ Unknown command!"                # The entered command was not recognized!
+not-found: "&c✘ Player &f%player%&c does not exist"         # The specified player does not exist!
+not-online: "&c✘ Player &f%player%&c is not online!"       # The specified player is currently not online!
+not-data-user: "&c✘ Player &f%player%&c bypassed tracking or does not exist!"     # This player is not tracked due to permission bypass or does not exist!
+not-my-self: "&c✘ You cannot use this command on yourself!"             # Cannot execute this command on yourself!
+stop-chat: "&c✘ Stop talking, the server is dying..."
+##############################################
+# Message Output Formats
+##############################################
+output:
+  ##############################################
+  # Client Brand Display Format
+  ##############################################
+  # Displays the client's brand and channel information when a player joins.
+  client-brand:
+    format: "&f✦ Player &b%player% &fjoined with &b%brand% &fvia &7(&b%channel%&7)"
+
+  ##############################################
+  # Alerts
+  ##############################################
+  alerts:
+    # Enable alert message: Text message displayed when all checks are enabled.
+    # Alert message when all checks are enabled.
+    # Default: "&f                                                       &a&lAll CHECKS HAVE BEEN ENABLED"
+    enable: "&f                                                       &a&lAll CHECKS HAVE BEEN ENABLED"
+    # Disable alert message: Text indicating that monitoring has been disabled.
+    # Alert message indicating that monitoring has been disabled.
+    # Default: "&eMonitoring stopped..."
+    disable: "&eMonitoring stopped..."
+    # Alert symbol: A symbol used within alert messages.
+    # Alert symbol: A symbol used within alert messages.
+    # Default: "&c⚠&f"
+    expsymbol: "&c⚠&f"
+    # Alert format configuration: Defines alert message templates for different scenarios.
+    format:
+      # Normal alert format: Alert message template for standard detections.
+      # Normal alert format for standard detections.
+      # Default: "&3⚠ &f%player% &7failed &3%check_name% &8» &f%exp% &7VL&8: &3%vl%"
+      normal: "&3⚠ &f%player% &7failed &3%check_name% &8» &f%exp% &7VL&8: &3%vl%"
+      # Proxy alert format: Alert message template for proxy mode.
+      # Proxy alert format for cases when proxy is used.
+      # Default: "&3⚠ &f%player% &7failed &3%check_name% &8» &f%exp% &7VL&8: &3%vl%"
+      proxy: "&3⚠ &f%player% &7failed &3%check_name% &8» &f%exp% &7VL&8: &3%vl%"
+
+  ##############################################
+  # Verbose
+  ##############################################
+  verbose:
+    # Enable verbose: Text displayed when verbose mode is activated.
+    # Verbose enabled message when detailed mode is activated.
+    # Default: "&f                                                       &a&lVERBOSE HAVE BEEN ENABLED"
+    enable: "&f                                                       &a&lVERBOSE HAVE BEEN ENABLED"
+    # Disable verbose: Text used to stop displaying verbose information.
+    # Verbose disabled message.
+    # Default: "&aStopped viewing verbose information!"
+    disable: "&aStopped viewing verbose information!"
+
+  ##############################################
+  # Hover Text
+  ##############################################
+  # Configure the detailed hover text displayed when the mouse hovers over a message.
+  hover: |-
+    &b✦ Ping: &f%mix_ping% &7(&fLag=&c%lagging%&7 | &c%move_lagging%&7)
+    &b✦ TPS: &f%tps% | &bVer: &f%brand% %version%
+    &7&m━━━━━━━━━━━━━━━━━━━━━━━━━━
+    &b✦ Check Description:
+    &f%description%
+    &7&m━━━━━━━━━━━━━━━━━━━━━━━━━━
+    &b✦ Verbose Data:
+    &f%verbose%
+    &7&m━━━━━━━━━━━━━━━━━━━━━━━━━━
+    &b✦ &cClick to kill player &f%player%
+
+##############################################
+# Kick Broadcast Messages
+##############################################
+broadcast: |-
+  &7&m--------------------------------------------------
+  &c&l✗ &b&lKARHU CHEAT DETECTION
+  &fKarhu &7has removed a player from the network due to cheating
+  &7&m--------------------------------------------------
+#  §7§m--------------------------------------------------
+#  §c§l✗ §bLON&fANTICHEAT §bCHEAT DETECTION
+#  %prefix%Has Removed §f%player%§7 For Cheating!
+#  §7§m--------------------------------------------------
+##############################################
+# Kick Messages
+##############################################
+# Defines the prompt text for players kicked due to data anomalies, timeouts, or other reasons.
+kick:
+  # Invalid forge: Message when a player is kicked due to abnormal forge version.
+  # Kick message for invalid packets.
+  invalid-forge: "&c✘ Client exception &7(FORGE:github.com/MinecraftForge/MinecraftForge/issues/9309)"
+  # Packet exception prompt: Message when a player is kicked due to packet anomalies.
+  # Kick message for invalid packets.
+  packet: "%prefix%&c✘ Packet exception"
+  # Exception prompt: Internal exception error message, usually caused by network errors.
+  # Internal exception message typically caused by network errors.
+  exception: "Internal Exception: io.netty.channel.unix.Errors$NativeIoException: readAddress(..) failed: Connection reset by peer (E)"
+  # Timeout prompt: Error message when packet transmission times out.
+  # Packet timeout message.
+  timed-out: "Internal Exception: io.netty.channel.unix.Errors$NativeIoException: readAddress(..) failed: Connection reset by peer (T)"
+  # Default exception prompt: Other uncategorized internal exception messages.
+  # Default internal exception message.
+  default: "Internal Exception: io.netty.channel.unix.Errors$NativeIoException: readAddress(..) failed: Connection reset by peer (D)"
+  # Illegal client kick prompt: Kicks the client with a client brand in the blacklist
+  # Illegal client kicked out prompt: kicked out the client brand client in the blacklist
+  invalid-client: "&cYour client is abnormal &7(%brand%)"
+  # Illegal ping kick: Kicks players whose ping exceeds a certain value for a period of time
+  # Illegal ping Kick: Kick out a player whose ping exceeds a certain value and lasts for a period of time
+  invalid-ping: "&cYour ping is abnormally high and has lasted &f%duration% &7(%ping%)"
+##############################################
+# Command Blocker
+##############################################
+command-blocker:
+  # Used to block messages when executing special commands for players.
+  # Used to block messages when executing special commands for players.
+  message: "Unknown command. Type \"/help\" for help."
+
+##############################################
+# Command Handling
+##############################################
+# The following section configures usage, prompt messages, and default parameters for each command
+commands:
+  ##############################################
+  # Spectate Command
+  ##############################################
+  # Command to start spectating a specified player.
+  action: "yuki spectate %player%"
+
+  ##############################################
+  # Help Command
+  ##############################################
+  help:
+    # Usage: Displays the command usage help.
+    usage: "&3✦ Usage: &f/yuki help"
+    # Help message content: Multi-line text listing all available commands and their descriptions.
+    message: |-
+      &7&m==============&b Yuki &7&m==============
+      &3❖ &f/yuki alerts &8-&7 Toggle alerts
+      &3❖ &f/yuki version &8-&7 View version
+      &3❖ &f/yuki log &7<page> &8-&7 View logs
+      &3❖ &f/yuki verbose &8-&7 Toggle verbose
+      &3❖ &f/yuki spectate &7<player> &8-&7 Spectate player
+      &3❖ &f/yuki stopspectating &8-&7 Stop spectating
+      &3❖ &f/yuki debug &7<mode> <player> &8-&7 Debug mode
+      &3❖ &f/yuki reload &8-&7 Reload config
+      &3❖ &f/yuki crash &7<player> <mode> &8-&7 Crash client
+      &3❖ &f/yuki setback &7<player> <mode> &8-&7 Setback player
+      &3❖ &f/yuki delay &7<seconds> <command> &8-&7 Delayed execution
+      &3❖ &f/yuki mitigate &7<player> <mode> &8-&7 Punish player
+      &3❖ &f/yuki develop &8-&7 Toggle develop mode
+      &3❖ &f/yuki control &7<player> &8-&7 Toggle target player's checks
+      &3❖ &f/yuki controlcheck &7<check> &8-&7 Toggle target check
+      &3❖ &f/yuki hist&f/history &7<player> <page> &8-&7 History logs
+      &3❖ &f/yuki punish &7<player> &8-&7 Punish player
+      &7&m==============&b Yuki &7&m==============
+
+  ##############################################
+  # Player Profile Command
+  ##############################################
+  profile:
+    # Usage: Command format to view a player's profile.
+    usage: "&b✦ Usage: &f/yuki profile <player>"
+    # Profile message: Displays detailed information such as ping, clicks, teleport status, client version, and sensitivity.
+    message: |-
+      &7&m━━━━━━━&b %player% Profile &7&m━━━━━━━
+      &b✦ Ping: &f%mix_ping% &7(&c%lagging%&7 | &c%move_lagging%&7)
+      &b✦ Clicks: &f%cps%/%last_cps% | &bTeleport: &f%teleporting%
+      &b✦ Riding: &f%riding% | &bVersion: &f%version%
+      &b✦ Client: &f%brand%
+      &b✦ Sensitivity: &fHorizontal %h_sensitivity%% | Vertical %v_sensitivity%%
+      &b✦ Overall Sensitivity: &f%wrapper_sensitivity%
+      &b✦ Fast Math: &f%fast_math%
+      &7&m━━━━━━━&b %player% Profile &7&m━━━━━━━
+
+  ##############################################
+  # Reload Command
+  ##############################################
+  reload:
+    # Reload failure prompt: Error message displayed when config reload fails.
+    # Message displayed when plugin reload fails.
+    fail: "&c✘ Reload failed! &7(%reason%)"
+    # Reload success prompt: Message after config reload succeeds.
+    # Message displayed when plugin reload succeeds.
+    success: "&a✔ Configuration reloaded"
+
+  ##############################################
+  # Delay Command
+  ##############################################
+  delay:
+    # Usage: Defines the format for delayed command execution; requires delay in seconds and the command to execute.
+    usage: "&b✦ Usage: &f/yuki delay <seconds> <command>"
+    # Invalid number prompt: Error message when a non-integer is entered.
+    invalid: "&c✘ Please enter an integer!"
+    # Command delay prompt: Notifies the user that the specified command will execute after the delay.
+    message: "&a✦ Command &b%command% &awill execute in &e%delay%s"
+
+  ##############################################
+  # Setback Command
+  ##############################################
+  setback:
+    # Usage: Command format to setback a player to a position.
+    usage: "&b✦ Usage: &f/yuki setback <player>"
+    # Setback success prompt: Message shown after successfully setting back a player, including the mode used.
+    message: "&a✦ Set back &e%player% &awith &b%mode% &amode"
+    # Player immune prompt: Message when the target player cannot be set back.
+    cannot: "&c✘ &f%player% &cis immune to setback!"
+    # Invalid setback mode prompt: Error when the entered setback mode does not exist.
+    no-type: "&c✘ Invalid setback mode!"
+    # Default setback mode: The default mode used when none is specified.
+    default-type: "normal"
+
+  ##############################################
+  # Version Command
+  ##############################################
+  info:
+    # Usage: Command format to check plugin version info.
+    usage: "&b✦ Usage: &f/yuki info"
+    # Version info message: Displays detailed version info including version number, server, and packet event stats.
+    message: |-
+      &7&m━━━━━━━━&b Yuki &7&m━━━━━━━━
+      &b✦ Version: &f%version%
+      &b✦ Server Name: &f%server%
+      &b✦ Server Version: &f%server_version%
+      &b✦ Is Folia: &f%folia%
+      &b✦ Advanced API Support: &f%support_adventure%
+      &b✦ Using VIA: &f%via%
+      &b✦ Memory Usage: &f%memory%
+      &b✦ Server System: &f%system%
+      &b✦ Java Version: &f%java%
+      &b✦ Packet Events Version: &f%packetevents%
+      &7&m━━━━━━━━&b Yuki &7&m━━━━━━━━
+
+  ##############################################
+  # Send Alert Command
+  ##############################################
+  # Command format to manually send an alert message.
+  send-alert:
+    usage: "&b✦ Usage: &f/yuki sendalert <mode> <message>"
+    # Default type: The mode used by default
+    # raw is without prefix
+    # normal is with prefix
+    default-type: "normal"
+
+  ##############################################
+  # History Command
+  ##############################################
+  history:
+    # Usage: Command format to view a player's history logs.
+    usage: "&b✦ Usage: &f/yuki history <player> <page>"
+    # Page count: Number of entries displayed per page for history logs.
+    pages: 8
+    # Pagination header format: Title line displaying pagination info.
+    header: "&b✦ Player &e%player% &7(&f%page%&8/&f%maxPages%&7)"
+    # Single history entry format: Text format for displaying each entry.
+    entry: "&8❖ &bID: &f%player% | &bType: %check_name% %exp% | &bVL: &f%vl% | &bTime: &f%timeago%"
+    # Delete all history prompt: Message when deleting all player history data.
+    clean-all: "&a✔ All player data has been cleared!"
+    # Delete specific player history prompt: Message when deleting a specific player's data.
+    clean: "&a✔ Cleared &e%player%&a's data!"
+
+  ##############################################
+  # Debug Command
+  ##############################################
+  debug:
+    # Usage: Command format to enable or disable prediction debug mode.
+    usage: "&b✦ Usage: &f/yuki debug <type> <player>"
+    # Enable debug prompt: Message displayed when prediction debug mode is enabled.
+    enable: "&a✦ &b%type% &fdebug mode &aenabled"
+    # Disable debug: Does not take effect when develop mode is off
+    no-develop: "&c✘ Please enable &bDevelop &cmode first!"
+    # Disable debug prompt: Message displayed when prediction debug mode is disabled.
+    disable: "&c✦ &b%type% &fdebug mode &cdisabled"
+
+  ##############################################
+  # Console Debug Command
+  ##############################################
+  console-debug:
+    # Usage: Command format for enabling/disabling debug mode from the console. (Console only)
+    usage: "&b✦ Usage: &f/yuki consoledebug <type> <player>"
+    # Console-only prompt: If executed outside the console, prompts that this command is console-only.
+    only-console: "&c✘ Console only!"
+    # Enable console debug prompt: Message when console debug mode is enabled for a player.
+    enable: "&a✦ Enabled &b%type% &fdebug for &e%player%"
+    # Disable console debug prompt: Message when console debug mode is disabled for a player.
+    disable: "&c✦ Disabled &b%type% &fdebug for &e%player%"
+
+  ##############################################
+  # Prediction Logs Command
+  ##############################################
+  prediciton-logs:
+    # Usage: Command format to view prediction logs by ID.
+    usage: "&b✦ Usage: &f/yuki logs <ID>"
+    # Invalid log ID prompt: Error message when an invalid log ID is entered.
+    invalid: "&c✘ Invalid value"
+    # Log not found prompt: Message when the specified log ID does not exist.
+    not-found: "&c✘ Log ID not found: &e%flagId%"
+    # Log uploading prompt: Notifies the user that the log is uploading.
+    uploading: "&a✦ Uploading..."
+    # Log upload complete prompt: Displays the uploaded URL after upload completes.
+    uploadded: "&a✔ Upload complete &7URL: &f%url%"
+    # Log upload failure prompt: Error message when log upload fails.
+    uploadfail: "&c✘ Upload failed!"
+    # Log upload failure (with core info): Prompt with core info when upload fails.
+    uploadfail2: "&c✘ Upload failed &7(&f%core%&7)"
+
+  ##############################################
+  # Spectate Command
+  ##############################################
+  spectate:
+    # Usage: Command format to start spectating a specified player.
+    usage: "&b✦ Usage: &f/yuki spectate <player>"
+    # Return prompt: Provides a return option to the previous spectate position (multi-line text).
+    return: "\n&e✦ Click to return to previous spectate position\n"
+    # Spectate success prompt: Success message when spectate mode starts for a player.
+    message: "&a✦ Now spectating &e%player%"
+    # Stop spectate prompt: Message when spectate mode is stopped.
+    stop: "&a✦ Spectate mode stopped"
+  ##############################################
+  # Develop Command
+  ##############################################
+  develop:
+    # Usage: Command format used to quickly open development mode.
+    usage: "&b✦ Usage: &f/yuki develop"
+    # Successfully opened development mode: prompt indicating successful opening of development mode
+    enable: "&a✦ Development mode enabled!"
+    # Successfully closed development mode: prompt indicating successful closure of development mode
+    disable: "&a✦ Development mode disabled!"
+
+  ##############################################
+  # Crash Command
+  ##############################################
+  crash:
+    # Usage: Command format to send a crash packet to a specified player.
+    usage: "&b✦ Usage: &f/yuki crash <player> <mode>"
+    # Invalid crash mode prompt: Error message when an invalid crash mode is specified.
+    invalid-type: "&c✘ Invalid crash mode!"
+    # Default crash mode: The default value when no crash mode is specified.
+    default-type: "explosion"
+    # Crash success prompt: Message when a crash packet is successfully sent to a player.
+    message: "&a✦ Sent crash packet to &e%player%"
+
+  ##############################################
+  # Mitigate Command
+  ##############################################
+  mitigate:
+    # Usage: Command format to mitigate (punish) a specified player.
+    usage: "&b✦ Usage: &f/yuki mitigate <player> <mode>"
+    # Invalid mitigation type prompt: Error message when an invalid mitigation type is specified.
+    invalid-type: "&c✘ Invalid mitigation type: &e%type%"
+    # Default mitigation mode: The default value when no mitigation mode is specified.
+    default-type: "damage"
+    types:
+      damage:
+        # Message for damage mitigation.
+        message: "&b✦ Enabled damage reduction for &e%player%"
+      reset-item:
+        # Message for resetting item usage state.
+        message: "&b✦ Reset &e%player%&b's item state"
+      knock-back:
+        # Message for applying knockback.
+        message: "&b✦ Applied knockback to &e%player%"
+      rotate:
+        # Message for randomizing the player's view.
+        message: "&b✦ Randomized &e%player%&b's view"
+      shuffle:
+        # Message for shuffling the player's main-hand inventory.
+        message: "&b✦ Shuffled &e%player%&b's main-hand items"
+      food:
+        # Message for temporarily resetting the player's food level.
+        message: "&b✦ Reset &e%player%&b's food level"
+      resync:
+        # Message for re-synchronizing the player's posture.
+        message: "&b✦ Resynced &e%player%&b's posture"
+      killaura:
+        # Message for teleporting the attacker behind the target player.
+        message: "&b✦ Teleported &e%player% &bbehind &e%target%"
+        # Message when the player hasn't attacked any other player yet.
+        not-target: "&c✘ &e%player% &chas not attacked any player"
+        # Message for teleporting the player back to the original position.
+        pull-back: "&b✦ Teleported &e%player% &bback to original position"
+        # Message indicating the target player might be using KillAura.
+        attacked: "&c✦ Target appears to be using &4KillAura&c!"
+        # Duration the player stays behind the target after teleportation (unit: tick).
+        tick: 10
+
+  ##############################################
+  # Freeze Command
+  ##############################################
+  freeze:
+    # Usage: Command format to freeze a specified player, preventing movement.
+    usage: "&b✦ Usage: &f/yuki freeze <player>"
+    # Freeze success prompt: Message displayed after a player is frozen.
+    message: "&b✦ Frozen player &e%player%"
+    # Player already frozen prompt: Error message when the target player is already frozen.
+    already-frozen: "&c✘ &e%player% &cis already frozen!"
+    # Frozen target prompt: Message shown to a player when they are frozen, possibly including appeal instructions.
+    target-side: "&c❖ You have been frozen! Please contact support to appeal\n&c❖ Do not move or leave the game!"
+
+  ##############################################
+  # Unfreeze Command
+  ##############################################
+  unfreeze:
+    # Usage: Command format to unfreeze a specified player.
+    usage: "&b✦ Usage: &f/yuki unfreeze <player>"
+    # Unfreeze success prompt: Message displayed after successfully unfreezing.
+    message: "&a✦ Unfroze &e%player%"
+    # Not frozen prompt: Error message when the target player is not frozen.
+    not-freeze: "&c✘ &e%player% &cis not frozen"
+    # Unfreeze target prompt: Message shown to a player when they have been unfrozen.
+    target-side: "&a✦ You have been unfrozen!"
+
+  ##############################################
+  # Control Command
+  ##############################################
+  control:
+    # Usage: Command format to toggle detection for a specified player.
+    usage: "&b✦ Usage: &f/yuki control <player>"
+    # Enable detection prompt: Message when detection is enabled for a player; executing again toggles the state.
+    enable: "&a✦ Enabled detection for &e%player% &7(execute again to disable)"
+    # Disable detection prompt: Message when detection is disabled for a player; executing again toggles the state.
+    disable: "&c✦ Disabled detection for &e%player% &7(execute again to enable)"
+
+  ##############################################
+  # Punish Command
+  ##############################################
+  punish:
+    # Usage: Command format used to punish players.
+    usage: "&b✦ Usage: &f/yuki punish <player>"
+    # Send punish command: Send a penalty command to the target player
+    message: "&a✦ Sent punishment command to &e%player%&a!"
+
+  ##############################################
+  # Decrypt Command
+  ##############################################
+  decrypt:
+    # Usage: Used to decrypt encrypted text
+    usage: "&b✦ Usage: &f/yuki decrypt <encrypted text>"
+    # Send final decrypted message: Display the decrypted result to the executor
+    message: "&a✦ Decrypted content is %message% !"
+
+  ##############################################
+  # Control-Check Command
+  ##############################################
+  control-check:
+    # Usage: Command format to toggle detection for a specified player.
+    usage: "&b✦ Usage: &f/yuki controlcheck <check>"
+    # Check not found: The corresponding check cannot be found
+    not-found: "&c✦ This check was not found!"
+    # Enable specific detection prompt: Enable corresponding detection
+    enable: "&a✦ &cEnabled &acheck &e%check_name%"
+    # Disable specific detection prompt: Disable corresponding detection
+    disable: "&c✦ Disabled check &e%check_name%"

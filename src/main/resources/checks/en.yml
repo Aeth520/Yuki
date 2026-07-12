@@ -1,0 +1,787 @@
+# ******************************************************************************************************************************
+#                     Check Settings Configuration
+# This configuration defines various detection parameters for anti-cheat checks including rotation, movement, scaffold, combat, and player checks.
+
+##############################################
+# Movement Checks
+##############################################
+
+# MovementValidation check: Used to detect player movement state, including strictness, special adaptation, wait time, and decay coefficient.
+MovementValidation:
+  # strictness: Detection strictness, options: "strict" / "balanced" / "lenient" / "chaos".
+  # Default: "balanced"
+  strictness: "balanced"
+  # special: Whether to enable special adaptation (e.g., adapting to sinkhole servers).
+  # Default: false
+  special: false
+  # silent: Whether to skip setback when detected.
+  # Default: false
+  silent: false
+  # refresh-blocks: When a player shows anomalies (possibly GroundSpoof or GhostBlock), refresh blocks around the player
+  # Additionally, this requires extra performance
+  # Default: false
+  refresh-blocks: false
+  # ignore-ghost-block: Whether to check when the block underfoot is a ghost block
+  # Default: false
+  ignore-ghost-block: false
+  # join-wait-time: Wait time after player joins, in seconds.
+  # Default: 5
+  join-wait-time: 5
+  # decay: Decay coefficient, used for decay calculation of movement data.
+  # Default: 0.85
+  decay: 0.85
+
+# NoSlowA check: Used to detect player no-slow behavior.
+NoSlowA:
+  # threshold: Detection threshold, below which detection may be triggered.
+  # Default: 0.018
+  threshold: 0.018
+  # setback-vl: Offset value given when anomaly is detected.
+  # Default: 15
+  setback-vl: 15
+  # decay: Decay coefficient, used for buffer score decay.
+  # Default: 0.15
+  decay: 0.15
+
+# GroundSpoofA check: Detects player ground spoofing behavior.
+GroundSpoofA:
+  # setback-vl: Offset value.
+  # Default: 5
+  setback-vl: 5
+  # ignore-ghost: Whether to ignore ghost block effects.
+  # Default: true
+  ignore-ghost: true
+
+# GroundSpoofB check: Another set of ground spoofing detection parameters.
+GroundSpoofB:
+  # setback-vl: Offset value.
+  # Default: 10
+  setback-vl: 10
+  # ignore-ghost: Whether to ignore ghost block effects.
+  # Default: false
+  ignore-ghost: false
+
+# GroundSpoofC check: Another set of ground spoofing detection parameters.
+GroundSpoofC:
+  # setback-vl: Offset value.
+  # Default: 7
+  setback-vl: 7
+  # ignore-ghost: Whether to ignore ghost block effects.
+  # Default: false
+  ignore-ghost: false
+  # mitigate-ground: Whether to silently handle some possible ground spoofing by the player; this may be affected by the environment and cause false positives
+  # Default: false
+  mitigate-ground: false
+
+# NoSaddleB check: Detects player controlling rideable entities without a saddle.
+NoSaddleB:
+  # setback-vl: Offset value for entity control.
+  # Default: 8
+  setback-vl: 1
+
+##############################################
+# Scaffold Checks
+##############################################
+
+# AirPlaceA check: Detects air placement behavior.
+AirPlaceA:
+  # cancel-vl: Cancel threshold when abnormal air placement behavior is detected.
+  # Default: 4
+  cancel-vl: 4
+
+# FarPlace check: Detects far-distance placement, supports detection only for crystal cases.
+FarPlace:
+  # only-crystal: Whether to only detect crystal-related placement.
+  # Default: true
+  only-crystal: false
+  # cancel-vl: Cancel behavior threshold.
+  # Default: 5
+  cancel-vl: 2
+
+# ScaffoldI check: Detects fabricated placement behavior.
+ScaffoldI:
+  # cancel-vl: Cancel behavior threshold.
+  # Default: 5
+  cancel-vl: 5
+
+# ScaffoldA check: Detects rotation anomalies during building.
+ScaffoldA:
+  # cancel-vl: Cancel behavior threshold.
+  # Default: 5
+  cancel-vl: 5
+
+##############################################
+# Combat Checks
+##############################################
+
+# AimF check: Used to detect rotation cheating, mainly detects X-axis rotation changes, acceleration, and rotation angle.
+AimF:
+  # buffer: Detection buffer score; when accumulated score exceeds this value, it's judged as cheating.
+  # Default: 9
+  buffer: 9
+  # min-deltaX: Minimum X-axis rotation change threshold, used to filter tiny changes.
+  # Default: 0.4D
+  min-deltaX: 0.4D
+  # max-deltaX-accel: Maximum X-axis acceleration threshold; exceeding this value may be a sign of cheating.
+  # Default: 0.1D
+  max-deltaX-accel: 0.1D
+  # max-rotation-angle: Maximum angle allowed for a single rotation.
+  # Default: 5D
+  max-rotation-angle: 5D
+
+# AimG check: Detects Y-axis rotation changes and acceleration.
+AimG:
+  # buffer: Detection buffer score.
+  # Default: 7
+  buffer: 7
+  # min-deltaY: Minimum Y-axis rotation change threshold.
+  # Default: 0.4D
+  min-deltaY: 0.4D
+  # max-deltaY-accel: Maximum Y-axis acceleration threshold.
+  # Default: 0.1D
+  max-deltaY-accel: 0.1D
+
+# AimH check: Detection for X-axis rotation changes and Y-axis acceleration.
+AimH:
+  # buffer: Detection buffer score.
+  # Default: 7
+  buffer: 7
+  # min-deltaX: Minimum X-axis rotation change threshold; set higher here.
+  # Default: 1D
+  min-deltaX: 1D
+  # max-deltaY: Maximum Y-axis acceleration threshold.
+  # Default: 0.0001D
+  max-deltaY: 0.0001D
+
+# AimJ check: Detection for version check, sample size, invalid rows, row length, and average rotation.
+AimJ:
+  # sample-size: Number of samples used to calculate the average.
+  # Default: 30
+  sample-size: 30
+  # max-invalid-rows: Maximum allowed invalid data rows.
+  # Default: 4
+  max-invalid-rows: 4
+  # min-row-length: Minimum row length requirement.
+  # Default: 3
+  min-row-length: 3
+  # min-average-rot: Minimum average rotation threshold.
+  # Default: 1.5
+  min-average-rot: 1.5
+  # buffer: Detection buffer score.
+  # Default: 5
+  buffer: 5
+
+# AimL check: Simple buffer configuration for rotation detection.
+AimL:
+  # buffer: Detection buffer score.
+  # Default: 4
+  buffer: 4
+
+# AimR check: Detection for X-axis rotation, Y-axis acceleration, ratio threshold, and window size.
+AimR:
+  # min-deltaX: Minimum X-axis rotation change threshold.
+  # Default: 1D
+  min-deltaX: 1D
+  # max-deltaY: Maximum Y-axis acceleration threshold.
+  # Default: 0.0001D
+  max-deltaY: 0.0001D
+  # ratio-threshold: Rotation ratio threshold, used to determine abnormal changes.
+  # Default: 1000.0D
+  ratio-threshold: 1000.0D
+  # window-size: Detection window size, i.e., the number of consecutive data samples collected.
+  # Default: 8
+  window-size: 8
+  # buffer: Detection buffer score.
+  # Default: 8
+  buffer: 8
+
+# AimM check: Sample size, invalid rows, row length, average rotation, and buffer settings.
+AimM:
+  # sampleSize: Number of samples used for analysis.
+  # Default: 25
+  sample-size: 25
+  # maxInvalidRows: Maximum allowed invalid data rows.
+  # Default: 2
+  max-invalid-rows: 2
+  # minRowLength: Minimum data row length.
+  # Default: 3
+  min-row-length: 3
+  # minAverageRot: Minimum average rotation threshold.
+  # Default: 1.5
+  min-average-rot: 1.5
+  # buffer: Detection buffer score.
+  # Default: 5
+  buffer: 5
+  # mitigate-vl: VL for damage reduction.
+  # Default: 5
+  mitigate-vl: 4
+
+# AnalysisA check: Identifies smooth aimbot through buffer score, dynamic threshold, smoothness, and jitter
+AnalysisA:
+  buffer:
+    # Per-frame buffer decays at this rate (higher → slower integral decline)
+    # Default: 0.965
+    decay: 0.965
+    # When buffer >= this value, immediately trigger alert
+    # Default: 4.0
+    flag-threshold: 5.0
+    # After alert, multiply buffer by this coefficient to fall back
+    # Default: 0.35
+    post-flag-decay: 0.35
+
+  dynamic-threshold:
+    # sus threshold = mean + (std-mult × standard deviation)
+    # Default: 2.0
+    std-mult: 2.0
+
+  windows:
+    # Sliding window size for smoothness calculation (Tick)
+    # Default: 80
+    smooth: 80
+
+    # Pitch-Lock statistics window size (Tick)
+    # Default: 60
+    small-pitch: 60
+
+  pitch-lock:
+    # Maximum angle considered as "small pitch" (°)
+    # Default: 0.3
+    small-pitch-max: 0.3
+
+    # Small pitch ratio >= ratio1 adds 0.15
+    # Default: 0.7
+    ratio1: 0.7
+
+    # Small pitch ratio >= ratio2 adds 0.25
+    # Default: 0.85
+    ratio2: 0.85
+
+  jitter:
+    # Angle threshold for determining "small movement" (°)
+    # Default: 0.5
+    small-angle: 0.5
+
+    # Jitter detection sliding window size (Tick)
+    # Default: 15
+    window: 15
+
+    # When the number of flips in the window >= this value, jitter is detected
+    # Default: 6
+    flip-threshold: 6
+
+AnalysisF:
+  gcd:
+    # Detects fixed angle changes (e.g., 0.1/0.01 regular changes)
+    # max-buffer: Maximum allowed anomaly count (default: 3.0)
+    # fail-increase: Anomaly value increment per trigger (default: 1.0)
+    enabled: true
+    max-buffer: 3.0
+    fail-increase: 1.0
+
+  sync:
+    # Detects mismatch between view movement and mouse sensitivity
+    # max-buffer: Maximum allowed anomaly count (default: 5.0)
+    # fail-increase: Anomaly value increment per trigger (default: 1.0)
+    enabled: true
+    max-buffer: 5.0
+    fail-increase: 1.0
+
+  machine:
+    # Detects machine-like regular movement (fixed interval angle changes)
+    # max-buffer: Maximum allowed anomaly count (default: 5.0)
+    # fail-increase: Anomaly value increment per trigger (default: 1.0)
+    enabled: true
+    max-buffer: 5.0
+    fail-increase: 1.0
+
+  interpolation:
+    # Detects screen jitter anomalies (discontinuous angle changes)
+    # max-buffer: Maximum allowed anomaly count (default: 4.0)
+    # fail-increase: Anomaly value increment per trigger (default: 0.85)
+    enabled: true
+    max-buffer: 4.0
+    fail-increase: 0.85
+
+  interpolation_out:
+    # Detects screen jitter anomalies at high sensitivity (effective when sensitivity > 100%)
+    # max-buffer: Maximum allowed anomaly count (default: 6.0)
+    # fail-increase: Anomaly value increment per trigger (default: 1.0)
+    enabled: true
+    max-buffer: 6.0
+    fail-increase: 1.0
+
+  machine_out:
+    # Detects machine-like movement at high sensitivity (effective when sensitivity > 100%)
+    # max-buffer: Maximum allowed anomaly count (default: 6.0)
+    # fail-increase: Anomaly value increment per trigger (default: 1.0)
+    enabled: true
+    max-buffer: 6.0
+    fail-increase: 1.0
+
+# AnalysisH check: Lightweight ML inference detection (logistic regression model, infers aimbot probability through 8-dimensional rotation features)
+AnalysisH:
+  buffer:
+    # Per-frame buffer decays at this rate
+    # Default: 0.94
+    decay: 0.94
+    # When buffer >= this value, immediately trigger alert
+    # Default: 5.0
+    flag-threshold: 5.0
+    # After alert, multiply buffer by this coefficient to fall back
+    # Default: 0.40
+    post-flag-decay: 0.40
+
+  threshold:
+    # When the average probability in the sliding window exceeds this value, start accumulating buffer
+    # Default: 0.68
+    mean-probability: 0.68
+    # When the peak probability in the sliding window exceeds this value, additionally accumulate buffer
+    # Default: 0.85
+    peak-probability: 0.85
+
+  windows:
+    # Feature normalization sliding window size (Tick)
+    # Default: 60
+    normalization: 60
+    # Probability aggregation sliding window size (Tick)
+    # Default: 40
+    probability: 40
+    # Minimum samples required to start inference
+    # Default: 15
+    min-samples: 15
+    # Minimum probability samples required to start aggregation judgment
+    # Default: 20
+    min-probability-samples: 20
+
+  increment:
+    # Increment coefficient when average probability exceeds threshold
+    # Default: 0.35
+    mean: 0.35
+    # Increment coefficient when peak probability exceeds threshold
+    # Default: 0.20
+    peak: 0.20
+    # Maximum increment cap per frame
+    # Default: 0.6
+    max: 0.6
+
+# KillAuraG check: Checks accuracy
+KillAuraG:
+  # accuracy: Detection accuracy percentage.
+  # Default: 95
+  accuracy: 95
+  # size: Sample size, used for detection analysis.
+  # Default: 25
+  size: 25
+  # reach: Attack range threshold.
+  # Default: 0.7
+  reach: 1.45
+  # combat-time: Combat time threshold, in seconds.
+  # Default: 10
+  combat-time: 10
+  # min-average-target-movement: Minimum average target movement distance threshold.
+  # Default: 0.3
+  min-average-target-movement: 0.3
+  # min-cps: Minimum CPS to trigger detection
+  # Default: 5
+  min-cps: 5
+  # should-cancel: Whether to cancel operations under this check.
+  # Default: false
+  should-cancel: false
+
+KillAuraJ:
+  # max-sample: Sample queue size, used to store detection data.
+  # The larger the value, the more accurate but higher latency; the smaller the value, the faster but may cause false positives.
+  # Default: 1600
+  max-sample: 1600
+  # min-diff: Latency difference threshold (milliseconds).
+  # When the difference between real latency (traPing) and keep-alive latency (keepAlivePing) exceeds this value, it's considered suspicious.
+  # Default: 95
+  min-diff: 95
+  # min-combat-ratio: Minimum ratio of invalid samples in combat (0.0~1.0).
+  # When the ratio of invalid samples in combat exceeds this value, detection is triggered.
+  # Default: 0.9
+  min-combat-ratio: 0.9
+  # min-invalid-samples: Minimum invalid samples to trigger detection.
+  # Prevents false positives when sample size is insufficient; recommended value is greater than 10.
+  # Default: 16
+  min-invalid-samples: 16
+
+KillAuraM:
+  # ping-offset: Latency offset compensation
+  # The smaller this is, the stricter the backtrack (false positive warning)
+  # Default: 1.1
+  ping-offset: 1.1
+  # buffer-multiplier: Buffer size
+  # The larger, the longer it takes to detect backtrack. Too small will cause false positives
+  # Default: 1.1
+  buffer-multiplier: 1.1
+
+# VelocityA check: Detects abnormal knockback data.
+VelocityA:
+  # strictness: Detection strictness, options: "strict" / "balanced" / "lenient" / "chaos".
+  # Default: "balanced"
+  strictness: "lenient"
+  # Used to fix false positives caused by 1.17+ client not being at the same position as actual
+  # Experimental, this may cause some bypasses or vulnerabilities
+  temp-fixed-sync: false
+
+# VelocityB check: Detects abnormal data caused by player explosions.
+VelocityB:
+  # threshold: Explosion detection threshold.
+  # Default: 0.05
+  threshold: 0.05
+  # setback-vl: VL for setback.
+  # Default: 3
+  setback-vl: 3
+  # isIgnoreInvalid: Whether to ignore invalid explosion data.
+  # Default: false
+  ignore-invalid: false
+
+# VelocityD check: Detects some horizontal KB reduction
+VelocityD:
+  # min-velocity: Minimum horizontal reduction to detect
+  # Default: 90
+  min-velocity: 90
+  # setback-vl: Explosion offset value.
+  # Default: 10
+  setback-vl: 10
+  # allowed-jump-reset: Whether to ignore players using jump reset
+  # Disabling this may cause false positives for jump reset users
+  # Default: true
+  allowed-jump-reset: true
+
+# AutoBlock check: Detects abnormal auto-block behavior.
+AutoBlock:
+  # setback-vl: Auto-block offset value.
+  # Default: 7
+  setback-vl: 7
+
+# Reach check: Detects abnormal hit range, including buffer, increment, decay, and various ignore rules.
+Reach:
+  # threshold: Hit range threshold.
+  # Default: 0.05 (i.e., 3.05)
+  threshold: 0.05
+  # buffer: Buffer size.
+  # Default: 2
+  buffer: 2
+  # increment: Increment value added per hit.
+  # Default: 0.5
+  increment: 0.5
+  # decay: Decay coefficient.
+  # Default: 0.45
+  decay: 0.45
+  # ignore-non-player-targets: Whether to ignore non-player targets.
+  # Default: false
+  ignore-non-player-targets: false
+  # block-impossible-hits: Whether to block impossible hit behavior.
+  # Default: true
+  block-impossible-hits: true
+  # ignore-ender-dragon: Whether to ignore Ender Dragon targets.
+  # Default: false
+  ignore-ender-dragon: false
+  # tolerant-box-moving: Tolerant handling of player's collision box when moving; this should reduce some false positives
+  # Default: false
+  tolerant-box-moving: false
+  # ray-trace-blacklist: Blocks ignored during raytrace, used for ReachE
+  ray-trace-blacklist:
+    - FENCE
+    - GATE
+  # entity-blacklist: Entities to ignore
+  entity-blacklist:
+    - BAT
+    - ITEM_FRAME
+    - AREA_EFFECT_CLOUD
+    - BOAT
+    - SQUID
+    - ELDER_GUARDIAN
+    - SLMIE
+    - HORSE
+    - ARMOR_STAND
+    - GUARDIAN
+    - CHEST_BOAT
+    - SHULKER
+    - CAT
+
+##############################################
+# Player Checks
+##############################################
+
+# AutoClickerA check: Detects if player's left-click frequency exceeds the limit
+AutoClickerA:
+  # max-cps: Maximum allowed left-clicks per second (CPS).
+  # Default: 30
+  max-cps: 30
+  # should-cancel: Whether to cancel abnormal click behavior.
+  # Default: false
+  should-cancel: false
+  # setback-vl: Offset value for abnormal clicks.
+  # Default: -1
+  setback-vl: -1
+
+# AutoClickerE check: Detects if player's left-click frequency is abnormal when too high.
+AutoClickerE:
+  # min-cps: At what CPS detection starts
+  # Default: 16
+  min-cps: 16
+  # min-cps: At what CPS peak detection starts
+  # MathUtil.getKurtosis(samples(25 samples)) / 1000.0
+  # Default: 7.5
+  max-kurtosis: 4
+  # should-cancel: Whether to cancel abnormal click behavior (only cancels when vl > 4)
+  # Default: false
+  should-cancel: false
+  # setback-vl: Offset value for abnormal clicks.
+  # Default: -1
+  setback-vl: -1
+
+# Interacts check: Buffer configuration for detecting player interaction behavior.
+Interacts:
+  buffer:
+    a: 4
+
+# BadPacketsO check: Detects abnormal packet behavior.
+BadPacketsO:
+  # skips: Number of detection skips.
+  # Default: 0
+  skips: 0
+  # join-time: Detection wait time after player joins, in seconds.
+  # Default: 5
+  join-time: 5
+
+# TimerA check: Detects timer-related abnormal behavior.
+TimerA:
+  # setback-vl: Offset value.
+  # Default: 10
+  setback-vl: 10
+  # drift: Drift value, used to detect timer drift.
+  # Default: 150
+  drift: 150
+  # ping-abuse-limit-threshold: Ping abuse limit threshold.
+  # Default: 500
+  ping-abuse-limit-threshold: 500
+
+# TimerB check: Another set of timer detection parameters.
+TimerB:
+  # setback-vl: Offset value.
+  # Default: 6
+  setback-vl: 6
+
+# TimerD check: Threshold configuration for strict mode and normal mode in timer detection.
+TimerD:
+  # setback-vl: Offset value.
+  # Default: 12
+  setback-vl: 12
+  # strict: Whether to enable strict mode.
+  # Default: false
+  strict: false
+  threshold:
+    # strict: Threshold in strict mode.
+    # Default: 1.05
+    strict: 1.05
+    # normal: Threshold in normal mode.
+    # Default: 1.07
+    normal: 1.07
+
+# InventoryM check: Detects abnormal player inventory operations (swap, quick-move, throw).
+InventoryM:
+  # mitigate: Whether to punish players when abnormal behavior is detected, such as canceling player packets and restoring player inventory
+  # Default: true
+  mitigate: true
+  # Standard deviation limits
+  std:
+    # swap: Flag when the standard deviation of hand swap count exceeds this value (time 1.0 second)
+    # Default: 2.8
+    swap: 2.8
+    # throw: Flag when the standard deviation of item throw count exceeds this value (time 1.0 second)
+    # Default: 1.75
+    throw: 1.75
+  # Speed limits
+  limit:
+    # quick-move: Flag when the number of quick-move packets sent by the player exceeds this value within a certain time (time 0.6 seconds)
+    # Default: 7
+    quick-move: 7
+    # throw: Flag when the number of item throw packets sent by the player exceeds this value within a certain time (time 0.6 seconds)
+    # Default: 12
+    throw: 12
+    # pick-up: Flag when the number of item pick-up packets sent by the player exceeds this value within a certain time (time 0.6 seconds)
+    # Default: 6
+    pick-up: 6
+
+BlinkA:
+  # max-lagging-time: Tolerable lag time
+  # Default: 1200 (1000 is one second)
+  max-lagging-time: 1200
+  # mitigate: Punish the hacker after detection
+  mitigate:
+    # Enable hacker punishment
+    # Default: true
+    enable: false
+    # teleport: Whether to teleport lagging players back to their previous position
+    # Default: true
+    teleport: true
+    # to-void: When a player tries to blink in the void, they will have a chance to be teleported back to land
+    # This option fixes this issue, but also causes additional performance overhead
+    # Default: false
+    to-void: false
+    # cancel: Cancel player packets after detection
+    cancel:
+      # Whether to cancel
+      enable: true
+      # time: How long to lag before testing
+      # Default: 1000 (1000L is one second)
+      time: 950
+  # buffer: Tolerable false positives
+  buffer:
+    # chat: Can still talk while lagging
+    # Default: 3.0
+    chat: 2.0 # -1 disables detection
+    # flying: Can still send movement packets while lagging
+    # Default: 4.0
+    flying: 40.0 # -1 disables detection
+    # blink: Lagging for too long
+    # Default: 8.0
+    blink: 20.0 # -1 disables detection
+    # lag-track: Still attacking while lagging
+    # Default: 4.0
+    attack: 6.0 # -1 disables detection
+
+# PingSpoof check: Detects abnormal player ping values.
+PingSpoof:
+  threshold:
+    # base: Base ping threshold.
+    # Default: 120
+    base: 120
+    # max: Maximum allowed ping threshold.
+    # Default: 200
+    max: 200
+  # buffer: Buffer size.
+  # Default: 15
+  buffer: 15
+  # history-size: History data size.
+  # Default: 25
+  history-size: 25
+
+# FastPlace check: Detects if the number of blocks placed by the player within a certain time exceeds the limit
+FastPlaceA:
+  # need-time: Detection time
+  # Default: 1000L (1 second)
+  need-time: 1000
+  # limit: How many blocks the player can place within the above time
+  # Default: 20
+  limit: 20
+
+# XRay check: Detects players using illegal mods such as auto-mining and illegal resource packs for precise block mining
+XRayA:
+  # blocks: Blocks to detect
+  blocks:
+    - DIAMOND_ORE
+    - ANCIENT_DEBRIS
+    - DEEPSLATE_DIAMOND_ORE
+
+##############################################
+# Misc Checks
+##############################################
+
+# ClientA check: Detects players sending illegal client brands
+ClientA:
+  # check-for-meteor: Whether to detect meteor client brand
+  # Recommended to be false in most cases, as some mods also send client brands similar to meteor
+  # Default: false
+  check-for-meteor: false
+
+# SpamB check: Detects player chat spam behavior
+SpamB:
+  # should-cancel: Whether to cancel packets after reaching this violation level
+  # Default: true
+  should-cancel: true
+  threshold:
+    # cancel-vl: Cancel packets after reaching this violation level
+    # Default: 5
+    cancel-vl: 5
+    # similarity: Similarity detection threshold (0.0-1.0)
+    # Default: 0.8
+    similarity: 0.8
+  # frequency-detection: Frequency detection configuration
+  frequency-detection:
+    # fast-threshold: Maximum messages per second allowed
+    # Default: 3
+    fast-threshold: 3
+  # history-settings: History configuration
+  history-settings:
+    # message-history: Number of historical messages to keep
+    # Default: 5
+    message-history: 5
+  # alert-settings: Player warning settings
+  alert-settings:
+    # enable: Warn players
+    # Default: true
+    enable: true
+
+##############################################
+# Chat Checks
+##############################################
+
+# ChatA check: Detects chat messages sent by the client that exceed the vanilla limit (256 characters)
+ChatA:
+  # enabled: Whether to enable this check
+  # Default: true
+  enabled: true
+  # max-length: Maximum allowed chat message length
+  # Default: 256
+  max-length: 256
+
+# ChatB check: Detects players sending chat messages too frequently
+ChatB:
+  # enabled: Whether to enable this check
+  # Default: true
+  enabled: true
+  # min-interval: Minimum interval between two chat messages (milliseconds)
+  # Default: 200
+  min-interval: 200
+
+# ChatC check: Detects players sending commands too frequently
+ChatC:
+  # enabled: Whether to enable this check
+  # Default: true
+  enabled: true
+  # min-interval: Minimum interval between two commands (milliseconds)
+  # Default: 100
+  min-interval: 100
+
+# ChatD check: Detects 1.19+ chat packets missing signatures or with abnormal signatures
+ChatD:
+  # enabled: Whether to enable this check
+  # Default: true
+  enabled: true
+
+##############################################
+# MultiActions Checks
+##############################################
+
+# MultiActionsA check: Detects attack and use-item packets sent simultaneously within the same tick
+MultiActionsA:
+  enabled: true
+
+# MultiActionsB check: Detects attack and item switching within the same tick
+MultiActionsB:
+  enabled: true
+
+# MultiActionsC check: Detects use-item and block placement within the same tick
+MultiActionsC:
+  enabled: true
+
+# MultiActionsD check: Detects attack and item dropping within the same tick
+MultiActionsD:
+  enabled: true
+
+# MultiActionsE check: Detects multiple attacks within the same tick
+MultiActionsE:
+  enabled: true
+
+# MultiActionsF check: Detects attack and entity interaction within the same tick
+MultiActionsF:
+  enabled: true
+
+# MultiActionsG check: Detects item switching and use-item within the same tick
+MultiActionsG:
+  enabled: true

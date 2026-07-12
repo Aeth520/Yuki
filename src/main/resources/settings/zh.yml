@@ -1,0 +1,648 @@
+##############################################
+# 杂项设置
+# 包含日志、警报及客户端相关配置
+# 默认值均已在注释中详细说明。
+##############################################
+
+# 语言设置
+# 可选值: zh (中文), en (英文)
+language: "zh"
+
+output:
+  # 警报设置：配置警报是否显示在控制台以及是否使用代理。
+  alerts:
+    # 控制台警报：是否在控制台显示警报信息。
+    # 默认值: true
+    console: true
+
+  # 详细信息显示：配置是否在控制台输出详细信息。
+  verbose:
+    # 控制台详细信息：是否启用控制台详细日志。
+    # 默认值: false
+    console: false
+
+  # 客户端品牌忽略列表：用于过滤掉特定客户端的标识（支持正则表达式）。
+  # 默认值: 如下列表所示
+  client-brand:
+    # 将这些发送下面客户端品牌的客户端直接踢出服务器
+    should-kick:
+      - acdisable
+      - smoke
+      - CB
+      - Lunar-Client
+      - Cracked-Vape
+    # 忽略客户端品牌，可写正则
+    ignores:
+      - "^badlion$"           # 忽略 Badlion 客户端
+      - "^optifine$"          # 忽略 Optifine 客户端
+      - "^vanilla$"           # 忽略 Vanilla 客户端
+      - "^fabric$"            # 忽略 Fabric 客户端
+      - "^Feather Fabric$"    # 忽略 Feather Fabric 客户端
+      - "(^lunarclient:v\\d+\\.\\d+\\.\\d+-\\d{4}$)|(^lunarclient:[a-z0-9]{7}/[\\w_/-]{3,32}$)"  # 忽略 Lunar Client 的复杂匹配
+      - "^labymod$"           # 忽略 Labymod 客户端
+
+  # 观察者设置：配置是否隐藏所有观察者以及限制可见的游戏世界。
+  # 默认值: hide-all: false, allowed-world: [""]
+  spectators:
+    # 隐藏所有观察者：是否在统计或显示中隐藏观察者。
+    # 默认值: false
+    hide-all: false
+    # 允许的世界：仅允许在指定的游戏世界中显示观察者，空字符串表示无限制。
+    allowed-world:
+      - ""
+
+##############################################
+# 同步系统设置
+# 用于配置玩家及载具状态的同步功能。
+# 默认值均在注释中详细列出。
+##############################################
+sync:
+  # 同步系统开关：启用或禁用整体同步系统。
+  # 默认值: true
+  enable: true
+  movement:
+    died:
+      # 玩家死亡同步：当玩家死亡时是否同步该事件。
+      # 默认值: true
+      enable: true
+      # 数据包同步：是否使用数据包来传输死亡事件。
+      # 默认值: true
+      packet: true
+      # Bukkit 同步：是否通过 Bukkit 平台同步死亡事件（通常用于兼容性）。
+      # 默认值: false
+      bukkit: false
+
+    wrong-offset:
+      # 错误偏移同步：当数据存在偏移错误时是否进行同步修正。
+      # 默认值: true
+      enable: true
+      # 区块偏移同步：针对区块数据偏移的同步开关。
+      # 默认值: true
+      chunk: true
+
+    # 玩家躺床状态同步：当玩家躺下或起床时同步状态。
+    # 默认值: true
+    in-bed: true
+    # 玩家互动事件同步：同步玩家与环境或实体的互动操作。
+    # 默认值: true
+    interact: true
+    # 玩家载具事件同步：同步玩家乘坐或离开载具的事件。
+    # 默认值: true
+    vehicle: true
+
+  vehicles:
+    died:
+      # 载具死亡同步：当载具被破坏或销毁时是否同步该事件。
+      # 默认值: true
+      enable: true
+      # 载具死亡数据包同步：使用数据包方式同步载具死亡事件。
+      # 默认值: true
+      packet: true
+      # 载具死亡 Bukkit 同步：是否通过 Bukkit 平台同步载具死亡事件。
+      # 默认值: false
+      bukkit: false
+
+    # 载具偏移同步：同步载具在发生位置偏移时的状态修正。
+    # 默认值: true
+    wrong-offset: true
+    # 载具数据包同步：启用载具相关数据包的同步传输。
+    # 默认值: true
+    packet: true
+    # 载具躺床状态同步：同步载具是否处于“躺床”状态（如适用）。
+    # 默认值: true
+    in-bed: true
+
+##############################################
+# 功能设置
+# 此部分配置与作弊检测、交互事件及其他功能相关的参数。
+# 默认值均已在注释中详细说明。
+##############################################
+function:
+  transaction:
+    # transaction包更改策略模块：指定用于交易检测的模块，支持 Intave、Verus 等。
+    # 默认值: GrimAC
+    type: GrimAC # 因为部分问题，这个值只应用于玩家进服的3秒内
+    # Netty 支持：是否启用 Netty 传输用于交易检测（实验性功能）。
+    # 默认值: false
+    netty: false
+    # 当玩家的transaction值大于一定值时踢出
+    kick-high-ping:
+      # 当玩家的transaction值大于一定值时是否踢出
+      # 默认值: true
+      enable: false
+      # 当玩家的transaction值大于多少时做处理
+      # 默认值: 300
+      max-ping: 300
+      # 当玩家的transaction值大于所定值时持续多久才踢出
+      # 默认值: 8 (秒)
+      duration: 8
+
+  # 服务器卡顿捕获
+  lag-track:
+    # tick : 服务器卡顿了多少毫米(1tick = 50毫秒)在yuki才算卡了
+    # 服务器卡顿在50毫秒(也就是1个tick)内都是正常的，这个值越低越灵敏但也容易误判，所以不建议低于30
+    # 默认值: 50
+    tick: 50
+    # setback : 在服务器卡的时候检测是否拉回玩家
+    # 默认值: false
+    setback: false
+    # print-stacktrace: 在服务器卡顿时是否打印线程堆栈
+    # 默认值: false
+    print-stacktrace: false
+    # message: 在玩家作弊同时服务器卡顿的时候发送消息在控制台
+    # 默认值: false
+    message: "&c检测到玩家 &f%player% &c的异常操作,但是服务器已经停止运行了 &f%time%&7/&f%time2% &c毫秒! &7(%check_name%)"
+
+  # 命令阻挡
+  command-blocker:
+    # 默认值: KarhuAC
+    plugin-name: "KarhuAC"
+    # 是否开启捕获玩家的Tab补全并阻挡
+    # 默认值: true
+    tab-complete: true
+    # 是否捕获玩家的命令执行并且阻挡
+    command:
+      # 是否捕开启获玩家的命令执行并且阻挡
+      # 默认值: true
+      enable: true
+      # 是否在阻挡玩家执行命令的时候补发消息
+      # 默认值: true
+      message: true
+      # 阻挡的命令名单
+      blocks:
+        # 阻挡的命令名单 (包含匹配字符)
+        contains:
+          - yuki
+          - anticheat
+          - matrix
+          - vulcan
+          - spiter
+          - polar
+          - grimac
+          - medusa
+          - verus
+          - aac
+        # 阻挡的命令名单 (准确匹配字符)
+        equals:
+          - yk
+      # 是否在玩家使用/plugins命令中的消息内增加数个虚假的插件名
+      # 默认值:
+      #  - PolarLoader
+      #  - MagicBlock
+      fake-plugins-add:
+        - PolarLoader
+        - MagicBlock
+
+  # 配置补全/刷新
+  config-refresh:
+    # punishment的配置是否也参与到配置补全中
+    # 默认值: false
+    punishments: false
+
+  # 处罚命令
+  command-punish:
+    # /gr punish 玩家id 后的处罚的命令
+    # 变量:
+    # %random_int% - 随机1-10的整数
+    # %random_string% - 随机短字符串
+    # %anticheat% - 随机反作弊名字
+    # %anticheat_color% - 对应前一个的随机反作弊的主题
+    # %world% - 对应玩家所在世界
+    # %transaction_ping% - 显示玩家对应的真实延迟
+    # %keepalive_ping% - 显示玩家对应的延迟
+    # %player% - 玩家的名
+    # %server% - 服务器名
+    # 默认值: yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-LiK108 S=%server%]
+    command: "yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-LiK108 S=%server%]"
+
+  # 在踢出/封禁玩家的时候是否公告
+  # 默认值: true
+  kick-broadcast: true
+
+  # 在踢出/封禁玩家的时候是否降下闪电
+  # 默认值: true
+  kick-strike-lightning-effect: true
+
+  # 在玩家退出服务器时是否存储玩家的VL信息 (用于修复当玩家在作弊后可以通过退出服务器和重进进行刷新VL)
+  # 默认值: false
+  save-violations-on-leave: false
+
+  # 在反作弊在检测到玩家时可能出现了一个问题就是多个检测一起检测到，然后就执行了多个punish，这样不仅会显得很异常
+  # 还会让黑客看出端倪，所以提供了这个配置
+  # 默认值: false
+  fix-duplicate-command-punish: true
+
+  # 开启这个选项后模拟引擎将会自动忽视鞘翅的移动,鞘翅的异常移动将不会被MovementValidation这个检测捕捉
+  # 默认值: false
+  ignore-elytra: false
+
+  knock-back:
+    # 击退系数 X：设置 X 方向的击退力度。
+    # 默认值: 0.75
+    x: 0.75
+    # 击退系数 Y：设置 Y 方向的击退力度。
+    # 默认值: 0.5
+    y: 0.5
+    # 击退系数 Z：设置 Z 方向的击退力度。
+    # 默认值: 0.75
+    z: 0.75
+
+  freeze:
+    punish:
+      # 冻结惩罚开关：当检测到作弊行为时是否启用冻结惩罚。
+      # 默认值: true
+      enable: true
+      # 惩罚命令：定义当玩家被判作弊时执行的命令，可使用变量替换（如 %player%）。
+      # 默认值: "banip -p %player% &bYuki &7> &c拒绝查端 &7[LastID= %player%]"
+      command: "banip -p %player% &bKarhu&fAC &7> &c拒绝查端 &7[LastID= %player%]"
+
+  # 实验性功能：启用额外的功能和检测，但可能不够稳定。
+  # 默认值: false
+  experimental: false
+  # 飞行检测：检测玩家是否处于飞行状态。
+  # 默认值:
+  #   bukkit: true
+  #   packet: true
+  flying-check:
+    # 启用 Bukkit 检测：使用 Bukkit 机制检测玩家飞行行为。
+    # 默认值: true
+    bukkit: true
+    # 启用数据包检测：使用数据包数据检测玩家飞行行为。
+    # 默认值: true
+    packet: true
+
+  # kick-invalid-forge-player： 踢出1.18-1.19.3客户端版本的带有forge的玩家。具体参考 github.com/MinecraftForge/MinecraftForge/issues/9309
+  # 默认值: true
+  kick-invalid-forge-player: true
+
+  # 电影模式检测：检测是否允许使用电影模式相关功能。
+  # 开启这个可能会造成一些绕过,但是可以有效的解决大部分误判
+  # 默认值: false
+  allowed-cinematic: false
+
+  develop:
+    # 开发模式开关：启用开发模式以获取更多调试日志和实时数据。
+    # 默认值: false
+    enable: false
+    # 日志发送方式：配置日志发送的模式，可选 "both" 等。
+    # 默认值: "player"
+    send: "player"
+    # 日志记录：是否启用详细的日志记录功能。
+    # 默认值: true
+    log: false
+    # 同步开发：是否在开发模式下启用同步功能。
+    # 默认值: true
+    sync: true
+    # 取消当前操作：在开发过程中是否自动取消错误操作。
+    # 默认值: true
+    cancel: true
+    # 缓解措施：是否启用缓解（mitigate）措施以减少误判影响。
+    # 默认值: true
+    mitigate: true
+    # 回退机制：启用后会对违规操作进行回退处理。
+    # 默认值: true
+    setback: true
+
+  chunk:
+    # 未加载区块同步：当玩家进入未加载区块时，是否同步其位置数据。
+    # 默认值: true
+    stay: true
+
+  sender:
+    # 不安全操作允许：是否允许执行不安全的操作,这会大大提高Reach/HitBoxs检测的精度
+    # 但是存在不稳定性，并且会消耗更多的带宽
+    # 默认值: false
+    unsafe: false
+    # 后置操作允许：是否允许执行后置操作。
+    # 默认值: false
+    post: false
+
+  click-listener:
+    # 这个配置用于解决1.17+多余的重复数据包的问题导致的autoclicker检测误判
+    # 点击监听模式：设置监听玩家点击事件的方式，可选 "bukkit" 或 "packet"。
+    # 默认值: packet
+    mode: packet
+
+  limit:
+    # 最大 TPS 限制：服务器允许的最高每秒处理次数（Ticks Per Second）。
+    # 默认值: 19.5
+    max-tps: 19.5
+    # 玩家在多少秒内不响应数据包则踢出
+    # 默认值: 30
+    transaction-timeout: 30
+    # 最大数据包处理数量：每个检测周期内允许处理的数据包最大数量。
+    # 默认值: 100
+    packet: 80
+    # xearomap 限制：是否限制 xearomap 的使用。
+    # 默认值: false
+    xearo-map: false
+    ping:
+      # 飞行时允许的最大延迟：在玩家飞行期间允许的最大网络延迟（单位：毫秒）。
+      # 默认值: 500
+      outflying: 500
+      # 烟花加速时允许的最大延迟：使用烟花加速时允许的最大网络延迟（单位：毫秒）。
+      # 默认值: 500
+      fireworkboost: 500
+
+##############################################
+# 插件钩子配置
+# 定义与其他插件或平台的集成支持。
+
+##############################################
+# Discord Webhook 集成
+# 配置 Discord Webhook 以接收警报通知
+##############################################
+discord:
+  # 是否启用 Discord Webhook
+  # 默认值: false
+  enabled: false
+  # Discord Webhook URL
+  # 在 Discord 频道设置 > 整合 > Webhook 中创建
+  webhook-url: ""
+  # 显示的机器人用户名
+  username: "Yuki"
+  # 机器人头像 URL (留空使用默认)
+  avatar-url: ""
+
+##############################################
+hooks:
+  # Luminol (Folia) TPS 支持：是否启用 Luminol 插件提供的 TPS 支持。
+  # 默认值: false
+  luminol: false
+  # MythicMobs 插件支持：是否启用 MythicMobs 插件的集成。
+  # 此项需要重启反作弊才生效
+  # 默认值: false
+  mythicmobs: false
+  # 7-pay 插件支持：是否启用 7-pay 插件的集成。
+  # 此项需要重启反作弊才生效
+  # 默认值: false
+  7-pay: false
+  # worldGuard 插件支持：是否启用 worldGuard 插件的集成。
+  # 此项需要重启反作弊才生效
+  # 默认值: false
+  world-guard: false
+
+  geyser:
+    # Geyser 插件支持：是否启用 Geyser 插件，用于桥接不同平台的玩家。
+    # 默认值: true
+    enable: false
+    # Geyser 客户端品牌支持：是否启用对 Geyser 客户端品牌的检测与支持。
+    # 默认值: false
+    brand: false
+    # Geyser 客户端 API 支持：是否启用 Geyser 客户端 API 功能。
+    # 默认值: true
+    api: true
+    # Geyser 客户端 UUID 支持：是否启用对玩家 UUID 的支持。
+    # 默认值: true
+    uuid: true
+    # BungeeCord 支持：是否启用 BungeeCord 的集成，以实现跨服同步。
+    # 默认值: true
+    bungee: true
+
+##############################################
+# 缓解设置
+# 该部分配置针对各种作弊行为提供缓解与检测措施，详细说明了每个检测项的参数。
+##############################################
+mitigates:
+
+  timer:
+    # 限制真实延迟(C0F)的最高值，防止外挂通过一些漏绕过Timer检测
+    # 默认值: 560
+    ping-abuse-limit-threshold: 560
+
+  attack:
+    # 攻击伤害降低：在玩家攻击时减少伤害数值，防止暴力作弊。
+    # 默认值: true
+    reduce-damage: true
+    # 伤害降低类型：定义减少伤害的算法类型，可选 Dynamic, Fixed, AttackSpeed, Random。
+    # 默认值: Dynamic
+    # Dynamic: 通过计算伤害大小来随机调配伤害 (Math.random() * 0.3 + 0.2) (不推荐)
+    # Fixed: 按下面那个damage选项来进行的计算，比如50就是50%(0.5) 打出10的伤害就是5 (推荐)
+    # AttackSpeed: 按玩家的攻击频率算的，如果玩家发送的攻击包越频繁则减的越多 (不推荐)
+    # Random: 纯在伤害内随机选择一个值进行的减伤 (不推荐)
+    # Strict: 将玩家打出的伤害 * 0.03 (推荐,这个够恶心)
+    reduce-type: Fixed
+    # 固定伤害减少百分比：仅在 reduce-type 为 Fixed 时生效，表示具体的百分比。
+    # 默认值: 50
+    damage: 50
+    # 是否取消所有在攻击时的格挡包
+    # 实验性
+    # 默认值: true
+    use-item: true
+
+  # 无减速作弊防护：防止玩家利用某些手段避免移动减速效果。
+  # 默认值: true
+  no-slow:
+    enable: true
+    # 大部分情况下(Sprint/Offset)
+    normal: true
+    # 打开背包时
+    inventory: false # 实验性功能
+    # 切换slot时
+    slot-change: true
+    # 丢弃物品时 (只支持1.8.8和1.7.10)
+    drop-item: false # 实验性功能
+    # 在一个tick内完成NoSlow
+    tick: false
+
+  tick-break:
+    # 破坏方块作弊防护：防止玩家通过异常破坏行为作弊。
+    # 默认值: true
+    enable: true
+    # 最小破坏延迟：规定玩家两次破坏操作之间的最小延迟时间（可根据实际情况设定单位）。
+    # 默认值: 3
+    min-delay: 3
+
+  invalid-pos:
+    # 无效位置检测：检测玩家位置数据异常，防止利用位置漏洞作弊。
+    # 默认值: true
+    enable: true
+    # 位置欺骗检测：是否检测玩家是否使用位置欺骗手段。
+    # 默认值: true
+    spoof: true
+    teleport:
+      # 传送检测开关：启用或禁用对玩家传送异常的检测。
+      # 默认值: true
+      enable: true
+      # 传送检测阈值：设置检测传送异常所需达到的数值门槛。
+      # 默认值: 8.5
+      need: 7.0
+
+  elytra:
+    # 翅膀作弊防护：针对使用 elytra 的作弊行为进行检测。
+    # 默认值: true
+    enable: true
+    # 幽灵翅膀检测：检测是否存在虚假或异常的翅膀数据。
+    # 默认值: true
+    ghost: false
+    # 翅膀动作检测：监控 elytra 的动作状态，判断是否存在异常行为。
+    # 默认值: true
+    actions: true
+    # 翅膀加速检测：检测玩家使用 elytra 时是否存在异常加速行为。
+    # 默认值: true
+    sprint: true
+    # 翅膀离地检测：检测玩家使用 elytra 是否存在不合理的离地行为。
+    # 默认值: true
+    ground: true
+    limit-speed:
+      # 速度限制开关：是否对使用 elytra 时的速度进行限制检测。
+      # 默认值: false
+      enable: false # 实验性的
+      # 基础速度阈值：定义当使用 elytra 时的基础允许速度。
+      # 默认值: 16.5
+      max-speed: 16.5
+      # 当Pitch高于10(和下面的pitch-threshold挂钩)时开始进行对移动提高容差
+      # 默认值: 33.5
+      pitch-factor: 33.5
+      # 当玩家使用烟花加速时开始进行对移动提高容差
+      # 默认值: 25.0
+      firework-boost: 25.0
+      # 俯仰角阈值：触发俯冲速度(Pitch-Factor)加成的角度（单位：度）
+      # 默认值: 7
+      pitch-threshold: 7
+
+  ghost-block:
+    # 幽灵方块检测：监控玩家在虚假或不存在的方块上进行操作。
+    # 默认值: true
+    place: true
+    # 放置距离限制：定义检测幽灵方块放置时的最大距离。
+    # 默认值: 2.0
+    distance: 2.0
+    # 缓冲区：允许的误判次数，超过后则执行回退或同步操作。
+    # 默认值: 3
+    buffer: 3
+    # 同步幽灵方块位置：是否同步幽灵方块的实际位置。
+    # 默认值: true
+    stay: true
+    # 同步幽灵方块状态：是否同步幽灵方块的状态信息。
+    # 默认值: false
+    sync: false
+    # 撤销放置操作：当检测到幽灵方块放置时是否取消该操作。
+    # 默认值: true
+    cancel: true
+    alert:
+      # 警报开关：是否在检测到幽灵方块放置时发送警报。
+      # 默认值: true
+      enable: true
+      # 警报消息：管理员接收的警报消息模板，支持变量替换（如 %player%、%type%、%x%、%y%、%z%）。
+      # 默认值: 如下所示
+      message: "&f玩家 &b%player% &f尝试在幽灵方块 &b%type% &f上放置方块,但是这个方块是幽灵块! &7( &b%distance%, %x% | %y% | %z% &7)"
+
+  duplicate:
+    # 这会忽略一些重复的数据包,用于修复一些GhostBlock和一些不同步的问题
+    # 默认值: false
+    ignore: false
+    # 这会撤销一些重复的数据包,用于修复一些不同步的问题
+    # 默认值: false
+    cancel: false
+
+  trident:
+    # 三叉戟作弊检测：检测使用三叉戟进行异常操作（例如潮汐推进）。
+    # 默认值: true
+    enable: true
+    limit-use:
+      # 三叉戟使用限制：限制三叉戟的连续使用次数或频率。
+      # 默认值: true
+      enable: true
+      # 缓冲值：允许的连续异常操作次数。
+      # 默认值: 5
+      buffer: 5
+      # 重置时间：经过该时间后重置检测计数，单位为毫秒。
+      # 默认值: 7000
+      reset: 7000
+    # 三叉戟潮汐推进检测：检测玩家是否使用三叉戟进行非法的潮汐推进操作。
+    # 默认值: true
+    riptiding: true
+
+  velocity:
+    # 速度作弊检测：检测玩家是否通过非正常手段改变移动速度。
+    # 默认值: true
+    enable: true
+    # 跳跃速度检测：检测玩家跳跃时是否存在异常速度数据。
+    # 默认值: true
+    jump: true
+    # 无效速度检测：检测玩家是否存在无效或异常的速度数值。
+    # 默认值: true
+    invalid: true
+
+  visual:
+    # 视觉欺骗模拟：通过伪造玩家元数据和装备状态来绕过反作弊检测。
+    # 默认值: true
+    enable: true
+    equipment:
+      # 装备数据伪造：修改客户端发送的装备数据（例如生成虚假附魔信息）
+      # 默认值: true
+      enable: true
+      # 虚假附魔生成：在装备上添加伪造的合法附魔数据以绕过检测
+      # 默认值: true
+      enchantments: true
+    meta:
+      # 元数据篡改：伪造玩家的状态元数据（例如模拟正常的状态变化模式）
+      # 默认值: true
+      enable: true
+      # 仅伪造玩家数据：集中资源只修改玩家实体的元数据
+      # 默认值: true
+      only-player: true
+      # 生命值伪装：保持发送给服务器的生命值数据在合理范围内
+      # 默认值: true
+      health: true
+      # 吸收生命伪装：保持发送给服务器的生命值数据在合理范围内
+      # 默认值: true
+      absorption: true
+
+  # 自动图腾使用：检测玩家是否自动使用图腾进行自救。
+  # 默认值: true
+  auto-totem: true
+
+  # 打开背包：检测玩家在打开背包时的数据包ID是否同步异常
+  # 默认值: true
+  inventory: true
+
+  # 拉回：检测玩家是否在拉回的时候不接受来自服务器的移动包
+  # 默认值: true
+  teleport-confirm: true
+
+  lag-spoof:
+    # 卡顿的欺骗：通过一些逻辑检测来缓解fakelag和一些来自延迟伪造的绕过
+    # 默认值: true
+    enable: true
+    # 卡顿欺骗: 通过检测玩家的响应来对应的操作进行缓存
+    # 默认值: false
+    fake-lag: false # 实验性
+    # 背包行走漏洞: 使用网络漏洞来进行的背包行走绕过
+    # 默认值: false
+    inventory: false # 实验性
+    # 用于修复最近的布吉岛幻影盾fly
+    # 默认值: false
+    delay-use-item: true
+
+##############################################
+# 功能开关
+# 通过功能开关控制各类检查和功能的启用/禁用
+# 也可通过 /yuki features 命令运行时切换
+##############################################
+features:
+  checks:
+    # 移动检查
+    movement: true
+    # 战斗检查
+    combat: true
+    # 搭建检查
+    scaffold: true
+    # 玩家检查
+    player: true
+    # 杂项检查
+    misc: true
+    # 聊天检查
+    chat: true
+    # MultiActions 检查
+    multiactions: true
+  performance:
+    # 性能监控
+    monitor: true
+  discord:
+    # Discord Webhook 集成
+    webhook: false
+  dump:
+    # 诊断 Dump 导出
+    diagnostic: true

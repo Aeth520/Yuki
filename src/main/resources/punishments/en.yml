@@ -1,0 +1,2059 @@
+# ******************************************************************************************************************************
+#                     Punishment Configuration
+# ******************************************************************************************************************************
+# %check_name% - Check name
+# %vl% - Violation count
+# %max_vl% - Maximum violation count for detection
+# %add% - Added violation count
+# %verbose% - Additional info
+# %player% - Player name
+# %uuid% - Player UUID
+# %description% - Check description
+# %cps% - Player clicks per second
+# %last_cps% - Player's previous click count
+# %random_int% - Random integer 1-10
+# %random_string% - Random short string
+# %anticheat% - Random anticheat name
+# %anticheat_color% - The theme color corresponding to the previous random anticheat
+# %world% - The world the player is in
+# %mix_ping% - Shows the player's mixed ping, i.e., real ping / normal ping, for example: "30 / 100" where the former is real ping and the latter is normal ping
+# %transaction_ping% - Shows the player's real ping
+# %keepalive_ping% - Shows the player's ping
+# %fast_math% - Detects whether the target has FastMath enabled (this affects Yuki's detection accuracy)
+# %special_random_string% - Encrypted random content + check name
+# [alert] - Special command for alerts
+# [save] - Save VL to database
+# [setback] - Setback player
+#
+# Some descriptions
+#
+# `remove-violations-after`: The time (in seconds) to clear all VL (violations).
+#
+# Format in command execution:
+# number:number
+# The first number indicates the VL at which the specified command is executed,
+# The second number indicates how many VL increments after that VL to repeat the command.
+#
+# Example:
+# 70:20 yuki mitigate %player% rotate
+# Explanation:
+# When the player's VL reaches 70, execute the command `yuki mitigate %player% rotate`.
+# Then every time the player's VL increases by 20, execute the command again.
+Punishments:
+
+  #Movement
+  MovementValidation:
+    remove-violations-after: 40 #original 300
+    checks:
+      - "MovementValidation"
+    commands:
+      - "20:10 [alert]"
+      - "50:20 yuki mitigate %player% rotate"
+      - "60:10 yuki mitigate %player% damage"
+      - "70:5 [save]"
+      - "90:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-%special_random_string% m= %fast_math% S=%server%]"
+
+  GroundSpoofA:
+    remove-violations-after: 100 #original 300
+    checks:
+      - "GroundSpoofA"
+    commands:
+      - "5:1 [save]"
+      - "10:5 [alert]"
+      - "40:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF2 S=%server%]"
+
+  GroundSpoofB:
+    remove-violations-after: 15 #original 300
+    checks:
+      - "GroundSpoofB"
+    commands:
+      - "15:5 [alert]"
+      - "20:5 [save]"
+      - "80:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF21 S=%server%]"
+
+  GroundSpoofC:
+    remove-violations-after: 50 #original 300
+    checks:
+      - "GroundSpoofC"
+    commands:
+      - "5:5 [alert]"
+      - "5:5 [save]"
+      - "40:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF22 S=%server%]"
+
+  SprintA:
+    remove-violations-after: 40 #original 300
+    checks:
+      - "SprintA"
+    commands:
+      - "5:5 [alert]"
+      - "5:5 [save]"
+      - "15:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF3 S=%server%]"
+
+  NoSlowA:
+    remove-violations-after: 30 #original 300
+    checks:
+      - "NoSlowA"
+    commands:
+      - "10:5 [save]"
+      - "20:5 [alert]"
+      - "60:10 yuki mitigate %player% rotate"
+      - "80:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF4 S=%server%]"
+
+  NoSlowB:
+    remove-violations-after: 8 #original 300
+    checks:
+      - "NoSlowB"
+    commands:
+      - "1:1 [save]"
+      - "3:1 [alert]"
+      - "8:5 yuki mitigate %player% rotate"
+      - "15:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF41 &eInvalidSneak&7 S=%server%]"
+
+  NoSlowC:
+    remove-violations-after: 15 #original 300
+    checks:
+      - "NoSlowC"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert]"
+      - "30:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF42 &eInvalidWalkSpeed&7 S=%server%]"
+
+  NoSlowD:
+    remove-violations-after: 15 #original 300
+    checks:
+      - "NoSlowD"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert]"
+      - "35:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF43 &eInvalidWalkSpeed&7 S=%server%]"
+
+  NoSlowE:
+    remove-violations-after: 150 #original 300
+    checks:
+      - "NoSlowE"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert]"
+      - "25:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF44 &eInvalidWalk&7 S=%server%]"
+
+  NoSlowF:
+    remove-violations-after: 50 #original 300
+    checks:
+      - "NoSlowF"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "40:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF45 S=%server%]"
+
+  NoSlowG:
+    remove-violations-after: 60 #original 300
+    checks:
+      - "NoSlowG"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "30:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF46 S=%server%]"
+
+  NoSaddleA:
+    remove-violations-after: 120 #original 300
+    checks:
+      - "NoSaddleA"
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      - "25:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF5 S=%server%]"
+
+  VehicleFlyA:
+    remove-violations-after: 50 #original 300
+    checks:
+      - "VehicleFlyA"
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      - "40:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF6 S=%server%]"
+
+  VehicleFlyB:
+    remove-violations-after: 10 #original 300
+    checks:
+      - "VehicleFlyB"
+    commands:
+      - "10:1 [alert]"
+      - "10:1 [save]"
+      - "50:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF61 &cOFFSETREDUCE?&7 S=%server%]"
+
+  ElytraA:
+    remove-violations-after: 50 #original 300
+    checks:
+      - "ElytraA" #Gliding
+    commands:
+      - "5:1 [alert]"
+      - "5:1 [save]"
+      - "30:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF7 S=%server%]"
+
+  ElytraB:
+    remove-violations-after: 25 #original 300
+    checks:
+      - "ElytraB" #Jump
+    commands:
+      - "5:1 [alert]"
+      - "5:1 [save]"
+      - "30:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF71 S=%server%]"
+
+  ElytraC:
+    remove-violations-after: 25 #original 300
+    checks:
+      - "ElytraC" #frequenlty
+    commands:
+      - "5:1 [alert]"
+      - "5:1 [save]"
+      - "25:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF72 S=%server%]"
+
+  ElytraD:
+    remove-violations-after: 25 #original 300
+    checks:
+      - "ElytraD" #DSync
+    commands:
+      - "5:1 [alert]"
+      - "5:1 [save]"
+      - "30:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF73 S=%server%]"
+
+  ElytraE:
+    remove-violations-after: 25 #original 300
+    checks:
+      - "ElytraE" #flying spoof
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      - "5:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF74 S=%server%]"
+
+  ElytraF:
+    remove-violations-after: 25 #original 300
+    checks:
+      - "ElytraF" #onGround
+    commands:
+      - "5:1 [alert]"
+      - "5:1 [save]"
+      - "35:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF75 S=%server%]"
+
+  ElytraG:
+    remove-violations-after: 25 #original 300
+    checks:
+      - "ElytraG" #levitation
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      - "5:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF76 S=%server%]"
+
+  ElytraH:
+    remove-violations-after: 25 #original 300
+    checks:
+      - "ElytraH" #vehicle spoof
+    commands:
+      - "5:1 [alert]"
+      - "5:1 [save]"
+      - "10:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF77 S=%server%]"
+
+  ElytraI:
+    remove-violations-after: 25 #original 300
+    checks:
+      - "ElytraI" #water
+    commands:
+      - "5:1 [alert]"
+      - "5:1 [save]"
+      - "20:5 [setback]"
+      - "40:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF78 S=%server%]"
+
+  ElytraJ:
+    remove-violations-after: 25 #original 300
+    checks:
+      - "ElytraJ"
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      - "10:5 [setback]"
+      - "20:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF79 S=%server%]"
+
+  ElytraK:
+    remove-violations-after: 25 #original 300
+    checks:
+      - "ElytraK"
+    commands:
+      - "10:1 [alert]"
+      - "10:1 [save]"
+      - "15:5 [setback]"
+      - "40:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiIIF791 &cWat the fucking Diff?&7 S=%server%]"
+
+  #Combat
+  SmoothChange:
+    remove-violations-after: 40 #original 300
+    checks:
+      - "AimA"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert]"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW1 S=%server%]"
+
+  InvalidRotation:
+    remove-violations-after: 20 #original 300
+    checks:
+      - "AimB"
+    commands:
+      - "8:1 [save]"
+      - "10:1 [alert]"
+  #      - "25:0 yuki mitigate %player% rotate"
+  #      - "30:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW11 &eLMFAO&7 S=%server%]"
+
+  AnomalyRotation:
+    remove-violations-after: 50 #original 300
+    checks:
+      - "AimC"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "10:0 yuki mitigate %player% rotate"
+      - "18:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW12 &eWeird&7 S=%server%]"
+
+  FactorAnalysis:
+    remove-violations-after: 40 #original 300
+    checks:
+      - "AimD"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "15:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW13 S=%server%]"
+
+  SnapRotation:
+    remove-violations-after: 15 #original 300
+    checks:
+      - "AimE"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert]"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW14 &eStats&7 S=%server%]"
+
+  AimConstantX:
+    remove-violations-after: 60 #original 300
+    checks:
+      - "AimF"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "20:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW15 S=%server%]"
+
+  AimConstantY:
+    remove-violations-after: 60 #original 300
+    checks:
+      - "AimG"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "25:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW16 S=%server%]"
+
+  AimStaticX:
+    remove-violations-after: 30 #original 300
+    checks:
+      - "AimH"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "10:0 yuki mitigate %player% rotate"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW17 S=%server%]"
+
+  invalidGCD:
+    remove-violations-after: 30 #original 300
+    checks:
+      - "AimI"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "6:0 yuki mitigate %player% rotate"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW18 &cStupid?&7 S=%server%]"
+
+  #Min Title: Divisor
+  DivisorXRotation:
+    remove-violations-after: 50 #original 300
+    checks:
+      - "AimJ"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "12:0 yuki mitigate %player% rotate"
+      - "20:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW19 S=%server%]"
+
+  GenericRotation:
+    remove-violations-after: 50 #original 300
+    checks:
+      - "AimK"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "7:0 yuki mitigate %player% rotate"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW191 &cGeneric&7 S=%server%]"
+
+  DynamicRotation:
+    remove-violations-after: 25 #original 300
+    checks:
+      - "AimL"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "5:1 yuki mitigate %player% resetitem"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW192 &aDynamic&7 S=%server%]"
+
+  InvalidRowChange:
+    remove-violations-after: 60 #original 300
+    checks:
+      - "AimM"
+    commands:
+      - "1:1 [alert]"
+      - "5:1 [save]"
+      - "10:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW193 &e1.8.9?&7 S=%server%]"
+
+  ConsistentRotation:
+    remove-violations-after: 30 #original 300
+    checks:
+      - "AimN"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW194 S=%server%]"
+
+  WeirdRotate:
+    remove-violations-after: 30 #original 300
+    checks:
+      - "AimO"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW195 &cWeird&7 S=%server%]"
+
+  ConsistentRotation#2:
+    remove-violations-after: 30 #original 300
+    checks:
+      - "AimP"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW196 &cConsistent&7 S=%server%]"
+
+  SimpleRotation:
+    remove-violations-after: 40 #original 300
+    checks:
+      - "AimQ"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "10:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW197 &eHeuristic&7 S=%server%]"
+
+  StaticY:
+    remove-violations-after: 30 #original 300
+    checks:
+      - "AimR"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "15:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW198 &eStatic&7 S=%server%]"
+
+  Mechanical:
+    remove-violations-after: 30 #original 300
+    checks:
+      - "AimS"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW199 &cMAX?&7 S=%server%]"
+
+  Inconsistent:
+    remove-violations-after: 30 #original 300
+    checks:
+      - "AimT"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "10:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW1991 S=%server%]"
+
+  InvalidPattern:
+    remove-violations-after: 30 #original 300
+    checks:
+      - "AimU"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW1992 S=%server%]"
+
+  InvalidYChange:
+    remove-violations-after: 30 #original 300
+    checks:
+      - "AimV"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "7:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW1993 S=%server%]"
+
+  AutoBlockA:
+    remove-violations-after: 50 #original 300
+    checks:
+      - "AutoBlockA"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert]"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW2 &eInvalidInteract&7 S=%server%]"
+
+  AutoBlockB:
+    remove-violations-after: 60 #original 300
+    checks:
+      - "AutoBlockB" #Ticks
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "5:5 yuki mitigate %player% rotate"
+      - "14:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW21 &ePacketTicks&7 S=%server%]"
+
+  AutoBlockC:
+    remove-violations-after: 30 #original 300
+    checks:
+      - "AutoBlockC"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "25:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW22 &dOrder&7 S=%server%]"
+
+  AutoBlockD:
+    remove-violations-after: 20 #original 300
+    checks:
+      - "AutoBlockD"
+    commands:
+      - "5:1 [save]"
+      - "5:5 [alert]"
+      - "25:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW23 S=%server%]"
+
+  AutoBlockE:
+    remove-violations-after: 20 #original 300
+    checks:
+      - "AutoBlockE"
+    commands:
+      - "1:1 [save]"
+      - "1:5 [alert]"
+      - "8:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW23 S=%server%]"
+
+  AutoBlockF:
+    remove-violations-after: 20 #original 300
+    checks:
+      - "!AutoBlockF"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "15:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW24 S=%server%]"
+
+  AutoBlockG:
+    remove-violations-after: 40 #original 300
+    checks:
+      - "AutoBlockG" # over 1 tick
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "20:0 yuki delay %random_int% kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW25 S=%server%]"
+
+  AutoBlock1:
+    remove-violations-after: 80 #original 300
+    checks:
+      - "AutoBlock1" #BadPlacement
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert]"
+      - "25:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW26 &eUseItem&7 S=%server%]"
+
+  AutoBlock2:
+    remove-violations-after: 80 #original 300
+    checks:
+      - "AutoBlock2"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert]"
+      - "25:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW27 &eInteract&7 S=%server%]"
+
+  AutoBlock3:
+    remove-violations-after: 80 #original 300
+    checks:
+      - "AutoBlock3"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert]"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW28 &eAttack&7 S=%server%]"
+
+  AutoBlock4:
+    remove-violations-after: 80 #original 300
+    checks:
+      - "AutoBlock4"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "15:5 yuki mitigate %player% delay %random_int% bane_ shuffle"
+      - "20:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW29 &eAttack&7 S=%server%]"
+
+  AttackAction:
+    remove-violations-after: 50 #original 300
+    checks:
+      - "KillAuraA"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW3 &cAction&7 S=%server%]"
+
+  KillAuraB:
+    remove-violations-after: 80 #original 300
+    checks:
+      - "KillAuraB"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW31 &eAdvancedMulti&7 S=%server%]"
+
+  InvalidLostPacket:
+    remove-violations-after: 30 #original 300
+    checks:
+      - "KillAuraC" # by tjshawa
+    commands:
+      - "8:5 [save]"
+      - "8:5 [alert]"
+      - "30:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW32 S=%server%]"
+
+  ProtocolCheck:
+    remove-violations-after: 40 #original 300
+    checks:
+      - "KillAuraD"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW33 &eProtocol&7 S=%server%]"
+
+  NoSwing:
+    remove-violations-after: 120 #original 300
+    checks:
+      - "KillAuraE"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert]"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW34 &cPacketSpoof?&7 S=%server%]"
+
+  KeepSprint:
+    remove-violations-after: 60 #original 300
+    checks:
+      - "KillAuraF"
+    commands:
+      - "10:1 [save]"
+      - "8:1 [alert]"
+      - "20:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW35 S=%server%]"
+
+  InvalidAccuracy:
+    remove-violations-after: 45 #original 300
+    checks:
+      - "KillAuraG"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "4:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW36 &cHighet&7 S=%server%]"
+
+  LockTarget:
+    remove-violations-after: 100 #original 300
+    checks:
+      - "KillAuraH"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW37 &aLock&7 S=%server%]"
+
+  InvalidAccel:
+    remove-violations-after: 15 #original 300
+    checks:
+      - "KillAuraI"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "10:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW38 &bAccel&7 S=%server%]"
+
+  DelaySummary:
+    remove-violations-after: 100 #original 300
+    checks:
+      - "KillAuraJ"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "2:0 yuki delay %random_int% kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW39 &2InvalidAttack&7 S=%server%]"
+
+  LowClickDelay:
+    remove-violations-after: 40 #original 300
+    checks:
+      - "KillAuraK"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW391 &cClickAction&7 S=%server%]"
+
+  InvalidFrequency:
+    remove-violations-after: 40 #original 300
+    checks:
+      - "KillAuraL"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW392 S=%server%]"
+
+  backtrack:
+    remove-violations-after: 40 #original 300
+    checks:
+      - "KillAuraM"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "10:0 yuki delay %random_int% kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW393 &cBAD WIFI?&7 S=%server%]"
+
+  Reach:
+    remove-violations-after: 120 #original 300
+    checks:
+      - "ReachA"
+    commands:
+      - "1:1 [save]"
+      - "2:1 [alert]"
+      - "3:0 yuki mitigate %player% damage"
+      - "6:0 yuki mitigate %player% rotate"
+      - "7:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW4 S=%server%]"
+
+  ReachEntity:
+    remove-violations-after: 40 #original 300
+    checks:
+      - "ReachB"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "5:1 yuki mitigate %player% damage"
+      - "15:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW41 S=%server%]"
+
+  HitBoxPlayer:
+    remove-violations-after: 60 #original 300
+    checks:
+      - "ReachC"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "5:1 yuki mitigate %player% damage"
+      - "10:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW42 S=%server%]"
+
+  HitBoxEntity:
+    remove-violations-after: 30 #original 300
+    checks:
+      - "ReachD"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "10:1 yuki mitigate %player% damage"
+      - "25:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW43 S=%server%]"
+
+  WallHit:
+    remove-violations-after: 30 #original 300
+    checks:
+      - "ReachE"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "8:1 yuki mitigate %player% damage"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW44 S=%server%]"
+
+  VelocityA:
+    remove-violations-after: 90 #original 300
+    checks:
+      - "VelocityA" # hor/vert
+    commands:
+      - "5:1 [alert]"
+      - "5:1 [save]"
+      - "23:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW6 &eIgnoring Vert/Hor&7 S=%server%]"
+
+  VelocityB:
+    remove-violations-after: 90 #original 300
+    checks:
+      - "VelocityB" # false some time
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "20:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW61 S=%server%]"
+
+  VelocityC:
+    remove-violations-after: 100 #original 100
+    checks:
+      - "VelocityC" # jump reset mitigate
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "20:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW62 S=%server%]"
+
+  VelocityD:
+    remove-violations-after: 60 #original 100
+    checks:
+      - "VelocityD"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "30:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW63 S=%server%]"
+
+  VelocityE:
+    remove-violations-after: 30 #original 100
+    checks:
+      - "VelocityE"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW64 S=%server%]"
+
+  AnalysisA:
+    remove-violations-after: 30 #original 300
+    checks:
+      - "AnalysisA"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW7 S=%server%]"
+
+  AnalysisB:
+    remove-violations-after: 30 #original 300
+    checks:
+      - "AnalysisB"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "6:0 yuki delay 5 kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW71 S=%server%]"
+
+  AnalysisC:
+    remove-violations-after: 25 #original 300
+    checks:
+      - "AnalysisC"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "10:0 yuki delay 5 kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW72 S=%server%]"
+
+  AnalysisD:
+    remove-violations-after: 30 #original 300
+    checks:
+      - "AnalysisD"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert]"
+      - "12:0 yuki delay 5 kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW73 S=%server%]"
+
+  AnalysisE:
+    remove-violations-after: 17 #original 300
+    checks:
+      - "AnalysisE"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "15:1 yuki mitigate %player% reducedamage"
+      - "20:0 yuki delay 5 kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW74 S=%server%]"
+
+  AnalysisF:
+    remove-violations-after: 15 #original 300
+    checks:
+      - "AnalysisF"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "20:0 yuki delay 5 kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW75 S=%server%]"
+
+  AnalysisG:
+    remove-violations-after: 60 #original 100
+    checks:
+      - "AnalysisG"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "15:0 yuki delay 5 kick %player% %anticheat% &7> %anticheat_color% &7[%random_string%-GFLOW75 S=%server%]"
+
+  AnalysisH:
+    remove-violations-after: 40 #original 300
+    checks:
+      - "AnalysisH"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert]"
+      - "12:0 yuki delay 5 kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW8 S=%server%]"
+
+  #Misc
+  PacketOrder:
+    remove-violations-after: 300 #original 300
+    checks:
+      - "Post"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "3:0 yuki mitigate %player% rotate"
+      - "5:0 yuki mitigate %player% rotate"
+      - "6:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-MC1 &c!Pre&7 S=%server%]"
+
+  #player
+  HighCPS:
+    remove-violations-after: 40 #original 300
+    checks:
+      - "AutoClickerA"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "6:0 kick %player% &5Neko&dWorks &7> CPS超过%cps% [ S=%server% ]"
+
+  RepeatedClicks:
+    remove-violations-after: 35 #original 300
+    checks:
+      - "AutoClickerB"
+    commands:
+      - "2:1 [save]"
+      - "2:1 [alert]"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L12 &cInvalidSTD&7 S=%server%]"
+
+  RepeatedClicks#2:
+    remove-violations-after: 25 #original 300
+    checks:
+      - "AutoClickerC"
+    commands:
+      - "2:1 [save]"
+      - "1:1 [alert]"
+      - "15:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L13 S=%server%]"
+
+  LowDeviation:
+    remove-violations-after: 25 #original 300
+    checks:
+      - "AutoClickerD"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L14 &eDeviation&7 S=%server%]"
+
+  InvalidKurtosis:
+    remove-violations-after: 40 #original 300
+    checks:
+      - "AutoClickerE"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L15 &eKurtosis&7 S=%server%]"
+
+  AVGClick:
+    remove-violations-after: 60 #original 300
+    checks:
+      - "AutoClickerF"
+    commands:
+      - "1:1 [save]"
+      - "8:1 [alert]"
+      - "20:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L16 &aAVG&7 S=%server%]"
+
+  noRandomization:
+    remove-violations-after: 30 #original 300
+    checks:
+      - "AutoClickerG" #Skidded From AutoClickerI for karhu anticheat
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "6:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L17 &aImpossibleCPS&7 S=%server%]"
+
+  Ratio:
+    remove-violations-after: 15 #original 300
+    checks:
+      - "AutoClickerH"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+    #  - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L18 S=%server%]"
+
+  PoorRandomization:
+    remove-violations-after: 80 #original 300
+    checks:
+      - "AutoClickerI"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L19 S=%server%]"
+
+  CPSAvg:
+    remove-violations-after: 10 #original 300
+    checks:
+      - "AutoClickerJ"
+    commands:
+      - "1:1 [save]"
+      - "8:1 [alert]"
+    #  - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L191 S=%server%]
+
+  Negatives:
+    remove-violations-after: 12 #original 300
+    checks:
+      - "AutoClickerK"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "16:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L192 S=%server%]"
+
+  SQRTFlow:
+    remove-violations-after: 20 #original 300
+    checks:
+      - "AutoClickerL"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L193 &cSqrt-Sdev&7 S=%server%]"
+
+  Consistency:
+    remove-violations-after: 20 #original 300
+    checks:
+      - "AutoClickerM"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "15:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L194 S=%server%]"
+
+  BadRandomization:
+    remove-violations-after: 43 #original 300
+    checks:
+      - "AutoClickerN"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L195 S=%server%]"
+
+  Consistency#2:
+    remove-violations-after: 43 #original 300
+    checks:
+      - "AutoClickerO"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "13:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L196 S=%server%]"
+
+  InvalidOscillation:
+    remove-violations-after: 35 #original 300
+    checks:
+      - "AutoClickerP"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L197 S=%server%]"
+
+  RecordedAutoClicker:
+    remove-violations-after: 70 #original 300
+    checks:
+      - "AutoClickerQ"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L198 S=%server%]"
+
+  InvalidTicks:
+    remove-violations-after: 40 #original 300
+    checks:
+      - "AutoClickerS"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L199 S=%server%]"
+
+  BadPacketsSwing:
+    remove-violations-after: 25 #original 300
+    checks:
+      - "AutoClickerT"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L1991 S=%server%]"
+
+  InvalidInventoryPackets:
+    remove-violations-after: 60
+    checks:
+      - "BadPacketsW"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L2 S=%server%]"
+
+  InvalidPitchChange:
+    remove-violations-after: 30
+    checks:
+      - "BadPacketsX"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert]"
+      - "10:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L21 S=%server%]"
+
+  InvalidPosChange:
+    remove-violations-after: 50
+    checks:
+      - "BadPacketsY"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "20:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L22 S=%server%]"
+
+  FastSwitch:
+    remove-violations-after: 15
+    checks:
+      - "BadPacketsA"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "10:2 yuki mitigate %player% delay %random_int% bane_ shuffle"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L23 &eInvalidSlot&7 S=%server%]"
+
+  AutoTool:
+    remove-violations-after: 40
+    checks:
+      - "BadPacketsAA"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "5:1 yuki mitigate %player% delay %random_int% bane_ shuffle"
+      - "10:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L24 &eInvalidSlot#2&7 S=%server%]"
+
+  EntityID:
+    remove-violations-after: 400
+    checks:
+      - "BadPacketsB"
+    commands:
+      - "1:1 [alert]"
+      - "6:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L25 &cInvalidEntityID&7 S=%server%]"
+
+  ActionPacketOrder:
+    remove-violations-after: 60
+    checks:
+      - "BadPacketsC"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "10:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L26 S=%server%]"
+
+  HackedClientTAB:
+    remove-violations-after: 25
+    checks:
+      - "BadPacketsD"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "5:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L27 &aTAB&7 S=%server%]"
+
+  SkippingHandInteract:
+    remove-violations-after: 25
+    checks:
+      - "BadPacketsF"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "10:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L28 &aSkipping?&7 S=%server%]"
+
+  MissedInteract:
+    remove-violations-after: 50
+    checks:
+      - "BadPacketsG"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "10:0 yuki delay %random_int% ban %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L29 &eInvalidInteract&7 S=%server%]"
+
+  InvalidInteract:
+    remove-violations-after: 80
+    checks:
+      - "BadPacketsH"
+    commands:
+      - "1:1 [alert]"
+      - "50:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L291 &eInvalidInteract#2&7 S=%server%]"
+
+  BigSwitch:
+    remove-violations-after: 40
+    checks:
+      - "BadPacketsI"
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      - "2:1 yuki mitigate %player% delay %random_int% bane_ shuffle"
+      - "3:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L292 &dInvalidSwitch&7 S=%server%]"
+
+  JumpBoostSpoofer:
+    remove-violations-after: 120
+    checks:
+      - "BadPacketsJ"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "5:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L293 &cSpoofPot&7 S=%server%]"
+
+  C0FOrder:
+    remove-violations-after: 120
+    checks:
+      - "BadPacketsK"
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      - "5:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L294 &cC0F&7 S=%server%]"
+
+  InvalidPosition:
+    remove-violations-after: 50
+    checks:
+      - "BadPacketsL"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "10:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L295 &eInvalidPositon&7 S=%server%]"
+
+  InvalidItem:
+    remove-violations-after: 50
+    checks:
+      - "BadPacketsM"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert]"
+      - "6:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L296 &eInvalidItem&7 S=%server%]"
+
+  EntityID#2:
+    remove-violations-after: 400
+    checks:
+      - "BadPacketsN"
+    commands:
+      - "1:1 [alert]"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L297 &cInvalidEntityID#2&7 S=%server%]"
+
+  C0FOrder#2:
+    remove-violations-after: 120
+    checks:
+      - "BadPacketsO"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert]"
+      - "20:0 yuki delay 5 kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L298 &aWhy Skip?&7 S=%server%]"
+
+  MovementShit:
+    remove-violations-after: 80
+    checks:
+      - "BadPacketsP"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "10:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L299 &cLost? Why?&7 S=%server%]"
+
+  InteractedEntity:
+    remove-violations-after: 80
+    checks:
+      - "BadPacketsQ"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "10:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L2991 &eInteractedEntity&7 S=%server%]"
+
+  InvalidEntityAction:
+    remove-violations-after: 50
+    checks:
+      - "BadPacketsR"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L2992 &eEntityACTION&7 S=%server%]"
+
+  MovementUnSync:
+    remove-violations-after: 60
+    checks:
+      - "BadPacketsS"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L2993 S=%server%]"
+
+  InvalidSprint:
+    remove-violations-after: 60
+    checks:
+      - "BadPacketsT"
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L2994 S=%server%]"
+
+  ConsistentY:
+    remove-violations-after: 60
+    checks:
+      - "BadPacketsU"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "3:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L2995 &cInvalidYStats&7 S=%server%]"
+
+  InvalidSwitchItem:
+    remove-violations-after: 60
+    checks:
+      - "BadPacketsV"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "10:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L2996 S=%server%]"
+
+  AnimationOrder:
+    remove-violations-after: 60
+    checks:
+      - "BadPacketsZ"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L2997 S=%server%]"
+
+  BaritoneA:
+    remove-violations-after: 80
+    checks:
+      - "BaritoneA"
+    commands:
+      - "1:1 [save]"
+      - "8:1 [alert]"
+      - "20:0 yuki mitigate %player% rotate"
+      - "30:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L3 S=%server%]"
+
+  BaritoneB:
+    remove-violations-after: 120
+    checks:
+      - "BaritoneB"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert]"
+      - "5:5 yuki mitigate %player% rotate"
+      - "25:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L31 S=%server%]"
+
+  BaritoneC:
+    remove-violations-after: 40
+    checks:
+      - "BaritoneC"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert]"
+      - "10:0 yuki mitigate %player% rotate"
+      - "25:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L32 S=%server%]"
+
+  BaritoneD:
+    remove-violations-after: 50
+    checks:
+      - "BaritoneD"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "5:5 yuki mitigate %player% rotate"
+      - "15:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L33 S=%server%]"
+
+  ServerCrasher:
+    remove-violations-after: 114514
+    checks:
+      - "CrashA"
+      - "CrashB"
+      - "CrashC"
+      - "CrashD"
+      - "CrashE"
+      - "CrashF"
+      - "CrashG"
+      - "CrashH"
+      - "CrashI"
+      - "CrashJ"
+      - "CrashK"
+      - "CrashL"
+      - "CrashM"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "1:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L4 &4ServerCrasher?&7 S=%server%]"
+
+  ServerExploit:
+    remove-violations-after: 114514
+    checks:
+      - "ExploitA"
+      - "ExploitB"
+      - "ExploitC"
+      - "ExploitD"
+      - "ExploitF"
+      - "ExploitG"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "1:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L42 &eSentExploit?&7 S=%server%]"
+
+  TridentDupe:
+    remove-violations-after: 114514
+    checks:
+      - "ExploitE"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "3:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L421 &eSentExploit?&7 S=%server%]"
+
+  NoSaddleB:
+    remove-violations-after: 80
+    checks:
+      - "NoSaddleB"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "5:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L5 S=%server%]"
+
+  ImpossibleVehicleDisabler:
+    remove-violations-after: 20
+    checks:
+      - "ImpossibleD"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "8:1 [setback]"
+      - "12:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L6 &cDisabler?&7 S=%server%]"
+
+  Impossibles:
+    remove-violations-after: 114514
+    checks:
+      - "ImpossibleA"
+      - "ImpossibleB"
+      - "ImpossibleC"
+      - "ImpossibleE"
+      - "ImpossibleF"
+      - "ImpossibleG"
+      - "ImpossibleH"
+      - "ImpossibleJ"
+      - "ImpossibleK"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "1:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L61 %check_name% &ePacketSpoofed&7 S=%server%]"
+
+  ImpossibleAction:
+    remove-violations-after: 15
+    checks:
+      - "ImpossibleL"
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      - "10:0 yuki delay 5 kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L62 S=%server%]"
+
+  ImpossibleMotion:
+    remove-violations-after: 25
+    checks:
+      - "ImpossibleI"
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      # - "5:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L63 S=%server%]"
+
+  PredictionInventoryJump:
+    remove-violations-after: 70
+    checks:
+      - "InventoryA"
+    commands:
+      - "1:1 [alert]"
+      - "5:1 [save]"
+      - "15:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L7 S=%server%]"
+
+  PredictionInventoryMove:
+    remove-violations-after: 45
+    checks:
+      - "InventoryB"
+    commands:
+      - "1:1 [alert]"
+      - "5:1 [save]"
+      - "20:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L71 S=%server%]"
+
+  InventoryDig:
+    remove-violations-after: 35
+    checks:
+      - "InventoryC"
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L72 S=%server%]"
+
+  InventoryPlacement:
+    remove-violations-after: 15
+    checks:
+      - "InventoryD"
+    commands:
+      - "5:1 [alert]"
+      - "5:1 [save]"
+      - "16:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L73 S=%server%]"
+
+  InventoryNotOpen:
+    remove-violations-after: 120
+    checks:
+      - "InventoryE"
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L74 &eAuto&7 S=%server%]"
+
+  InventoryAction:
+    remove-violations-after: 25
+    checks:
+      - "InventoryF"
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      - "10:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L75 &eAction&7 S=%server%]"
+
+  InventoryMove:
+    remove-violations-after: 80
+    checks:
+      - "InventoryG"
+    commands:
+      - "5:1 [alert]"
+      - "5:1 [save]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L76 &eInvalidWalk&7 S=%server%]"
+
+  InventoryAttack:
+    remove-violations-after: 20
+    checks:
+      - "InventoryH"
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L77 S=%server%]"
+
+  HeadInventoryMove:
+    remove-violations-after: 45
+    checks:
+      - "InventoryI"
+    commands:
+      - "1:1 [alert]"
+      - "5:1 [save]"
+      - "30:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L78 S=%server%]"
+
+  InvalidInventoryAction:
+    remove-violations-after: 45
+    checks:
+      - "InventoryJ"
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      - "10:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L79 S=%server%]"
+
+  InvalidChangeItemWhileInvOpen:
+    remove-violations-after: 45
+    checks:
+      - "InventoryK"
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      - "6:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L791 S=%server%]"
+
+  container:
+    remove-violations-after: 45
+    checks:
+      - "InventoryL"
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      - "6:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L792 S=%server%]"
+
+  ChestStealer:
+    remove-violations-after: 30
+    checks:
+      - "InventoryM"
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      - "10:0 yuki delay 5 kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L793 &c?&7 S=%server%]"
+
+  FastClickInventory:
+    remove-violations-after: 30
+    checks:
+      - "InventoryN"
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      - "12:0 yuki delay 5 ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L794 S=%server%]"
+
+  DuplicatePing:
+    remove-violations-after: 114514
+    checks:
+      - "PingSpoofA"
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      - "1:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L8 S=%server%]"
+
+  InvalidPing:
+    remove-violations-after: 114514
+    checks:
+      - "PingSpoofB"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "1:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L81 S=%server%]"
+
+  MathSpoofPing:
+    remove-violations-after: 50
+    checks:
+      - "PingSpoofC"
+    commands:
+      - "5:1 [alert]"
+      - "10:1 [save]"
+      - "60:0 yuki delay 5 kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L82 &e您延迟异常!&7 S=%server%]"
+
+  PacketPingSpoof:
+    remove-violations-after: 50
+    checks:
+      - "PingSpoofD"
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      - "10:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L83 S=%server%]"
+
+  FeaturedPingSpoof:
+    remove-violations-after: 35
+    checks:
+      - "PingSpoofE"
+    commands:
+      - "1:1 [alert]"
+      - "1:1 [save]"
+      - "10:0 yuki delay %random_int% kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L84 &cBAD?&7 S=%server%]"
+
+  InvalidPingDiff:
+    remove-violations-after: 35
+    checks:
+      - "PingSpoofE"
+    commands:
+      - "5:1 [alert]"
+      - "5:1 [save]"
+      - "12:0 yuki delay %random_int% kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L85 S=%server%]"
+
+  InvalidPlacement:
+    remove-violations-after: 114514
+    checks:
+      - "ScaffoldH"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "1:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L91 S=%server%]"
+
+  InvalidPlacementFace:
+    remove-violations-after: 114514
+    checks:
+      - "ScaffoldI"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "5:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L92 S=%server%]"
+
+  InvalidExpandPlacement:
+    remove-violations-after: 30
+    checks:
+      - "ScaffoldJ"
+    commands:
+      - "8:1 [save]"
+      - "5:1 [alert]"
+      - "30:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L93 &eExpand&7 S=%server%]"
+
+  InvalidCursorPos:
+    remove-violations-after: 30
+    checks:
+      - "ScaffoldK"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "5:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L93 &cCursor&7 S=%server%]"
+
+  PostRotate:
+    remove-violations-after: 40
+    checks:
+      - "ScaffoldA"
+    commands:
+      - "5:1 [alert]"
+      - "25:0 yuki mitigate %player% rotate"
+      - "30:0 yuki mitigate %player% rotate"
+      - "40:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L1013 &cBadPlacement&7 S=%server%]"
+
+  BridgeAnalysis:
+    remove-violations-after: 20
+    checks:
+      - "ScaffoldB"
+    commands:
+      - "5:1 [alert]"
+      - "5:1 [save]"
+      - "20:5 yuki mitigate %player% rotate"
+      - "30:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L1014 S=%server%]"
+
+  FarPlace:
+    remove-violations-after: 40
+    checks:
+      - "ScaffoldE"
+    commands:
+      - "5:1 [alert]"
+      - "10:1 [save]"
+      - "15:10 yuki mitigate %player% rotate"
+      - "20:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L10 S=%server%]"
+
+  FabricatedPlace:
+    remove-violations-after: 80
+    checks:
+      - "ScaffoldC"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "10:5 yuki mitigate %player% rotate"
+      - "25:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L1012 S=%server%]"
+
+  MultiPlace:
+    remove-violations-after: 40
+    checks:
+      - "ScaffoldD"
+    commands:
+      - "5:1 [alert]"
+      - "5:1 [save]"
+      - "15:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L1015 &eMulti&7 S=%server%]"
+
+  SnapPlace:
+    remove-violations-after: 40
+    checks:
+      - "ScaffoldF"
+    commands:
+      - "5:1 [alert]"
+      - "5:1 [save]"
+      - "8:0 yuki mitigate %player% rotate"
+      - "10:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L1016 &cAAC&7 S=%server%]"
+
+  InvalidPosPlace:
+    remove-violations-after: 40
+    checks:
+      - "ScaffoldG"
+    commands:
+      - "5:1 [alert]"
+      - "5:1 [save]"
+      - "15:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L1017 &cLB&7 S=%server%]"
+
+  AirPlaceA:
+    remove-violations-after: 35
+    checks:
+      - "AirPlaceA"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert]"
+      - "10:5 yuki mitigate %player% rotate"
+      - "10:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L101 S=%server%]"
+
+  NormalTimer:
+    remove-violations-after: 60
+    checks:
+      - "TimerA"
+    commands:
+      - "10:1 [alert]"
+      - "20:1 [save]"
+      - "40:20 yuki mitigate %player% rotate"
+      - "150:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L102 S=%server%]"
+
+  TimerAA:
+    remove-violations-after: 60
+    checks:
+      - "TimerAA"
+    commands:
+      - "5:1 [alert]"
+      - "5:1 [save]"
+      - "10:1 yuki mitigate %player% rotate"
+      - "50:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L1021 S=%server%]"
+
+  VehicleTimer:
+    remove-violations-after: 120
+    checks:
+      - "TimerB"
+    commands:
+      - "15:1 [save]"
+      - "5:5 [alert]"
+      - "10:10 yuki mitigate %player% rotate"
+      - "40:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L1022 S=%server%]"
+
+  SlowDownTimer:
+    remove-violations-after: 20
+    checks:
+      - "TimerC"
+    commands:
+      - "1:1 [alert]"
+      - "100:0 yuki delay 5 kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L1023 S=%server%]"
+
+  AVGTimer:
+    remove-violations-after: 60
+    checks:
+      - "TimerD"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert]"
+      - "20:10 [setback]"
+      - "35:5 yuki mitigate %player% rotate"
+      - "40:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L1024 S=%server%]"
+
+  TimerMitigate:
+    remove-violations-after: 30
+    checks:
+      - "TimerMitigate"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert]"
+      - "20:10 [setback]"
+      - "20:5 yuki mitigate %player% rotate"
+      - "40:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L1025 S=%server%]"
+
+  InteractA:
+    remove-violations-after: 30
+    checks:
+      - "InteractA"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L103 &eInvalidDigPacket&7 S=%server%]"
+
+  InteractB:
+    remove-violations-after: 30
+    checks:
+      - "InteractB"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L1031 S=%server%]"
+
+  FastBreakA:
+    remove-violations-after: 90
+    checks:
+      - "FastBreakA"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert]"
+      - "120:0 yuki delay 5 kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L104 &eSpeedEdit&7 S=%server%]"
+
+  FastBreakB:
+    remove-violations-after: 200
+    checks:
+      - "FastBreakB"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "10:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L1041 &eSpeedEdit&7 S=%server%]"
+
+  FastBreakC:
+    remove-violations-after: 200
+    checks:
+      - "FastBreakC"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert]"
+      - "10:0 yuki mitigate %player% rotate"
+      - "15:0 yuki mitigate %player% rotate"
+      - "30:0 yuki mitigate %player% rotate"
+      - "55:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L1042 &eSpeedEdit#2&7 S=%server%]"
+
+  FarBreakA:
+    remove-violations-after: 30
+    checks:
+      - "FarBreakA"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "8:1 [setback]"
+      - "10:5 yuki mitigate %player% rotate"
+      - "20:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L105 S=%server%]"
+
+  PositionBreakA:
+    remove-violations-after: 50
+    checks:
+      - "PositionBreakA"
+    commands:
+      - "5:1 [save]"
+      - "1:1 [alert]"
+      - "20:5 yuki mitigate %player% rotate"
+      - "30:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L106 S=%server%]"
+
+  PositionBreakB:
+    remove-violations-after: 50
+    checks:
+      - "PositionBreakB"
+    commands:
+      - "5:1 [save]"
+      - "1:1 [alert]"
+      - "20:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L1061 S=%server%]"
+
+  AbortBreak:
+    remove-violations-after: 50
+    checks:
+      - "WrongBreakA"
+    commands:
+      - "10:1 [save]"
+      - "5:1 [alert]"
+      - "20:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L107 S=%server%]"
+
+  AirBreak:
+    remove-violations-after: 50
+    checks:
+      - "WrongBreakB"
+    commands:
+      - "7:1 [save]"
+      - "5:1 [alert]"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L1071 S=%server%]"
+
+  NoBreakDelay:
+    remove-violations-after: 50
+    checks:
+      - "WrongBreakC"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "3:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L1072 S=%server%]"
+
+  NoSwingBreak:
+    remove-violations-after: 50
+    checks:
+      - "NoSwingBreakA"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert]"
+      - "25:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L1073 S=%server%]"
+
+  InvalidBreak:
+    remove-violations-after: 114514
+    checks:
+      - "InvalidBreakA"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "1:0 yuki delay %random_int% banip %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L1074 S=%server%]"
+
+  FastPlace:
+    remove-violations-after: 30
+    checks:
+      - "FastPlaceA"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "8:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-X8AF0L108 S=%server%]"
+
+  XRayA:
+    remove-violations-after: 120
+    checks:
+      - "XRayA"
+    commands:
+      - "5:1 [alert]"
+      - "5:1 [save]"
+      - "12:0 yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-GFLOW109 S=%server%]"
+
+  InvalidClientBoard:
+    remove-violations-after: 114514
+    checks:
+      - "ClientA"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "1:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-oOoOo1 S=%server%]"
+
+  SpamA:
+    remove-violations-after: 114514
+    checks:
+      - "SpamA"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "1:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-oOoOo2 S=%server%]"
+
+  SpamB:
+    remove-violations-after: 10
+    checks:
+      - "SpamB"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "12:0 mute %player% 3d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-oOoOo21 S=%server%]"
+
+  BlinkA:
+    remove-violations-after: 30
+    checks:
+      - "BlinkA"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert]"
+      - "40:0 yuki delay 5 kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-IiI1iAa S=%server%]"
+
+  #Chat
+  ChatA:
+    remove-violations-after: 114514
+    checks:
+      - "ChatA"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "1:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-CHAT1 &cInvalidLength&7 S=%server%]"
+
+  ChatB:
+    remove-violations-after: 30
+    checks:
+      - "ChatB"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "8:0 yuki delay %random_int% mute %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-CHAT2 &eSpamChat&7 S=%server%]"
+
+  ChatC:
+    remove-violations-after: 30
+    checks:
+      - "ChatC"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "8:0 yuki delay %random_int% mute %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-CHAT3 &eSpamCommand&7 S=%server%]"
+
+  ChatD:
+    remove-violations-after: 114514
+    checks:
+      - "ChatD"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+      - "1:0 yuki delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-CHAT4 &cInvalidSignature&7 S=%server%]"
+
+  #MultiActions
+  MultiActionsA:
+    remove-violations-after: 30
+    checks:
+      - "MultiActionsA"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+
+  MultiActionsB:
+    remove-violations-after: 30
+    checks:
+      - "MultiActionsB"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+
+  MultiActionsC:
+    remove-violations-after: 30
+    checks:
+      - "MultiActionsC"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+
+  MultiActionsD:
+    remove-violations-after: 30
+    checks:
+      - "MultiActionsD"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+
+  MultiActionsE:
+    remove-violations-after: 30
+    checks:
+      - "MultiActionsE"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+
+  MultiActionsF:
+    remove-violations-after: 30
+    checks:
+      - "MultiActionsF"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"
+
+  MultiActionsG:
+    remove-violations-after: 30
+    checks:
+      - "MultiActionsG"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert]"

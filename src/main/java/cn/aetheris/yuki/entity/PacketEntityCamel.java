@@ -1,0 +1,21 @@
+package cn.aetheris.yuki.entity;
+
+import cn.aetheris.yuki.player.PlayerData;
+import com.github.retrooper.packetevents.protocol.attribute.Attributes;
+import com.github.retrooper.packetevents.protocol.entity.type.EntityType;
+
+import java.util.UUID;
+
+public final class PacketEntityCamel extends PacketEntityHorse {
+
+    public boolean dashing = false;
+
+    public PacketEntityCamel(PlayerData player, UUID uuid, EntityType type, double x, double y, double z, float xRot) {
+        super(player, uuid, type, x, y, z, xRot);
+
+        setAttribute(Attributes.JUMP_STRENGTH, 0.42f);
+        setAttribute(Attributes.MOVEMENT_SPEED, 0.09f);
+        setAttribute(Attributes.STEP_HEIGHT, 1.5f);
+    }
+
+}

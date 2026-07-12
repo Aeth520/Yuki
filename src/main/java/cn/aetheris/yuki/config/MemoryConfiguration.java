@@ -1,0 +1,82 @@
+package cn.aetheris.yuki.config;
+
+import com.google.common.base.Preconditions;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
+
+
+public class MemoryConfiguration extends MemorySection implements Configuration {
+    protected Configuration defaults;
+    protected MemoryConfigurationOptions options;
+
+    
+    public MemoryConfiguration() {
+    }
+
+    
+    public MemoryConfiguration(@Nullable Configuration defaults) {
+        this.defaults = defaults;
+    }
+
+    @Override
+    public void addDefault(@NotNull String path, @Nullable Object value) {
+        Preconditions.checkArgument(path != null, "Path may not be null");
+
+        if (defaults == null) {
+            defaults = new MemoryConfiguration();
+        }
+
+        defaults.set(path, value);
+    }
+
+    @Override
+    public void addDefaults(@NotNull Map<String, Object> defaults) {
+        Preconditions.checkArgument(defaults != null, "Defaults may not be null");
+
+        for (Map.Entry<String, Object> entry : defaults.entrySet()) {
+            addDefault(entry.getKey(), entry.getValue());
+        }
+    }
+
+    @Override
+    public void addDefaults(@NotNull Configuration defaults) {
+        Preconditions.checkArgument(defaults != null, "Defaults may not be null");
+
+        for (String key : defaults.getKeys(true)) {
+            if (!defaults.isConfigurationSection(key)) {
+                addDefault(key, defaults.get(key));
+            }
+        }
+    }
+
+    @Override
+    @Nullable
+    public Configuration getDefaults() {
+        return defaults;
+    }
+
+    @Override
+    public void setDefaults(@NotNull Configuration defaults) {
+        Preconditions.checkArgument(defaults != null, "Defaults may not be null");
+
+        this.defaults = defaults;
+    }
+
+    @Nullable
+    @Override
+    public ConfigurationSection getParent() {
+        return null;
+    }
+
+    @Override
+    @NotNull
+    public MemoryConfigurationOptions options() {
+        if (options == null) {
+            options = new MemoryConfigurationOptions(this);
+        }
+
+        return options;
+    }
+}

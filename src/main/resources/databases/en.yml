@@ -1,0 +1,47 @@
+##############################################
+# Data Configuration
+# This section configures the database settings.
+# Detailed default values are noted above each configuration item.
+##############################################
+database-manager:
+  # Data type: Specify the database type to use. Options: sqlite, mysql, mariadb, h2, mongodb.
+  # Default: sqlite
+  data-type: sqlite
+
+  # Server name: The name for the database server, used for identification and logging.
+  # Default: "ServerName"
+  server-name: "ServerName"
+
+  # ---------------------------
+  # MySQL Configuration
+  # Configure connection parameters for a MySQL database.
+  mysql:
+    # Database host: The host address of the MySQL service.
+    host: "localhost"
+    # Database port: The port number on which MySQL listens.
+    port: 3306
+    # Database name: The name of the MySQL database to connect to.
+    database: "your_database"
+    # Username: The username used for connecting to MySQL.
+    username: "your_username"
+    # Password: The password for connecting to MySQL.
+    password: "your_password"
+    # SSL module: used to enable SSL mode for mysql
+    ssl: false
+
+  # ---------------------------
+  # MongoDB Configuration
+  # Configure connection parameters for a MongoDB database.
+  mongodb:
+    # Database host: The host address of the MongoDB service.
+    host: localhost
+    # Database port: The port number on which MongoDB listens.
+    port: 27017
+    # Database name: The name of the MongoDB database to connect to.
+    database: your_database_name
+    # Username: The username to connect to MongoDB.
+    username: your_username
+    # Password: The password to connect to MongoDB.
+    password: your_password
+    # Authentication Database: The name of the MongoDB database used for user authentication.
+    authentication-database: admin

@@ -1,0 +1,78 @@
+package cn.aetheris.yuki.functionality;
+
+import cn.aetheris.yuki.Yuki;
+import cn.aetheris.yuki.PluginLoader;
+import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import com.google.gson.JsonObject;
+import lombok.Getter;
+
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.logging.Level;
+
+@Getter
+public final class DiscordWebhookManager {
+
+    private boolean enabled;
+    private String webhookUrl;
+    private String username;
+    private String avatarUrl;
+
+    public DiscordWebhookManager() {
+        reload();
+    }
+
+    public void reload() {
+        var config = PluginLoader.INSTANCE.getConfigManager().getConfig();
+        this.enabled = config.getBooleanElse("discord.enabled", false);
+        this.webhookUrl = config.getStringElse("discord.webhook-url", "");
+        this.username = config.getStringElse("discord.username", "Yuki");
+        this.avatarUrl = config.getStringElse("discord.avatar-url", "");
+    }
+
+    public void sendMessage(String content) {
+        if (!enabled || webhookUrl == null || webhookUrl.isEmpty()) return;
+
+        JsonObject payload = new JsonObject();
+        payload.addProperty("content", content);
+        if (username != null && !username.isEmpty()) {
+            payload.addProperty("username", username);
+        }
+        if (avatarUrl != null && !avatarUrl.isEmpty()) {
+            payload.addProperty("avatar_url", avatarUrl);
+        }
+
+        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+            try {
+                URL url = new URL(webhookUrl);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setDoOutput(true);
+                connection.setConnectTimeout(5000);
+                connection.setReadTimeout(5000);
+
+                try (OutputStream os = connection.getOutputStream()) {
+                    os.write(payload.toString().getBytes(StandardCharsets.UTF_8));
+                }
+
+                int responseCode = connection.getResponseCode();
+                if (responseCode < 200 || responseCode >= 300) {
+                    Yuki.getInstance().getLogger().warning("Discord webhook returned response code: " + responseCode);
+                }
+                connection.disconnect();
+            } catch (Exception e) {
+                Yuki.getInstance().getLogger().log(Level.WARNING, "Failed to send Discord webhook message", e);
+            }
+        });
+    }
+
+    public boolean test() {
+        if (!enabled) return false;
+        if (webhookUrl == null || webhookUrl.isEmpty()) return false;
+        sendMessage("**Yuki** Discord webhook test - connection successful!");
+        return true;
+    }
+}

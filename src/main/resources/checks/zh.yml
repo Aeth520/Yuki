@@ -1,0 +1,786 @@
+# ******************************************************************************************************************************
+#                     检查设置配置
+
+##############################################
+# 移动检查
+##############################################
+
+# MovementValidation 检查：用于检测玩家移动状态，包含严格度、特殊适配、等待时间及衰减系数。
+MovementValidation:
+  # strictness: 检测严格度，可选 "strict" / "balanced" / "lenient" / "chaos"。
+  # 默认值: "balanced"
+  strictness: "balanced"
+  # special: 是否启用特殊适配（例如适配天坑服务器）。
+  # 默认值: false
+  special: false
+  # silent: 是否在检查到后不进行拉回。
+  # 默认值: false
+  silent: false
+  # refresh-blocks: 当玩家出现异常时(可能是GroundSpoof或者GhostBlock)将刷新玩家周围的方块
+  # 另外一提,这会需要额外的性能
+  # 默认值: false
+  refresh-blocks: false
+  # ignore-ghost-block: 是否在检查脚下是幽灵方块时检查
+  # 默认值: false
+  ignore-ghost-block: false
+  # join-wait-time: 玩家加入后的等待时间，单位为秒。
+  # 默认值: 5
+  join-wait-time: 5
+  # decay: 衰减系数，用于移动数据的衰减计算。
+  # 默认值: 0.85
+  decay: 0.85
+
+# NoSlowA 检查：用于检测玩家无减速行为。
+NoSlowA:
+  # threshold: 检测阈值，低于该值可能触发检测。
+  # 默认值: 0.018
+  threshold: 0.018
+  # setback-vl: 当检测到异常时，给予的偏移值。
+  # 默认值: 15
+  setback-vl: 15
+  # decay: 衰减系数，用于缓冲分的衰减。
+  # 默认值: 0.15
+  decay: 0.15
+
+# GroundSpoofA 检查：检测玩家地面欺骗行为。
+GroundSpoofA:
+  # setback-vl: 偏移值。
+  # 默认值: 5
+  setback-vl: 5
+  # ignore-ghost: 是否忽略幽灵方块的影响。
+  # 默认值: true
+  ignore-ghost: true
+
+# GroundSpoofB 检查：另一组地面欺骗检测参数。
+GroundSpoofB:
+  # setback-vl: 偏移值。
+  # 默认值: 10
+  setback-vl: 10
+  # ignore-ghost: 是否忽略幽灵方块的影响。
+  # 默认值: false
+  ignore-ghost: false
+
+# GroundSpoofC 检查：另一组地面欺骗检测参数。
+GroundSpoofC:
+  # setback-vl: 偏移值。
+  # 默认值: 7
+  setback-vl: 7
+  # ignore-ghost: 是否忽略幽灵方块的影响。
+  # 默认值: false
+  ignore-ghost: false
+  # mitigate-ground: 是否静默处理玩家的一些可能的地面欺骗,这很可能受到一些环境的影响导致误判
+  # 默认值: false
+  mitigate-ground: false
+
+# NoSaddleB 检查：检测玩家无鞍控制可骑乘实体。
+NoSaddleB:
+  # setback-vl: 实体控制时的偏移值。
+  # 默认值: 8
+  setback-vl: 1
+
+##############################################
+# 搭建检查
+##############################################
+
+# AirPlaceA 检查：检测空中放置行为。
+AirPlaceA:
+  # cancel-vl: 当检测到异常空中放置行为时的撤销阈值。
+  # 默认值: 4
+  cancel-vl: 4
+
+# FarPlace 检查：检测远距离放置行为，支持仅针对水晶情况检测。
+FarPlace:
+  # only-crystal: 是否仅检测水晶相关放置。
+  # 默认值: true
+  only-crystal: false
+  # cancel-vl: 撤销行为阈值。
+  # 默认值: 5
+  cancel-vl: 2
+
+# ScaffoldI 检查：检测伪造放置行为。
+ScaffoldI:
+  # cancel-vl: 撤销行为阈值。
+  # 默认值: 5
+  cancel-vl: 5
+
+# ScaffoldA 检查：检测建筑时的旋转异常。
+ScaffoldA:
+  # cancel-vl: 撤销行为阈值。
+  # 默认值: 5
+  cancel-vl: 5
+
+##############################################
+# 战斗检查
+##############################################
+
+# AimF 检查：用于检测旋转作弊，主要检测X轴旋转变化、加速度和旋转角度。
+AimF:
+  # buffer: 检测缓冲区分数，当累计分超过该值则判定为作弊。
+  # 默认值: 9
+  buffer: 9
+  # min-deltaX: 最小X轴旋转变化阈值，用于过滤微小变化。
+  # 默认值: 0.4D
+  min-deltaX: 0.4D
+  # max-deltaX-accel: 最大X轴加速度阈值，超出该值可能为作弊迹象。
+  # 默认值: 0.1D
+  max-deltaX-accel: 0.1D
+  # max-rotation-angle: 单次旋转允许的最大角度。
+  # 默认值: 5D
+  max-rotation-angle: 5D
+
+# AimG 检查：检测Y轴旋转变化和加速度。
+AimG:
+  # buffer: 检测缓冲区分数。
+  # 默认值: 7
+  buffer: 7
+  # min-deltaY: 最小Y轴旋转变化阈值。
+  # 默认值: 0.4D
+  min-deltaY: 0.4D
+  # max-deltaY-accel: 最大Y轴加速度阈值。
+  # 默认值: 0.1D
+  max-deltaY-accel: 0.1D
+
+# AimH 检查：针对X轴旋转变化和Y轴加速度的检测。
+AimH:
+  # buffer: 检测缓冲区分数。
+  # 默认值: 7
+  buffer: 7
+  # min-deltaX: 最小X轴旋转变化阈值，此处设定更高要求。
+  # 默认值: 1D
+  min-deltaX: 1D
+  # max-deltaY: 最大Y轴加速度阈值。
+  # 默认值: 0.0001D
+  max-deltaY: 0.0001D
+
+# AimJ 检查：版本检查、样本数量、无效行数、行长度和平均旋转的检测。
+AimJ:
+  # sample-size: 样本数量，用于计算平均值。
+  # 默认值: 30
+  sample-size: 30
+  # max-invalid-rows: 最大允许的无效数据行数。
+  # 默认值: 4
+  max-invalid-rows: 4
+  # min-row-length: 最小行长度要求。
+  # 默认值: 3
+  min-row-length: 3
+  # min-average-rot: 最小平均旋转阈值。
+  # 默认值: 1.5
+  min-average-rot: 1.5
+  # buffer: 检测缓冲区分数。
+  # 默认值: 5
+  buffer: 5
+
+# AimL 检查：旋转检测的简易缓冲配置。
+AimL:
+  # buffer: 检测缓冲区分数。
+  # 默认值: 4
+  buffer: 4
+
+# AimR 检查：对X轴旋转、Y轴加速度、比例阈值和窗口大小进行检测。
+AimR:
+  # min-deltaX: 最小X轴旋转变化阈值。
+  # 默认值: 1D
+  min-deltaX: 1D
+  # max-deltaY: 最大Y轴加速度阈值。
+  # 默认值: 0.0001D
+  max-deltaY: 0.0001D
+  # ratio-threshold: 旋转比率阈值，用于判断异常变化。
+  # 默认值: 1000.0D
+  ratio-threshold: 1000.0D
+  # window-size: 检测窗口大小，即采集连续数据的数量。
+  # 默认值: 8
+  window-size: 8
+  # buffer: 检测缓冲区分数。
+  # 默认值: 8
+  buffer: 8
+
+# AimM 检查：样本数量、无效行数、行长度、平均旋转和缓冲设置。
+AimM:
+  # sampleSize: 用于分析的样本数量。
+  # 默认值: 25
+  sample-size: 25
+  # maxInvalidRows: 最大允许的无效数据行数。
+  # 默认值: 2
+  max-invalid-rows: 2
+  # minRowLength: 最小数据行长度。
+  # 默认值: 3
+  min-row-length: 3
+  # minAverageRot: 最小平均旋转阈值。
+  # 默认值: 1.5
+  min-average-rot: 1.5
+  # buffer: 检测缓冲区分数。
+  # 默认值: 5
+  buffer: 5
+  # mitigate-vl: 减伤的vl。
+  # 默认值: 5
+  mitigate-vl: 4
+
+# AnalysisA 检查：通过缓冲分、动态阈值、平滑度和抖动来识别平滑外挂
+AnalysisA:
+  buffer:
+    # 每帧缓冲按此比例衰减（越大 → 积分下降慢）
+    # 默认值: 0.965
+    decay: 0.965
+    # 当缓冲 ≥ 此值立即触发告警
+    # 默认值: 4.0
+    flag-threshold: 5.0
+    # 告警后把缓冲乘以此系数回落
+    # 默认值: 0.35
+    post-flag-decay: 0.35
+
+  dynamic-threshold:
+    # sus 阈值 = 均值 + (std-mult × 标准差)
+    # 默认值: 2.0
+    std-mult: 2.0
+
+  windows:
+    # 计算平滑度的滑窗大小（Tick）
+    # 默认值: 80
+    smooth: 80
+
+    # Pitch-Lock 统计窗口大小（Tick）
+    # 默认值: 60
+    small-pitch: 60
+
+  pitch-lock:
+    # 视为“微小 pitch” 的最大角度 (°)
+    # 默认值: 0.3
+    small-pitch-max: 0.3
+
+    # 微小 pitch 占比 ≥ ratio1 加 0.15
+    # 默认值: 0.7
+    ratio1: 0.7
+
+    # 微小 pitch 占比 ≥ ratio2 加 0.25
+    # 默认值: 0.85
+    ratio2: 0.85
+
+  jitter:
+    # 判定“小幅移动” 的角度阈 (°)
+    # 默认值: 0.5
+    small-angle: 0.5
+
+    # 抖动检测滑窗大小（Tick）
+    # 默认值: 15
+    window: 15
+
+    # 窗口内翻转次数 ≥ 此值判定抖动
+    # 默认值: 6
+    flip-threshold: 6
+
+AnalysisF:
+  gcd:
+    # 检测固定角度变化（如0.1/0.01等规律变化）
+    # max-buffer: 最大允许异常计数（默认: 3.0）
+    # fail-increase: 每次触发时异常值增量（默认: 1.0）
+    enabled: true
+    max-buffer: 3.0
+    fail-increase: 1.0
+
+  sync:
+    # 检测视角移动与鼠标灵敏度不匹配的情况
+    # max-buffer: 最大允许异常计数（默认: 5.0）
+    # fail-increase: 每次触发时异常值增量（默认: 1.0）
+    enabled: true
+    max-buffer: 5.0
+    fail-increase: 1.0
+
+  machine:
+    # 检测机器式规律移动（固定间隔角度变化）
+    # max-buffer: 最大允许异常计数（默认: 5.0）
+    # fail-increase: 每次触发时异常值增量（默认: 1.0）
+    enabled: true
+    max-buffer: 5.0
+    fail-increase: 1.0
+
+  interpolation:
+    # 检测画面抖动异常（角度变化不连续）
+    # max-buffer: 最大允许异常计数（默认: 4.0）
+    # fail-increase: 每次触发时异常值增量（默认: 0.85）
+    enabled: true
+    max-buffer: 4.0
+    fail-increase: 0.85
+
+  interpolation_out:
+    # 检测高灵敏度下的画面抖动异常（灵敏度>100%时生效）
+    # max-buffer: 最大允许异常计数（默认: 6.0）
+    # fail-increase: 每次触发时异常值增量（默认: 1.0）
+    enabled: true
+    max-buffer: 6.0
+    fail-increase: 1.0
+
+  machine_out:
+    # 检测高灵敏度下的机器式移动（灵敏度>100%时生效）
+    # max-buffer: 最大允许异常计数（默认: 6.0）
+    # fail-increase: 每次触发时异常值增量（默认: 1.0）
+    enabled: true
+    max-buffer: 6.0
+    fail-increase: 1.0
+
+# AnalysisH 检查：轻量ML推理检测（逻辑回归模型，通过8维旋转特征推断自瞄概率）
+AnalysisH:
+  buffer:
+    # 每帧缓冲按此比例衰减
+    # 默认值: 0.94
+    decay: 0.94
+    # 当缓冲 ≥ 此值立即触发告警
+    # 默认值: 5.0
+    flag-threshold: 5.0
+    # 告警后把缓冲乘以此系数回落
+    # 默认值: 0.40
+    post-flag-decay: 0.40
+
+  threshold:
+    # 滑窗内平均概率超过此值开始累积缓冲
+    # 默认值: 0.68
+    mean-probability: 0.68
+    # 滑窗内峰值概率超过此值额外累积缓冲
+    # 默认值: 0.85
+    peak-probability: 0.85
+
+  windows:
+    # 特征归一化滑窗大小（Tick）
+    # 默认值: 60
+    normalization: 60
+    # 概率聚合滑窗大小（Tick）
+    # 默认值: 40
+    probability: 40
+    # 开始推理所需最小样本数
+    # 默认值: 15
+    min-samples: 15
+    # 开始聚合判定所需最小概率样本数
+    # 默认值: 20
+    min-probability-samples: 20
+
+  increment:
+    # 平均概率超阈值时的增量系数
+    # 默认值: 0.35
+    mean: 0.35
+    # 峰值概率超阈值时的增量系数
+    # 默认值: 0.20
+    peak: 0.20
+    # 单帧最大增量上限
+    # 默认值: 0.6
+    max: 0.6
+
+# KillAuraG 检查：检查精准度
+KillAuraG:
+  # accuracy: 检测准确度百分比。
+  # 默认值: 95
+  accuracy: 95
+  # size: 样本大小，用于检测分析。
+  # 默认值: 25
+  size: 25
+  # reach: 攻击范围阈值。
+  # 默认值: 0.7
+  reach: 1.45
+  # combat-time: 战斗时间阈值，单位为秒。
+  # 默认值: 10
+  combat-time: 10
+  # min-average-target-movement: 最小平均目标移动距离阈值。
+  # 默认值: 0.3
+  min-average-target-movement: 0.3
+  # min-cps: 最小可触发检测的cps
+  # 默认值: 5
+  min-cps: 5
+  # should-cancel: 是否取消此检测下的操作。
+  # 默认值: false
+  should-cancel: false
+
+KillAuraJ:
+  # max-sample: 样本队列大小，用于存储检测数据。
+  # 值越大检测越准确但延迟越高，值越小检测越快但可能误报。
+  # 默认值: 1600
+  max-sample: 1600
+  # min-diff: 延迟差异阈值(毫秒)。
+  # 当真实延迟(traPing)和保持连接延迟(keepAlivePing)差异超过此值时视为可疑。
+  # 默认值: 95
+  min-diff: 95
+  # min-combat-ratio: 战斗中无效样本的最小比例(0.0~1.0)。
+  # 当战斗中的无效样本比例超过此值时触发检测。
+  # 默认值: 0.9
+  min-combat-ratio: 0.9
+  # min-invalid-samples: 触发检测的最小无效样本数。
+  # 防止在样本量不足时误报，建议值大于10。
+  # 默认值: 16
+  min-invalid-samples: 16
+
+KillAuraM:
+  # ping-offset: 延迟偏移补偿
+  # 这个越小，backtrack越严格（误判警告）
+  # 默认值: 1.1
+  ping-offset: 1.1
+  # buffer-multiplier: 缓冲区大小
+  # 越大，检测backtrack要越久。过小会导致误判
+  # 默认值: 1.1
+  buffer-multiplier: 1.1
+
+# VelocityA 检查：检测击退数据是否异常。
+VelocityA:
+  # strictness: 检测严格度，可选 "strict" / "balanced" / "lenient" / "chaos"。
+  # 默认值: "balanced"
+  strictness: "lenient"
+  # 用于修复1.17+的客户端和实际不在同一位置导致的误判
+  # 实验性，这可能会导致一些绕过或者一些漏洞
+  temp-fixed-sync: false
+
+# VelocityB 检查：检测玩家因爆炸产生的异常数据。
+VelocityB:
+  # threshold: 爆炸检测阈值。
+  # 默认值: 0.05
+  threshold: 0.05
+  # setback-vl: 拉回的vl。
+  # 默认值: 3
+  setback-vl: 3
+  # isIgnoreInvalid: 是否忽略无效的爆炸数据。
+  # 默认值: false
+  ignore-invalid: false
+
+# VelocityD 检查：检测一些横向的减少KB
+VelocityD:
+  # min-velocity: 检测的最小的横向减少
+  # 默认值: 90
+  min-velocity: 90
+  # setback-vl: 爆炸偏移值。
+  # 默认值: 10
+  setback-vl: 10
+  # allowed-jump-reset: 是否忽略正在使用jumpreset的玩家
+  # 关闭这个可能会造成jumpreset的的使用者被误判
+  # 默认值: true
+  allowed-jump-reset: true
+
+# AutoBlock 检查：检测自动阻挡行为是否异常。
+AutoBlock:
+  # setback-vl: 自动阻挡偏移值。
+  # 默认值: 7
+  setback-vl: 7
+
+# Reach 检查：检测击打范围异常，包括缓冲、增量、衰减及多种忽略规则。
+Reach:
+  # threshold: 击打范围阈值。
+  # 默认值: 0.05 (就是3.05)
+  threshold: 0.05
+  # buffer: 缓冲区大小。
+  # 默认值: 2
+  buffer: 2
+  # increment: 每次击打增加的增量值。
+  # 默认值: 0.5
+  increment: 0.5
+  # decay: 衰减系数。
+  # 默认值: 0.45
+  decay: 0.45
+  # ignore-non-player-targets: 是否忽略非玩家目标。
+  # 默认值: false
+  ignore-non-player-targets: false
+  # block-impossible-hits: 是否阻止不可能的击打行为。
+  # 默认值: true
+  block-impossible-hits: true
+  # ignore-ender-dragon: 是否忽略末影龙目标。
+  # 默认值: false
+  ignore-ender-dragon: false
+  # tolerant-box-moving: 在移动时对玩家的碰撞箱进行宽容处理,这应该可以减少一些误判
+  # 默认值: false
+  tolerant-box-moving: false
+  # ray-trace-blacklist: 在raytrace时忽略的方块，用于ReachE
+  ray-trace-blacklist:
+    - FENCE
+    - GATE
+  # entity-blacklist: 忽略的实体
+  entity-blacklist:
+    - BAT
+    - ITEM_FRAME
+    - AREA_EFFECT_CLOUD
+    - BOAT
+    - SQUID
+    - ELDER_GUARDIAN
+    - SLMIE
+    - HORSE
+    - ARMOR_STAND
+    - GUARDIAN
+    - CHEST_BOAT
+    - SHULKER
+    - CAT
+
+##############################################
+# 玩家检查
+##############################################
+
+# AutoClickerA 检查：检测玩家左键点击频率是否超过限制
+AutoClickerA:
+  # max-cps: 最大允许的左键点击次数（CPS）。
+  # 默认值: 30
+  max-cps: 30
+  # should-cancel: 是否取消异常点击行为。
+  # 默认值: false
+  should-cancel: false
+  # setback-vl: 异常点击时的偏移值。
+  # 默认值: -1
+  setback-vl: -1
+
+# AutoClickerE 检查：检测玩家左键点击太高时频率是否异常。
+AutoClickerE:
+  # min-cps: 当cps来到多少时进行检测
+  # 默认值: 16
+  min-cps: 16
+  # min-cps: 当cps峰值超过了多少才进行检测
+  # MathUtil.getKurtosis(samples(25样本)) / 1000.0
+  # 默认值: 7.5
+  max-kurtosis: 4
+  # should-cancel: 是否取消异常点击行为 (当在vl大于4时才撤销)
+  # 默认值: false
+  should-cancel: false
+  # setback-vl: 异常点击时的偏移值。
+  # 默认值: -1
+  setback-vl: -1
+
+# Interacts 检查：检测玩家交互行为的缓冲配置。
+Interacts:
+  buffer:
+    a: 4
+
+# BadPacketsO 检查：检测异常数据包行为。
+BadPacketsO:
+  # skips: 跳过检测的次数计数。
+  # 默认值: 0
+  skips: 0
+  # join-time: 玩家加入后的检测等待时间，单位为秒。
+  # 默认值: 5
+  join-time: 5
+
+# TimerA 检查：检测计时相关异常行为。
+TimerA:
+  # setback-vl: 偏移值。
+  # 默认值: 10
+  setback-vl: 10
+  # drift: 漂移值，用于检测计时漂移。
+  # 默认值: 150
+  drift: 150
+  # ping-abuse-limit-threshold: Ping滥用限制阈值。
+  # 默认值: 500
+  ping-abuse-limit-threshold: 500
+
+# TimerB 检查：另一组计时检测参数。
+TimerB:
+  # setback-vl: 偏移值。
+  # 默认值: 6
+  setback-vl: 6
+
+# TimerD 检查：计时检测中严格模式与普通模式的阈值配置。
+TimerD:
+  # setback-vl: 偏移值。
+  # 默认值: 12
+  setback-vl: 12
+  # strict: 是否启用严格模式。
+  # 默认值: false
+  strict: false
+  threshold:
+    # strict: 严格模式下的阈值。
+    # 默认值: 1.05
+    strict: 1.05
+    # normal: 普通模式下的阈值。
+    # 默认值: 1.07
+    normal: 1.07
+
+# InventoryM 检查：检测玩家物品操作（交换、快速移动、丢弃）是否异常。
+InventoryM:
+  # mitigate: 是否在检查到玩家异常的时候惩罚玩家如撤销玩家的发包和还原玩家的背包等
+  # 默认值: true
+  mitigate: true
+  # 标准差限制
+  std:
+    # swap: 当玩家交换手的次数的标准差超过此值时则flag (时间1.0秒)
+    # 默认值: 2.8
+    swap: 2.8
+    # throw: 当玩家丢出物品的次数的标准差超过此值时则flag (时间1.0秒)
+    # 默认值: 1.75
+    throw: 1.75
+  # 速度限制
+  limit:
+    # quick-move: 当玩家发送快捷移动包的次数在一定时间内的超过此值时则flag (时间0.6秒)
+    # 默认值: 7
+    quick-move: 7
+    # throw: 当玩家发送丢出物品的次数在一定时间内的超过此值时则flag (时间0.6秒)
+    # 默认值: 12
+    throw: 12
+    # pick-up: 当玩家发送选择物品的次数在一定时间内的超过此值时则flag (时间0.6秒)
+    # 默认值: 6
+    pick-up: 6
+
+BlinkA:
+  # max-lagging-time: 可容许卡顿的时间
+  # 默认值: 1200 (1000 为一秒)
+  max-lagging-time: 1200
+  # mitigate: 在检查到后要恶心黑客
+  mitigate:
+    # 开启恶心黑客
+    # 默认值: true
+    enable: false
+    # teleport: 是否拉回卡顿的玩家到之前的位置
+    # 默认值: true
+    teleport: true
+    # to-void: 当玩家在虚空中尝试blink时,将会概率被拉回到陆地上
+    # 这个选项会修复这个问题,但是也会造成额外的性能开销
+    # 默认值: false
+    to-void: false
+    # cancel: 在检查到后撤销玩家的发包
+    cancel:
+      # 是否撤销
+      enable: true
+      # time: 卡顿了多久再进行测验
+      # 默认值: 1000 (1000L 为一秒)
+      time: 950
+  # buffer: 可容许的误判
+  buffer:
+    # chat: 在卡顿的时候依然可以说话
+    # 默认值: 3.0
+    chat: 2.0 # -1 是关闭检测
+    # flying: 在卡顿的时候依然可以发移动包
+    # 默认值: 4.0
+    flying: 40.0 # -1 是关闭检测
+    # blink: 卡的太久了
+    # 默认值: 8.0
+    blink: 20.0 # -1 是关闭检测
+    # lag-track: 在卡顿的时候还在攻击
+    # 默认值: 4.0
+    attack: 6.0 # -1 是关闭检测
+
+# PingSpoof 检查：检测玩家Ping数值异常。
+PingSpoof:
+  threshold:
+    # base: 基础Ping阈值。
+    # 默认值: 120
+    base: 120
+    # max: 最大允许Ping阈值。
+    # 默认值: 200
+    max: 200
+  # buffer: 缓冲区大小。
+  # 默认值: 15
+  buffer: 15
+  # history-size: 历史数据大小。
+  # 默认值: 25
+  history-size: 25
+
+# FastPlace 检查：检测玩家在一定时间内所放置了多少方块是否超出了限制
+FastPlaceA:
+  # need-time: 检测的时间
+  # 默认值: 1000L (1秒)
+  need-time: 1000
+  # limit: 在上面的时间中玩家所能放置多少个方块
+  # 默认值: 20
+  limit: 20
+
+# XRay 检查：检测玩家使用了不合法的模组如自动挖矿和使用了不合法的材质包进行精确的挖掘方块
+XRayA:
+  # blocks: 检测的方块
+  blocks:
+    - DIAMOND_ORE
+    - ANCIENT_DEBRIS
+    - DEEPSLATE_DIAMOND_ORE
+
+##############################################
+# 杂项检查
+##############################################
+
+# ClientA 检测 : 检测玩家发送不合法的客户端品牌
+ClientA:
+  # check-for-meteor: 是否检测meteor的客户端品牌
+  # 大部分情况下推荐为false，因为部分模组也会发送类似于meteor的客户端品牌
+  # 默认值: false
+  check-for-meteor: false
+
+# SpamB 检查：检测玩家聊天刷屏行为
+SpamB:
+  # should-cancel: 达到该违规等级后是否取消数据包
+  # 默认值: true
+  should-cancel: true
+  threshold:
+    # cancel-vl: 达到该违规等级后取消数据包
+    # 默认值: 5
+    cancel-vl: 5
+    # similarity: 相似度检测阈值（0.0-1.0）
+    # 默认值: 0.8
+    similarity: 0.8
+  # frequency-detection: 频率检测配置
+  frequency-detection:
+    # fast-threshold: 每秒允许的最大消息数
+    # 默认值: 3
+    fast-threshold: 3
+  # history-settings: 历史记录配置
+  history-settings:
+    # message-history: 保留的历史消息数量
+    # 默认值: 5
+    message-history: 5
+  # alert-settings: 警告玩家设置
+  alert-settings:
+    # enable: 警告玩家
+    # 默认值: true
+    enable: true
+
+##############################################
+# 聊天检查
+##############################################
+
+# ChatA 检查：检测客户端发送的聊天消息长度超过原版限制（256字符）
+ChatA:
+  # enabled: 是否启用此检查
+  # 默认值: true
+  enabled: true
+  # max-length: 允许的最大聊天消息长度
+  # 默认值: 256
+  max-length: 256
+
+# ChatB 检查：检测玩家发送聊天消息过于频繁
+ChatB:
+  # enabled: 是否启用此检查
+  # 默认值: true
+  enabled: true
+  # min-interval: 两次聊天消息之间的最小间隔（毫秒）
+  # 默认值: 200
+  min-interval: 200
+
+# ChatC 检查：检测客户端发送命令过于频繁
+ChatC:
+  # enabled: 是否启用此检查
+  # 默认值: true
+  enabled: true
+  # min-interval: 两次命令之间的最小间隔（毫秒）
+  # 默认值: 100
+  min-interval: 100
+
+# ChatD 检查：检测 1.19+ 聊天包缺少签名或签名异常
+ChatD:
+  # enabled: 是否启用此检查
+  # 默认值: true
+  enabled: true
+
+##############################################
+# MultiActions 检查
+##############################################
+
+# MultiActionsA 检查：检测同一 tick 内同时发送攻击和使用物品包
+MultiActionsA:
+  enabled: true
+
+# MultiActionsB 检查：检测同一 tick 内攻击和切换物品
+MultiActionsB:
+  enabled: true
+
+# MultiActionsC 检查：检测同一 tick 内使用物品和放置方块
+MultiActionsC:
+  enabled: true
+
+# MultiActionsD 检查：检测同一 tick 内攻击和丢弃物品
+MultiActionsD:
+  enabled: true
+
+# MultiActionsE 检查：检测同一 tick 内多次攻击
+MultiActionsE:
+  enabled: true
+
+# MultiActionsF 检查：检测同一 tick 内攻击和实体交互
+MultiActionsF:
+  enabled: true
+
+# MultiActionsG 检查：检测同一 tick 内切换物品和使用物品
+MultiActionsG:
+  enabled: true

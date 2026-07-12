@@ -1,0 +1,75 @@
+name: Yuki
+version: ${version}
+main: cn.aetheris.yuki.Yuki
+load: POSTWORLD
+description: "An AntiCheat Plugin | Powered By Aetheris"
+api-version: 1.13
+authors: [ Aetheris ]
+commands:
+  yuki:
+    aliases: [ "yk" ]
+    description: "主命令"
+    permission: "yuki.commands"
+
+permissions:
+  yuki.staff:
+    children:
+      yuki.brand: true
+      yuki.exempt.cancel: true
+      yuki.exempt.highpingkick: true
+      yuki.exempt.setback: true
+      yuki.commands: true
+      yuki.commands.alert: true
+      yuki.commands.freeze: true
+      yuki.commands.unfreeze: true
+      yuki.commands.decrypt: true
+      yuki.commands.alerts.enable-on-join: true
+      yuki.commands.spectate: true
+      yuki.commands.mitigate: true
+      yuki.commands.setback: true
+      yuki.commands.stopspectating: true
+
+  yuki.commands:
+    default: op
+
+  yuki.commands.alerts.enable-on-join:
+    description: Enable alerts on join
+    default: op
+
+  yuki.brand:
+    description: Show client brands on join
+    default: op
+
+  yuki.antiplugin:
+    default: op
+
+  yuki.exempt:
+    description: Exempt from all checks
+    default: op
+    children:
+      yuki.exempt.*: true
+
+  yuki.exempt.cancel:
+    description: Exempt cancel from anticheat
+    default: op
+
+  yuki.exempt.highpingkick:
+    default: op
+
+  yuki.exempt.modifypacket:
+    description: Disable modifying packets
+    default: "false"
+
+  yuki.exempt.setback:
+    description: Disable setback
+    default: op
+
+softdepend:
+  - ViaVersion
+  - ViaBackwards
+  - ViaRewind
+  - Geyser-Spigot
+  - floodgate
+  - PlaceholderAPI
+  - MythicMobs
+  - MyPet

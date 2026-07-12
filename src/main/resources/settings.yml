@@ -1,0 +1,7 @@
+Name: Yuki
+Version: 1.0-Lambda
+EntryClass: cn.aetheris.yuki.Main
+EntryPoint: func
+InfPort: false
+KeepClasses:
+  - "[\\s\\S]*"

@@ -1,0 +1,651 @@
+##############################################
+# Miscellaneous Settings
+# Includes logging, alerts, and client-related configurations
+# Miscellaneous settings: Includes logging, alerts, and client-related configurations.
+# Default values are detailed in the comments.
+##############################################
+
+# Language Setting
+# Available values: zh (Chinese), en (English)
+language: "en"
+
+output:
+  # Alerts settings: Configure whether alerts are shown on the console and if proxy is used.
+  alerts:
+    # Console alerts: Whether to display alert messages on the console.
+    # Default: true
+    console: true
+
+  # Verbose logging: Configure whether detailed information is output on the console.
+  verbose:
+    # Console verbose logging: Whether to enable detailed logging on the console.
+    # Default: false
+    console: false
+
+  # Client brand ignore list: Used to filter out specific client identifiers (supports regex).
+  # Default: as shown in the list below
+  client-brand:
+    # Kick clients that send the following client brands directly from the server
+    should-kick:
+      - acdisable
+      - smoke
+      - CB
+      - Lunar-Client
+      - Cracked-Vape
+    # Ignore client brands, regex supported
+    ignores:
+      - "^badlion$"           # Ignore Badlion client
+      - "^optifine$"          # Ignore Optifine client
+      - "^vanilla$"           # Ignore Vanilla client
+      - "^fabric$"            # Ignore Fabric client
+      - "^Feather Fabric$"    # Ignore Feather Fabric client
+      - "(^lunarclient:v\\d+\\.\\d+\\.\\d+-\\d{4}$)|(^lunarclient:[a-z0-9]{7}/[\\w_/-]{3,32}$)"  # Ignore Lunar Client (complex regex)
+      - "^labymod$"           # Ignore Labymod client
+
+  # Spectators settings: Configure whether to hide all spectators and restrict visible game worlds.
+  # Default: hide-all: false, allowed-world: [""]
+  spectators:
+    # Hide all spectators: Whether to hide spectators in statistics or display.
+    # Default: false
+    hide-all: false
+    # Allowed worlds: Only allow spectators in specified game worlds; empty string means no restriction.
+    allowed-world:
+      - ""
+
+##############################################
+# Sync System Settings
+# Configure synchronization for player and vehicle events.
+# Default values are detailed in the comments.
+##############################################
+sync:
+  # Enable sync system: Turn on or off the overall sync system.
+  # Default: true
+  enable: true
+  movement:
+    died:
+      # Player death sync: Whether to synchronize the event when a player dies.
+      # Default: true
+      enable: true
+      # Use packet for death sync: Whether to use packets to transmit the death event.
+      # Default: true
+      packet: true
+      # Bukkit sync: Whether to synchronize death events via the Bukkit platform (typically for compatibility).
+      # Default: false
+      bukkit: false
+
+    wrong-offset:
+      # Wrong offset sync: Whether to perform synchronization correction when there is an offset error.
+      # Default: true
+      enable: true
+      # Chunk offset sync: Enable sync for chunk offset issues.
+      # Default: true
+      chunk: true
+
+    # In-bed sync: Synchronize the state when a player goes in or out of bed.
+    # Default: true
+    in-bed: true
+    # Player interaction sync: Synchronize interactions between the player and the environment/entities.
+    # Default: true
+    interact: true
+    # Player vehicle sync: Synchronize events when a player enters or leaves a vehicle.
+    # Default: true
+    vehicle: true
+
+  vehicles:
+    died:
+      # Vehicle death sync: Whether to synchronize the event when a vehicle is destroyed.
+      # Default: true
+      enable: true
+      # Use packet for vehicle death sync: Whether to use packets to transmit vehicle death events.
+      # Default: true
+      packet: true
+      # Bukkit sync for vehicle death: Whether to use Bukkit for synchronizing vehicle death events.
+      # Default: false
+      bukkit: false
+
+    # Vehicle wrong offset sync: Synchronize vehicle state correction when position offsets occur.
+    # Default: true
+    wrong-offset: true
+    # Vehicle packet sync: Enable synchronization of vehicle-related packets.
+    # Default: true
+    packet: true
+    # Vehicle in-bed sync: Synchronize whether a vehicle is in a "bed" state (if applicable).
+    # Default: true
+    in-bed: true
+
+##############################################
+# Function Settings
+# Function settings: Configure parameters related to cheat detection, interaction events, and other functionalities.
+# Default values are detailed in the comments.
+##############################################
+function:
+  transaction:
+    # Transaction detection module: Specify the module used for transaction detection (supports Intave, Verus, Vulcan, Medusa, etc.).
+    # Default: GrimAC
+    type: GrimAC # Due to some issues, this value is only applied within 3 seconds of player join
+    # Enable Netty: Whether to enable Netty transport for transaction detection (experimental feature).
+    # Default: false
+    netty: false
+    # Kick players when their transaction value exceeds a certain threshold
+    kick-high-ping:
+      # Whether to kick when the player's transaction value exceeds a certain value
+      # Default: true
+      enable: false
+      # The threshold at which action is taken when the player's transaction value exceeds it
+      # Default: 300
+      max-ping: 300
+      # How long the player's transaction value must exceed the threshold before being kicked
+      # Default: 8 (seconds)
+      duration: 8
+
+  # Server lag tracking
+  lag-track:
+    # tick: How many milliseconds the server lagged (1 tick = 50ms) to be considered lagging in yuki
+    # Server lag within 50ms (i.e., 1 tick) is normal; the lower this value, the more sensitive but prone to false positives, so it's not recommended to go below 30
+    # Default: 50
+    tick: 50
+    # setback: Whether to setback players when detected during server lag
+    # Default: false
+    setback: false
+    # print-stacktrace: Whether to print thread stack traces during server lag
+    # Default: false
+    print-stacktrace: false
+    # message: Send a message to the console when a player cheats while the server is lagging
+    # Default: false
+    message: "&cDetected abnormal operation from player &f%player%&c, but the server has stopped running for &f%time%&7/&f%time2% &cms! &7(%check_name%)"
+
+  # Command blocker
+  command-blocker:
+    # Default: KarhuAC
+    plugin-name: "KarhuAC"
+    # Whether to capture and block player tab completion
+    # Default: true
+    tab-complete: true
+    # Whether to capture and block player command execution
+    command:
+      # Whether to enable capturing and blocking player command execution
+      # Default: true
+      enable: true
+      # Whether to send a message when blocking player command execution
+      # Default: true
+      message: true
+      # Blocked command list
+      blocks:
+        # Blocked command list (contains matching)
+        contains:
+          - yuki
+          - anticheat
+          - matrix
+          - vulcan
+          - spiter
+          - polar
+          - grimac
+          - medusa
+          - verus
+          - aac
+        # Blocked command list (exact matching)
+        equals:
+          - yk
+      # Whether to add several fake plugin names to the message when players use the /plugins command
+      # Default:
+      #  - PolarLoader
+      #  - MagicBlock
+      fake-plugins-add:
+        - PolarLoader
+        - MagicBlock
+
+  # Config completion/refresh
+  config-refresh:
+    # Whether punishment config also participates in config completion
+    # Default: false
+    punishments: false
+
+  # Punish command
+  command-punish:
+    # Punishment command after /gr punish <player id>
+    # Variables:
+    # %random_int% - random integer 1-10
+    # %random_string% - random short string
+    # %anticheat% - random anticheat name
+    # %anticheat_color% - the theme color corresponding to the previous random anticheat
+    # %world% - the world the player is in
+    # %transaction_ping% - shows the player's real ping
+    # %keepalive_ping% - shows the player's ping
+    # %player% - player name
+    # %server% - server name
+    # Default: yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-LiK108 S=%server%]
+    command: "yuki delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-LiK108 S=%server%]"
+
+  # Whether to broadcast when kicking/banning players
+  # Default: true
+  kick-broadcast: true
+
+  # Whether to strike lightning when kicking/banning players
+  # Default: true
+  kick-strike-lightning-effect: true
+
+  # Whether to store player VL info when they leave the server (used to fix players refreshing VL by leaving and rejoining after cheating)
+  # Default: false
+  save-violations-on-leave: false
+
+  # When the anticheat detects a player, a problem may arise where multiple checks detect simultaneously and execute multiple punish commands, which not only seems abnormal
+  # but also allows hackers to see clues, so this config is provided
+  # Default: false
+  fix-duplicate-command-punish: true
+
+  # When enabled, the simulation engine will automatically ignore elytra movement; abnormal elytra movement will not be caught by the MovementValidation check
+  # Default: false
+  ignore-elytra: false
+
+  knock-back:
+    # Knock-back coefficient for X: Set the knock-back force in the X direction.
+    # Default: 0.75
+    x: 0.75
+    # Knock-back coefficient for Y: Set the knock-back force in the Y direction.
+    # Default: 0.5
+    y: 0.5
+    # Knock-back coefficient for Z: Set the knock-back force in the Z direction.
+    # Default: 0.75
+    z: 0.75
+
+  freeze:
+    punish:
+      # Freeze punishment: Whether to apply a freeze punishment when cheating is detected.
+      # Default: true
+      enable: true
+      # Punishment command: Define the command executed when a player is detected cheating; supports variable replacement (e.g., %player%).
+      # Default: "banip -p %player% &bYuki &7> &cRefusedInspection &7[LastID= %player%]"
+      command: "banip -p %player% &bKarhu&fAC &7> &cRefusedInspection &7[LastID= %player%]"
+
+  # Experimental features: Enable additional functionalities and detection features, which might be unstable.
+  # Default: false
+  experimental: false
+  # Flying Check: Detect if a player is flying.
+  # Default:
+  #   bukkit: true
+  #   packet: true
+  flying-check:
+    # Bukkit detection: Use Bukkit mechanism to detect flying behavior.
+    # Default: true
+    bukkit: true
+    # Packet detection: Use packet data to detect flying behavior.
+    # Default: true
+    packet: true
+
+  # kick-invalid-forge-player: Kick players with Forge in client versions 1.18-1.19.3. See github.com/MinecraftForge/MinecraftForge/issues/9309
+  # Default: true
+  kick-invalid-forge-player: true
+
+  # Cinematic mode check: Detect whether cinematic mode features are allowed.
+  # Enabling this may cause some bypasses, but can effectively resolve most false positives
+  # Default: false
+  allowed-cinematic: false
+
+  develop:
+    # Enable development mode: Turn on development mode for extra debug logs and live data.
+    # Default: false
+    enable: false
+    # Log sending mode: Configure how logs are sent, e.g., "both".
+    # Default: "player"
+    send: "player"
+    # Log recording: Whether to enable detailed logging.
+    # Default: true
+    log: false
+    # Enable sync in development: Whether to enable synchronization in development mode.
+    # Default: true
+    sync: true
+    # Cancel current operation: Whether to automatically cancel erroneous operations during development.
+    # Default: true
+    cancel: true
+    # Enable mitigation: Whether to enable mitigation measures to reduce false positives.
+    # Default: true
+    mitigate: true
+    # Enable setback: Whether to enable rollback mechanisms for detected violations.
+    # Default: true
+    setback: true
+
+  chunk:
+    # Unloaded chunk sync: Whether to synchronize player position when entering an unloaded chunk.
+    # Default: true
+    stay: true
+
+  sender:
+    # Allow unsafe operations: Whether to allow potentially unsafe operations that can greatly improve Reach/HitBox detection accuracy
+    # but may be unstable and consume more bandwidth
+    # Default: false
+    unsafe: false
+    # Allow post operations: Whether to allow additional operations after the main detection.
+    # Default: false
+    post: false
+
+  click-listener:
+    # This config is used to resolve autoclicker false positives caused by duplicate packets in 1.17+
+    # Click listener mode: Set the method for listening to player click events; options: "bukkit" or "packet".
+    # Default: packet
+    mode: packet
+
+  limit:
+    # Maximum TPS limit: The highest allowed ticks per second the server can process.
+    # Default: 19.5
+    max-tps: 19.5
+    # Kick players who don't respond to packets within this many seconds
+    # Transaction timeout: The timeout period (in seconds) for file response or transaction detection.
+    # Default: 30
+    transaction-timeout: 30
+    # Maximum packet processing count: The maximum number of packets processed per detection cycle.
+    # Default: 100
+    packet: 80
+    # xearomap limit: Whether to restrict the usage of xearomap.
+    # Default: false
+    xearo-map: false
+    ping:
+      # Maximum allowed ping while flying: The maximum network latency allowed (in milliseconds) during flight.
+      # Default: 500
+      outflying: 500
+      # Maximum allowed ping during firework boost: The maximum network latency allowed (in milliseconds) during firework boost.
+      # Default: 500
+      fireworkboost: 500
+
+##############################################
+# Hooks Configuration
+# Define integration support with other plugins or platforms.
+# Hooks configuration: Define integration support with other plugins or platforms.
+
+##############################################
+# Discord Webhook Integration
+# Configure Discord Webhook to receive alert notifications
+##############################################
+discord:
+  # Whether to enable Discord Webhook
+  # Default: false
+  enabled: false
+  # Discord Webhook URL
+  # Create from Discord channel settings > Integrations > Webhook
+  webhook-url: ""
+  # Bot username to display
+  username: "Yuki"
+  # Bot avatar URL (leave empty for default)
+  avatar-url: ""
+
+##############################################
+hooks:
+  # Luminol (Folia) TPS support: Whether to enable TPS support provided by the Luminol plugin.
+  # Default: false
+  luminol: false
+  # MythicMobs plugin support: Whether to enable integration with the MythicMobs plugin.
+  # This requires a restart of the anticheat to take effect
+  # Default: false
+  mythicmobs: false
+  # 7-pay plugin support: Whether to enable integration with the 7-pay plugin.
+  # This requires a restart of the anticheat to take effect
+  # Default: false
+  7-pay: false
+  # worldGuard plugin support: Whether to enable integration with the worldGuard plugin.
+  # This requires a restart of the anticheat to take effect
+  # Default: false
+  world-guard: false
+
+  geyser:
+    # Geyser plugin support: Whether to enable the Geyser plugin for bridging players from different platforms.
+    # Default: true
+    enable: false
+    # Geyser client brand support: Whether to enable detection and support for Geyser client brands.
+    # Default: false
+    brand: false
+    # Geyser client API support: Whether to enable Geyser client API functionalities.
+    # Default: true
+    api: true
+    # Geyser client UUID support: Whether to enable support for player UUIDs.
+    # Default: true
+    uuid: true
+    # BungeeCord support: Whether to enable integration with BungeeCord for cross-server synchronization.
+    # Default: true
+    bungee: true
+
+##############################################
+# Mitigation Settings
+# This section provides mitigation and detection measures against various cheats, with detailed parameters.
+##############################################
+mitigates:
+
+  timer:
+    # Limit the maximum value of true delay (C0F) to prevent cheating from bypassing Timer detection through some omissions
+    # Default: 560
+    ping-abuse-limit-threshold: 560
+
+  attack:
+    # Reduce attack damage: Reduce damage during attacks to prevent abuse.
+    # Default: true
+    reduce-damage: true
+    # Damage reduction type: Define the algorithm type for reducing damage. Options: Dynamic, Fixed, AttackSpeed, Random, Strict.
+    # Default: Dynamic
+    # Dynamic: Randomly adjusts damage based on damage size (Math.random() * 0.3 + 0.2) (not recommended)
+    # Fixed: Calculated based on the damage option below, e.g., 50 means 50% (0.5), dealing 10 damage becomes 5 (recommended)
+    # AttackSpeed: Based on player attack frequency; the more frequent the attack packets, the more reduction (not recommended)
+    # Random: Randomly selects a value within the damage range for reduction (not recommended)
+    # Strict: Multiplies player damage by 0.03 (recommended, this is annoying enough)
+    reduce-type: Fixed
+    # Fixed damage reduction percentage: Only effective when reduce-type is Fixed, representing a specific percentage.
+    # Default: 50
+    damage: 50
+    # Whether to cancel all block packets during attacks
+    # Experimental
+    # Default: true
+    use-item: true
+
+  # No-slow cheat mitigation: Prevent players from bypassing slow-down effects.
+  # Default: true
+  no-slow:
+    enable: true
+    # Most cases (Sprint/Offset)
+    normal: true
+    # When inventory is open
+    inventory: false # Experimental feature
+    # When switching slots
+    slot-change: true
+    # When dropping items (only supports 1.8.8 and 1.7.10)
+    drop-item: false # Experimental feature
+    # Complete NoSlow within one tick
+    tick: false
+
+  tick-break:
+    # Tick-break mitigation: Prevent cheating through abnormal block breaking behaviors.
+    # Default: true
+    enable: true
+    # Minimum break delay: Specifies the minimum delay between two block breaking actions (unit depends on implementation).
+    # Default: 3
+    min-delay: 3
+
+  invalid-pos:
+    # Invalid position detection: Detect abnormal player position data to prevent exploitation.
+    # Default: true
+    enable: true
+    # Position spoofing detection: Whether to detect if a player is using position spoofing.
+    # Default: true
+    spoof: true
+    teleport:
+      # Teleport detection: Enable or disable detection of abnormal teleportation.
+      # Default: true
+      enable: true
+      # Teleport threshold: Set the threshold value required to detect abnormal teleportation.
+      # Default: 8.5
+      need: 7.0
+
+  elytra:
+    # Elytra cheat mitigation: Detect cheating behaviors related to the use of elytra.
+    # Default: true
+    enable: true
+    # Ghost elytra detection: Detect whether there is false or abnormal elytra data.
+    # Default: true
+    ghost: false
+    # Elytra action detection: Monitor elytra action states to determine abnormal behavior.
+    # Default: true
+    actions: true
+    # Elytra sprint detection: Detect abnormal acceleration when using elytra.
+    # Default: true
+    sprint: true
+    # Elytra ground detection: Detect if the player is using elytra in an abnormal ground state.
+    # Default: true
+    ground: true
+    limit-speed:
+      # Enable speed limiting: Whether to enforce speed limits when using elytra.
+      # Default: false
+      enable: false # Experimental
+      # Base speed threshold: Base allowed speed when using elytra.
+      # Default: 16.5
+      max-speed: 16.5
+      # When pitch is above 10 (linked to pitch-threshold below), begin to increase movement tolerance
+      # Default: 33.5
+      pitch-factor: 33.5
+      # When players use fireworks acceleration, begin to increase movement tolerance
+      # Default: 25.0
+      firework-boost: 25.0
+      # Pitch threshold: Angle to trigger dive speed bonus (in degrees)
+      # Default: 7
+      pitch-threshold: 7
+
+  ghost-block:
+    # Ghost block detection: Monitor player actions on blocks that are fake or do not exist.
+    # Default: true
+    place: true
+    # Maximum placement distance: Define the maximum distance for detecting ghost block placement.
+    # Default: 2.0
+    distance: 2.0
+    # Buffer for false positives: The number of allowed false positives before performing rollback or sync.
+    # Default: 3
+    buffer: 3
+    # Sync ghost block position: Whether to synchronize the actual position of ghost blocks.
+    # Default: true
+    stay: true
+    # Sync ghost block state: Whether to synchronize the state information of ghost blocks.
+    # Default: false
+    sync: false
+    # Cancel placement: Whether to cancel the placement operation when ghost block placement is detected.
+    # Default: true
+    cancel: true
+    alert:
+      # Alert enable: Whether to send an alert when ghost block placement is detected.
+      # Default: true
+      enable: true
+      # Alert message: Template for alert messages sent to administrators; supports variable replacements (e.g., %player%, %type%, %x%, %y%, %z%).
+      # Default: as shown below
+      message: "&fPlayer &b%player% &ftried to place a block on ghost block &b%type%&f, but this block is a ghost block! &7( &b%distance%, %x% | %y% | %z% &7)"
+
+  duplicate:
+    # This will ignore some duplicate packets, used to fix some GhostBlock and desync issues
+    # Default: false
+    ignore: false
+    # This will cancel some duplicate packets, used to fix some desync issues
+    # Default: false
+    cancel: false
+
+  trident:
+    # Trident cheat detection: Detect abnormal actions using a trident (e.g., riptiding).
+    # Default: true
+    enable: true
+    limit-use:
+      # Limit trident usage: Limit the frequency or number of consecutive uses of a trident.
+      # Default: true
+      enable: true
+      # Buffer: The allowed number of consecutive abnormal operations.
+      # Default: 5
+      buffer: 5
+      # Reset time: The time (in milliseconds) after which the detection counter resets.
+      # Default: 7000
+      reset: 7000
+    # Trident riptiding detection: Detect if a player is using a trident for illegal riptiding.
+    # Default: true
+    riptiding: true
+
+  velocity:
+    # Velocity cheat detection: Detect if a player is altering movement speed through abnormal means.
+    # Default: true
+    enable: true
+    # Jump velocity detection: Detect abnormal speed data during jumps.
+    # Default: true
+    jump: true
+    # Invalid velocity detection: Detect if there is invalid or abnormal velocity data.
+    # Default: true
+    invalid: true
+
+  visual:
+    # Visual cheat simulation: Bypass anti-cheat systems by spoofing player metadata and equipment status.
+    # Default: true
+    enable: true
+    equipment:
+      # Equipment data spoofing: Alter equipment data sent by client (e.g. generate fake enchantments)
+      # Default: true
+      enable: true
+      # Fake enchantments generation: Add spoofed legitimate enchantment data to equipment
+      # Default: true
+      enchantments: true
+    meta:
+      # Metadata manipulation: Fabricate player status metadata (e.g. simulate normal state change patterns)
+      # Default: true
+      enable: true
+      # Player-only spoofing: Focus resources on modifying player entity metadata only
+      # Default: true
+      only-player: true
+      # Health value masking: Maintain health data sent to server within plausible limits
+      # Default: true
+      health: true
+      # Absorption value masking: Maintain absorption data sent to server within plausible limits
+      # Default: true
+      absorption: true
+
+  # Auto-totem usage: Detect if a player automatically uses a totem for self-preservation.
+  # Default: true
+  auto-totem: true
+
+  # Open inventory: Check if the player's data packet ID is synchronized abnormally when opening the inventory
+  # Default: true
+  inventory: true
+
+  # Setback: Check if the player does not accept movement packets from the server when set back
+  # Default: true
+  teleport-confirm: true
+
+  lag-spoof:
+    # Lag spoof: Relieving Fakelag and some bypass from delay forgery through some logical checks
+    # Default: true
+    enable: true
+    # Fakelag: caching corresponding operations by detecting player responses
+    # Default: false
+    fake-lag: false # Experimental
+    # Inventory walk: inventory walking bypass using network vulnerabilities
+    # Default: false
+    inventory: false # Experimental
+    # Used to fix the recent Buji Island phantom shield fly
+    # Default: false
+    delay-use-item: true
+
+##############################################
+# Feature Flags
+# Toggle various checks and features on/off
+# Can also be toggled at runtime via /yuki features
+##############################################
+features:
+  checks:
+    # Movement checks
+    movement: true
+    # Combat checks
+    combat: true
+    # Scaffold checks
+    scaffold: true
+    # Player checks
+    player: true
+    # Misc checks
+    misc: true
+    # Chat checks
+    chat: true
+    # MultiActions checks
+    multiactions: true
+  performance:
+    # Performance monitoring
+    monitor: true
+  discord:
+    # Discord Webhook integration
+    webhook: false
+  dump:
+    # Diagnostic dump export
+    diagnostic: true
