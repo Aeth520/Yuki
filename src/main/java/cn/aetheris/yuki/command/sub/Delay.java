@@ -21,7 +21,7 @@ public final class Delay extends AbstractCommand {
     @Override
     public void execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
         if (args.length < 2) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.delay.usage"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.delay.usage"));
             return;
         }
 
@@ -34,11 +34,11 @@ public final class Delay extends AbstractCommand {
             final String command = commandBuilder.toString().trim();
             startStopRunnable(sender, command, delay);
 
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.delay.message")
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.delay.message")
                     .replace("%command%", command)
                     .replace("%delay%", String.valueOf(delay)));
         } catch (NumberFormatException e) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.delay.invalid"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.delay.invalid"));
         }
     }
 

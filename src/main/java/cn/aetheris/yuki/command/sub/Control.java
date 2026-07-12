@@ -23,28 +23,28 @@ public final class Control extends AbstractCommand {
     @Override
     public void execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
         if (args.length < 1) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.control.usage"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.control.usage"));
             return;
         }
 
         Player target = Bukkit.getPlayer(args[0]);
 
         if (target == null) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("not-found").replace("%player%", args[0]));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("not-found").replace("%player%", args[0]));
             return;
         }
 
         PlayerData data = PluginLoader.INSTANCE.getPlayerDataManager().getPlayer(target);
         if (data == null) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "not-data-user"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "not-data-user"));
             return;
         }
         if (!data.bypass) {
             data.bypass = true;
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "commands.control.disable"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.control.disable"));
         } else {
             data.bypass = false;
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "commands.control.enable"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.control.enable"));
         }
     }
 

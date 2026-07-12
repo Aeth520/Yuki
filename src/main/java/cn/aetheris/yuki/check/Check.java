@@ -224,7 +224,7 @@ public class Check implements AbstractCheck {
         if (isLowerTPS) return false;
 
         if (PluginLoader.INSTANCE.getLagManager().isLagging()) {
-            String message = PluginLoader.INSTANCE.getLangManger().i18n("function.lag-track.message")
+            String message = PluginLoader.INSTANCE.getLangManager().i18n("function.lag-track.message")
                     .replace("%player%", player.getName())
                     .replace("%time%", PluginLoader.INSTANCE.getLagManager().getLaggingTime(time()) + "")
                     .replace("%time2%", PluginLoader.INSTANCE.getLagManager().getLaggingTime2() + "")
@@ -298,7 +298,7 @@ public class Check implements AbstractCheck {
 
     public void kickPlayer() {
         LogUtils.console("&3Yuki &8» &cKick by &b" + getConfigName() + " p= " + player.getName());
-        player.disconnect(Component.translatable(PluginLoader.INSTANCE.getLangManger().i18nWithoutPrefix("kick.default")));
+        player.disconnect(Component.translatable(PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("kick.default")));
     }
 
     public String formatOffset(double offset) {

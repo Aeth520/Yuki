@@ -131,10 +131,10 @@ public final class PredictionDebugHandler extends Check implements PostPredictio
         if (!listeners.remove(player)) {
             listeners.add(player);
             DebugManager.setEnable(true);
-            player.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(player, "commands.debug.enable").replace("%type%", "prediction"));
+            player.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(player, "commands.debug.enable").replace("%type%", "prediction"));
         } else {
             DebugManager.setEnable(false);
-            player.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(player, "commands.debug.disable").replace("%type%", "prediction"));
+            player.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(player, "commands.debug.disable").replace("%type%", "prediction"));
         }
     }
 

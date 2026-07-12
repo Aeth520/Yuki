@@ -24,24 +24,24 @@ public final class Profile extends AbstractCommand {
     @Override
     public void execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
         if (args.length < 1) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.profile.usage"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.profile.usage"));
             return;
         }
 
         Player target = Bukkit.getPlayer(args[0]);
 
         if (target == null) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("not-found").replace("%player%", args[0]));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("not-found").replace("%player%", args[0]));
             return;
         }
 
         PlayerData playerData = PluginLoader.INSTANCE.getPlayerDataManager().getPlayer(target);
         if (playerData == null) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "not-data-user"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "not-data-user"));
             return;
         }
 
-        String profileMessage = PluginLoader.INSTANCE.getLangManger().i18nWithoutPrefix("commands.profile.message");
+        String profileMessage = PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("commands.profile.message");
         profileMessage = HookInit.getPlaceholderAPIHook().setPlaceholders(playerData.getBukkitPlayer(), profileMessage);
         String formattedMessage = PluginLoader.INSTANCE.getExternalAPI().replaceVariables(playerData, profileMessage, true);
         sender.sendMessage(formattedMessage);

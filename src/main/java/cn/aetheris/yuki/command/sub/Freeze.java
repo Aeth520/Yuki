@@ -22,23 +22,23 @@ public final class Freeze extends AbstractCommand {
     @Override
     public void execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
         if (args.length < 1) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.freeze.usage"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.freeze.usage"));
             return;
         }
 
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("not-found").replace("%player%", args[0]));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("not-found").replace("%player%", args[0]));
             return;
         }
 
         if (target == sender) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("not-my-self"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("not-my-self"));
             return;
         }
 
         if (FreezeData.isFrozen(target)) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "commands.freeze.already-frozen"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.freeze.already-frozen"));
             return;
         }
 
@@ -48,8 +48,8 @@ public final class Freeze extends AbstractCommand {
             if (target.getVehicle() != null) target.leaveVehicle();
         }, null);
 
-        sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "commands.freeze.message"));
-        target.sendMessage(PluginLoader.INSTANCE.getLangManger().i18nWithoutPrefix("commands.freeze.target-side"));
+        sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.freeze.message"));
+        target.sendMessage(PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("commands.freeze.target-side"));
     }
 
     @Override

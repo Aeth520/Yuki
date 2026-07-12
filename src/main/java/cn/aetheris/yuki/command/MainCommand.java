@@ -63,13 +63,13 @@ public final class MainCommand implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         if (args.length == 0) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18nWithoutPrefix("commands.help.message"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("commands.help.message"));
             return true;
         }
 
         AbstractCommand command = subCommands.get(args[0].toLowerCase());
         if (command == null) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("unknown-command"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("unknown-command"));
             return true;
         }
 

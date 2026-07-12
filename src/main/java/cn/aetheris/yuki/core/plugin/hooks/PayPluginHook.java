@@ -9,7 +9,7 @@ import org.bukkit.Bukkit;
 public final class PayPluginHook extends AbstractHook {
     @Override
     public void hook() {
-        final String serverName = HookInit.getPlaceholderAPIHook().setPlaceholders(null, PluginLoader.INSTANCE.getLangManger().i18nWithoutPrefix("database-manager.server-name"));
+        final String serverName = HookInit.getPlaceholderAPIHook().setPlaceholders(null, PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("database-manager.server-name"));
 
         if (Bukkit.getPluginManager().getPlugin("7yPay") != null
                 && PluginLoader.INSTANCE.getConfigManager().isHook7yPay()) {

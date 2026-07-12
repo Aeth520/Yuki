@@ -26,7 +26,7 @@ public final class PluginLoader {
     private LagManager lagManager;
     private ViolationDatabaseManager databaseManager;
     private ConfigManager configManager;
-    private LangManger langManger;
+    private LangManager langManager;
     private DiscordWebhookManager discordWebhookManager;
     private ModerationManager moderationManager;
     private FeatureManager featureManager;
@@ -38,7 +38,7 @@ public final class PluginLoader {
     public void start() {
         long startTime = System.currentTimeMillis();
         configManager = new ConfigManager();
-        langManger = new LangManger();
+        langManager = new LangManager();
         discordWebhookManager = new DiscordWebhookManager();
         featureManager = FeatureManager.getInstance();
         featureManager.loadFromConfig();

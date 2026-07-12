@@ -102,7 +102,7 @@ public final class GhostBlockMitigation extends BlockPlaceCheck {
 
                     if (!foundNonAir) {
                         if (alertEnable) {
-                            String msg = PluginLoader.INSTANCE.getLangManger()
+                            String msg = PluginLoader.INSTANCE.getLangManager()
                                     .i18n(player, "mitigates.ghost-block.alert.message")
                                     .replace("%distance%", String.valueOf(distance))
                                     .replace("%player%", player.getName())

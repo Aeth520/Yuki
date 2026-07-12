@@ -29,7 +29,7 @@ public final class Log extends AbstractCommand {
     @Override
     public void execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
         if (args.length < 1) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.prediciton-logs.usage"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.prediciton-logs.usage"));
             return;
         }
 
@@ -37,27 +37,27 @@ public final class Log extends AbstractCommand {
         try {
             flagId = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.prediciton-logs.invalid"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.prediciton-logs.invalid"));
             return;
         }
 
         final StringBuilder flagData = DebugManager.getFlag(flagId);
         if (flagData == null) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.prediciton-logs.not-found")
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.prediciton-logs.not-found")
                     .replace("%flagId%", String.valueOf(flagId)));
             return;
         }
 
         String logContent = flagData.toString();
-        sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.prediciton-logs.uploading"));
+        sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.prediciton-logs.uploading"));
 
         MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
             String url = uploadPaste(logContent);
             if (url != null) {
-                sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.prediciton-logs.uploadded")
+                sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.prediciton-logs.uploadded")
                         .replace("%url%", url));
             } else {
-                sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.prediciton-logs.uploadfail"));
+                sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.prediciton-logs.uploadfail"));
             }
         });
     }

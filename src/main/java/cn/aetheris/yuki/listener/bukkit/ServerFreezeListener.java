@@ -24,7 +24,7 @@ public final class ServerFreezeListener extends AbstractListener {
     final String message;
 
     public ServerFreezeListener() {
-        this.message = PluginLoader.INSTANCE.getLangManger().i18nWithoutPrefix("commands.freeze.target-side");
+        this.message = PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("commands.freeze.target-side");
     }
 
     @EventHandler

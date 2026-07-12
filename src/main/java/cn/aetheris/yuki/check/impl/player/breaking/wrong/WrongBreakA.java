@@ -62,7 +62,7 @@ public final class WrongBreakA extends Check implements BlockBreakCheck {
                 }
                 
                 if (player.getClientVersion().isOlderThan(ClientVersion.V_1_14_4) || (!lastBlockWasInstantBreak && pos.equals(lastCancelledBlock))) {
-                    if (flagAndAlert("action= CANCELLED_DIGGING" + "\nlast= " + PluginLoader.INSTANCE.getLangManger().toUnlabledString(lastBlock) + "\npos=" + PluginLoader.INSTANCE.getLangManger().toUnlabledString(pos))) {
+                    if (flagAndAlert("action= CANCELLED_DIGGING" + "\nlast= " + PluginLoader.INSTANCE.getLangManager().toUnlabeledString(lastBlock) + "\npos=" + PluginLoader.INSTANCE.getLangManager().toUnlabeledString(pos))) {
                         if (shouldModifyPackets()) {
                             blockBreak.cancel();
                             lastFlag = time();
@@ -85,7 +85,7 @@ public final class WrongBreakA extends Check implements BlockBreakCheck {
                 if (time() - lastFlag2 < 600L) {
                     return;
                 }
-                if (flagAndAlert("action= FINISHED_DIGGING" + "\nlast=" + PluginLoader.INSTANCE.getLangManger().toUnlabledString(lastBlock) + "\npos=" + PluginLoader.INSTANCE.getLangManger().toUnlabledString(pos))) {
+                if (flagAndAlert("action= FINISHED_DIGGING" + "\nlast=" + PluginLoader.INSTANCE.getLangManager().toUnlabeledString(lastBlock) + "\npos=" + PluginLoader.INSTANCE.getLangManager().toUnlabeledString(pos))) {
                     if (shouldModifyPackets()) {
                         blockBreak.cancel();
                         lastFlag2 = time();

@@ -122,7 +122,7 @@ public final class PlayerChatListener extends AbstractListener {
                 if (check.getViolations() >= check.cancelVL && check.cancelEnabled) {
                     event.setCancelled(true);
                     event.getPlayer().sendMessage(
-                            PluginLoader.INSTANCE.getLangManger().i18n("stop-chat")
+                            PluginLoader.INSTANCE.getLangManager().i18n("stop-chat")
                     );
                 }
             }

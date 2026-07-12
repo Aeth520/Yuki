@@ -448,7 +448,7 @@ public class PlayerData implements PlayerAPI {
     public void onPacketCancel() {
         if (spamThreshold != -1 && cancelledPackets.incrementAndGet() > spamThreshold && !isClientACUser()) {
             LogUtils.console("&c踢出玩家 &f" + getName() + " &c因为其发送了大量的数据包! &7(&b" + cancelledPackets + "&7)");
-            disconnect(Component.translatable(PluginLoader.INSTANCE.getLangManger().i18nWithoutPrefix("kick.packet").replace("%pps%", cancelledPackets.incrementAndGet() + "")));
+            disconnect(Component.translatable(PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("kick.packet").replace("%pps%", cancelledPackets.incrementAndGet() + "")));
             cancelledPackets.set(0);
         }
     }
@@ -657,7 +657,7 @@ public class PlayerData implements PlayerAPI {
     }
 
     public void timedOut() {
-        disconnect(Component.translatable(PluginLoader.INSTANCE.getLangManger().i18nWithoutPrefix("kick.timed-out")));
+        disconnect(Component.translatable(PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("kick.timed-out")));
     }
 
     public float getMaxUpStep() {

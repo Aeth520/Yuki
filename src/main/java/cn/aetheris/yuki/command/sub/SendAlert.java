@@ -23,7 +23,7 @@ public final class SendAlert extends AbstractCommand {
     @Override
     public void execute(@NotNull CommandSender sender, @NotNull String string, @NotNull String[] args) {
         if (args.length < 1) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.send-alert.usage"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.send-alert.usage"));
             return;
         }
 
@@ -32,7 +32,7 @@ public final class SendAlert extends AbstractCommand {
         if (args[0].equalsIgnoreCase("normal") || args[0].equalsIgnoreCase("raw")) {
             mode = args[0].toLowerCase();
             if (args.length < 2) {
-                sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.send-alert.usage"));
+                sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.send-alert.usage"));
                 return;
             }
             content = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
@@ -42,9 +42,9 @@ public final class SendAlert extends AbstractCommand {
 
         String message;
         if (mode.equals("normal")) {
-            message = PluginLoader.INSTANCE.getLangManger().format("%prefix%" + content);
+            message = PluginLoader.INSTANCE.getLangManager().format("%prefix%" + content);
         } else {
-            message = PluginLoader.INSTANCE.getLangManger().format(content);
+            message = PluginLoader.INSTANCE.getLangManager().format(content);
         }
 
         for (UUID uuid : PluginLoader.INSTANCE.getAlertManager().getEnabledAlerts()) {

@@ -33,7 +33,7 @@ public final class HistoryOrmLiteUtil implements CheckInfoManager {
         final String dataType = PluginLoader.INSTANCE.getConfigManager().getConfig().getString("database-manager.data-type");
 
         CheckInfo entity = new CheckInfo(
-                HookInit.getPlaceholderAPIHook().setPlaceholders(offlinePlayer, PluginLoader.INSTANCE.getLangManger().i18nWithoutPrefix("database-manager.server-name")),
+                HookInit.getPlaceholderAPIHook().setPlaceholders(offlinePlayer, PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("database-manager.server-name")),
                 player.getUniqueId(),
                 player.getName(),
                 checkName,

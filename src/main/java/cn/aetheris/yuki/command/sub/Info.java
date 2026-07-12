@@ -24,7 +24,7 @@ public final class Info extends AbstractCommand {
 
     @Override
     public void execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
-        sender.sendMessage(HookInit.getPlaceholderAPIHook().setPlaceholders(null, PluginLoader.INSTANCE.getLangManger().i18nWithoutPrefix("commands.info.message")
+        sender.sendMessage(HookInit.getPlaceholderAPIHook().setPlaceholders(null, PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("commands.info.message")
                 .replace("%version%", PluginLoader.INSTANCE.getVersion())
                 .replace("%server%", PluginLoader.INSTANCE.getExternalAPI().getServerName())
                 .replace("%packetevents%", PacketEvents.getAPI().getVersion().toString())

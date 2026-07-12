@@ -142,7 +142,7 @@ public class RotationDebugHandler extends Check implements RotationCheck {
     }
 
     private void sendToggleMessage(Player player, boolean enabled) {
-        String message = PluginLoader.INSTANCE.getLangManger().i18n(player,
+        String message = PluginLoader.INSTANCE.getLangManager().i18n(player,
                         enabled ? "commands.debug.enable" : "commands.debug.disable")
                 .replace("%type%", "rotation");
         player.sendMessage(message);

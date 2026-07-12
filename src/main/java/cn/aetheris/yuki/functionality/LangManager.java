@@ -7,7 +7,7 @@ import com.github.retrooper.packetevents.util.Vector3f;
 import com.github.retrooper.packetevents.util.Vector3i;
 import org.bukkit.OfflinePlayer;
 
-public final class LangManger {
+public final class LangManager {
 
     public String format(String string) {
         return ColorUtils.color(string.replace("%prefix%",
@@ -35,11 +35,11 @@ public final class LangManger {
     }
 
 
-    public String toUnlabledString(Vector3i vec) {
+    public String toUnlabeledString(Vector3i vec) {
         return vec == null ? "null" : vec.x + ", " + vec.y + ", " + vec.z;
     }
 
-    public String toUnlabledString(Vector3f vec) {
+    public String toUnlabeledString(Vector3f vec) {
         return vec == null ? "null" : vec.x + ", " + vec.y + ", " + vec.z;
     }
 }

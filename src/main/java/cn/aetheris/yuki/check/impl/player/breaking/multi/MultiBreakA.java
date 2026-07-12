@@ -36,8 +36,8 @@ public final class MultiBreakA extends Check implements BlockBreakCheck {
 
         if (hasBroken && (blockBreak.face != lastFace || !blockBreak.position.equals(lastPos))) {
             final String verbose = "f= " + blockBreak.face + "\nlf= " + lastFace
-                    + "\np= " + PluginLoader.INSTANCE.getLangManger().toUnlabledString(blockBreak.position)
-                    + "\nlp= " + PluginLoader.INSTANCE.getLangManger().toUnlabledString(lastPos);
+                    + "\np= " + PluginLoader.INSTANCE.getLangManager().toUnlabeledString(blockBreak.position)
+                    + "\nlp= " + PluginLoader.INSTANCE.getLangManager().toUnlabeledString(lastPos);
             if (!player.canSkipTicksPreVia()) {
                 if (flagAndAlert(verbose) && shouldModifyPackets()) {
                     blockBreak.cancel();

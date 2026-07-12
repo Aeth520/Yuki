@@ -33,12 +33,12 @@ public final class Mitigate extends AbstractCommand {
 
         types.put("damage", (data, sender, target, args) -> {
             data.mitigateDamage();
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "commands.mitigate.types.damage.message"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.mitigate.types.damage.message"));
         });
 
         types.put("resetitem", (data, sender, target, args) -> {
             NMSUtils.resetItemUsage(target);
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "commands.mitigate.types.reset-item.message"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.mitigate.types.reset-item.message"));
         });
 
         MitigationType knockbackAction = (data, sender, target, args) -> {
@@ -46,14 +46,14 @@ public final class Mitigate extends AbstractCommand {
             double y = PluginLoader.INSTANCE.getConfigManager().getConfig().getDoubleElse("knock-back.y", 0.5);
             double z = PluginLoader.INSTANCE.getConfigManager().getConfig().getDoubleElse("knock-back.z", 0.75);
             target.setVelocity(new Vector(x, y, z));
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "commands.mitigate.types.knock-back.message"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.mitigate.types.knock-back.message"));
         };
         types.put("knockback", knockbackAction);
         types.put("kb", knockbackAction);
 
         types.put("rotate", (data, sender, target, args) -> {
             data.randomiseAim(target, target.getLocation());
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "commands.mitigate.types.rotate.message"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.mitigate.types.rotate.message"));
         });
 
         types.put("shuffle", (data, sender, target, args) -> {
@@ -75,7 +75,7 @@ public final class Mitigate extends AbstractCommand {
             NMSUtils.resetItemUsage(target);
             data.user.flushPackets();
 
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "commands.mitigate.types.shuffle.message").replace("%slot%", String.valueOf(randomSlot)));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.mitigate.types.shuffle.message").replace("%slot%", String.valueOf(randomSlot)));
         });
 
         types.put("food", (data, sender, target, args) -> {
@@ -86,19 +86,19 @@ public final class Mitigate extends AbstractCommand {
                     target.setFoodLevel(original);
                 }
             }, 20L);
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "commands.mitigate.types.food.message"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.mitigate.types.food.message"));
         });
 
         types.put("resync", (data, sender, target, args) -> {
             data.resyncPose();
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "commands.mitigate.types.resync.message"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.mitigate.types.resync.message"));
         });
         types.put("killaura", (data, sender, target, args) -> {
             if (data.target == null) return;
 
             PacketEntity targetEntity = data.getTarget();
             if (targetEntity == null || targetEntity.isDead || targetEntity.getType() != EntityTypes.PLAYER) {
-                sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "commands.mitigate.types.killaura.not-target"));
+                sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.mitigate.types.killaura.not-target"));
                 return;
             }
 
@@ -118,19 +118,19 @@ public final class Mitigate extends AbstractCommand {
 
             PaperUtils.teleport(targetPlayer, behindLoc);
             teleport_entity.add(targetPlayer);
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(targetPlayer, "commands.mitigate.types.killaura.message").replace("%target%", target.getName()));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(targetPlayer, "commands.mitigate.types.killaura.message").replace("%target%", target.getName()));
 
             MHDFScheduler.getGlobalRegionScheduler().runTaskLater(Yuki.getInstance(), () -> {
                 if (teleport_entity.contains(targetPlayer)) {
                     PaperUtils.teleport(targetPlayer, originalLoc);
-                    sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(targetPlayer, "commands.mitigate.types.killaura.pull-back").replace("%target%", target.getName()));
+                    sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(targetPlayer, "commands.mitigate.types.killaura.pull-back").replace("%target%", target.getName()));
                     teleport_entity.remove(targetPlayer);
                     if (violationMap.contains(targetPlayer)) {
                         MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
                             if (data.getCheckManager().getCheck(KillAuraG.class) != null) {
                                 data.getCheckManager().getCheck(KillAuraG.class).flagAndAlert("impossible attack?");
                                 violationMap.remove(targetPlayer);
-                                sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(targetPlayer, "commands.mitigate.types.killaura.attacked").replace("%target%", target.getName()));
+                                sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(targetPlayer, "commands.mitigate.types.killaura.attacked").replace("%target%", target.getName()));
                             }
                         });
                     }
@@ -174,25 +174,25 @@ public final class Mitigate extends AbstractCommand {
     @Override
     public void execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
         if (args.length < 1) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.mitigate.usage"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.mitigate.usage"));
             return;
         }
 
         String playerName = args[0];
         Player target = Bukkit.getPlayer(playerName);
         if (target == null) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("not-found").replace("%player%", playerName));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("not-found").replace("%player%", playerName));
             return;
         }
 
         if (target == sender) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("not-my-self"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("not-my-self"));
             return;
         }
 
         PlayerData data = PluginLoader.INSTANCE.getPlayerDataManager().getPlayer(target);
         if (data == null) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "not-data-user"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "not-data-user"));
             return;
         }
 
@@ -200,12 +200,12 @@ public final class Mitigate extends AbstractCommand {
 
         MitigationType mitigation = TYPES.get(typeName);
         if (mitigation == null) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.mitigate.invalid-type").replace("%type%", typeName));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.mitigate.invalid-type").replace("%type%", typeName));
             return;
         }
 
         if (!sender.hasPermission("yuki.commands.mitigate." + typeName)) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("no-permission"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("no-permission"));
             return;
         }
 

@@ -26,7 +26,7 @@ public class ControlCheck extends AbstractCommand {
     @Override
     public void execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
         if (args.length < 1) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.control-check.usage"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.control-check.usage"));
             return;
         }
 
@@ -35,7 +35,7 @@ public class ControlCheck extends AbstractCommand {
         final PlayerData data = PluginLoader.INSTANCE.getPlayerDataManager().getPlayer(Objects.requireNonNull(player));
 
         if (data == null) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(player, "not-data-user"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(player, "not-data-user"));
             return;
         }
 
@@ -47,10 +47,10 @@ public class ControlCheck extends AbstractCommand {
             }
             if (check.getConfigName().equalsIgnoreCase(checkName) || check.getCheckName().equalsIgnoreCase(checkName)) {
                 if (check.isEnabled()) {
-                    sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.control-check.enable").replace("%check_name%", check.getConfigName()));
+                    sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.control-check.enable").replace("%check_name%", check.getConfigName()));
                     check.setEnabled(false);
                 } else {
-                    sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.control-check.disable").replace("%check_name%", check.getConfigName()));
+                    sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.control-check.disable").replace("%check_name%", check.getConfigName()));
                     check.setEnabled(true);
                 }
                 break;

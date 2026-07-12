@@ -23,11 +23,11 @@ public final class ConsoleDebug extends AbstractCommand {
     @Override
     public void execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof ConsoleCommandSender)) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.console-debug.only-console"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.console-debug.only-console"));
             return;
         }
         if (args.length < 2) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.console-debug.usage"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.console-debug.usage"));
             return;
         }
 
@@ -35,13 +35,13 @@ public final class ConsoleDebug extends AbstractCommand {
         Player targetPlayer = Bukkit.getPlayer(args[1]);
 
         if (targetPlayer == null) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("not-found").replace("%player%", args[1]));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("not-found").replace("%player%", args[1]));
             return;
         }
 
         PlayerData playerData = PluginLoader.INSTANCE.getPlayerDataManager().getPlayer(targetPlayer);
         if (playerData == null) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(targetPlayer, "not-data-user"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(targetPlayer, "not-data-user"));
             return;
         }
 
@@ -51,16 +51,16 @@ public final class ConsoleDebug extends AbstractCommand {
             case "prediction" -> isOutput = playerData.getCheckManager().getMotionDebugHandler().toggleConsoleOutput();
             case "rotation" -> isOutput = playerData.getCheckManager().getRotationDebugHandler().toggleConsoleOutput();
             default -> {
-                sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.console-debug.usage"));
+                sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.console-debug.usage"));
                 return;
             }
         }
 
         if (isOutput) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(targetPlayer, "commands.console-debug.enable")
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(targetPlayer, "commands.console-debug.enable")
                     .replace("%type%", debugType));
         } else {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(targetPlayer, "commands.console-debug.disable")
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(targetPlayer, "commands.console-debug.disable")
                     .replace("%type%", debugType));
         }
     }

@@ -48,7 +48,7 @@ public final class AntiCheatUtil implements AbstractAPI, Init {
 
     @Override
     public String getServerName() {
-        return HookInit.getPlaceholderAPIHook().setPlaceholders(null, PluginLoader.INSTANCE.getLangManger().i18nWithoutPrefix("database-manager.server-name"));
+        return HookInit.getPlaceholderAPIHook().setPlaceholders(null, PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("database-manager.server-name"));
     }
 
     

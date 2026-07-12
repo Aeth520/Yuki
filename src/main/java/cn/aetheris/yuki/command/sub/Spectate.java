@@ -27,18 +27,18 @@ public final class Spectate extends AbstractCommand {
     @Override
     public void execute(@NotNull Player player, @NotNull String label, @NotNull String[] args) {
         if (args.length < 1) {
-            player.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.spectate.usage"));
+            player.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.spectate.usage"));
             return;
         }
 
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null) {
-            player.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("not-found").replace("%player%", args[1]));
+            player.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("not-found").replace("%player%", args[1]));
             return;
         }
 
         if (target == player) {
-            player.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("not-my-self"));
+            player.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("not-my-self"));
             return;
         }
 
@@ -46,15 +46,15 @@ public final class Spectate extends AbstractCommand {
 
             PlayerData playerData = PluginLoader.INSTANCE.getPlayerDataManager().getPlayer(player);
             if (playerData == null) {
-                player.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "not-data-user"));
+                player.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "not-data-user"));
                 return;
             }
 
-            Component formattedMessage = Component.text(PluginLoader.INSTANCE.getLangManger().i18n(target, "commands.spectate.return"))
+            Component formattedMessage = Component.text(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.spectate.return"))
                     .clickEvent(clickEvent(RUN_COMMAND, "/yuki stopspectating"))
                     .hoverEvent(showText(Component.text("/yuki stopspectating")));
             playerData.getUser().sendMessage(formattedMessage);
-            player.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "commands.spectate.message"));
+            player.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.spectate.message"));
         }
 
         player.setGameMode(GameMode.SPECTATOR);

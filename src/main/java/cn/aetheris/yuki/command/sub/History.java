@@ -35,33 +35,33 @@ public final class History extends AbstractCommand {
     @Override
     public void execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
         if (args.length < 1) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.history.usage"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.history.usage"));
             return;
         }
 
         if (args[0].equalsIgnoreCase("clear")) {
             if (args.length == 1) {
                 if (!sender.hasPermission("yuki.commands.history.clear")) {
-                    sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("no-permission"));
+                    sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("no-permission"));
                     return;
                 }
                 clearAllHistory(sender);
             } else if (args.length == 2) {
                 OfflinePlayer target = getOfflinePlayerByName(args[1]);
                 if (target == null) {
-                    sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.history.playernot-found"));
+                    sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.history.playernot-found"));
                     return;
                 }
                 clearPlayerHistory(sender, target);
             } else {
-                sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.history.usage"));
+                sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.history.usage"));
             }
             return;
         }
 
         OfflinePlayer target = getOfflinePlayerByName(args[0]);
         if (target == null) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("not-found").replace("%player%", args[0]));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("not-found").replace("%player%", args[0]));
             return;
         }
 
@@ -77,7 +77,7 @@ public final class History extends AbstractCommand {
 
             long maxPages = (long) Math.ceil((float) logCount / 10);
 
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target,
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target,
                             "commands.history.header")
                     .replace("%page%", String.valueOf(page))
                     .replace("%maxPages%", String.valueOf(maxPages)));
@@ -102,9 +102,9 @@ public final class History extends AbstractCommand {
                 TextComponent checkNameComponent = new TextComponent(ColorUtils.color(log.getCheckName()));
                 checkNameComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hoverContent).create()));
                 checkNameComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, PluginLoader.INSTANCE.getConfigManager().getConfig().getStringElse("hover-command", "/yuki spectate") + " " + target.getName()));
-                String[] splitMessage = PluginLoader.INSTANCE.getLangManger().i18n("commands.history.entry")
+                String[] splitMessage = PluginLoader.INSTANCE.getLangManager().i18n("commands.history.entry")
                         .replace("%player%", args[0])
-                        .replace("%exp%", log.isExp() ? PluginLoader.INSTANCE.getLangManger().i18nWithoutPrefix("output.alerts.expsymbol") : "")
+                        .replace("%exp%", log.isExp() ? PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("output.alerts.expsymbol") : "")
                         .replace("%vl%", String.valueOf(log.getVl()))
                         .replace("%timeago%", TimeUtils.formatRelativeTime(log.getCreatedAt()))
                         .replace("%server%", ColorUtils.color(log.getServer()))
@@ -127,14 +127,20 @@ public final class History extends AbstractCommand {
     }
 
     private OfflinePlayer getOfflinePlayerByName(String playerName) {
-        return Bukkit.getOfflinePlayer(playerName);
+        Player onlinePlayer = Bukkit.getPlayerExact(playerName);
+        if (onlinePlayer != null) {
+            return onlinePlayer;
+        }
+        @SuppressWarnings("deprecation")
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
+        return offlinePlayer;
     }
 
     private void clearAllHistory(@NotNull CommandSender sender) {
         MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
             CheckInfoManager checkInfoManager = PluginLoader.INSTANCE.getDatabaseManager().getCheckInfoManager();
             checkInfoManager.clearAllLogs();
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.history.clean-all"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.history.clean-all"));
         });
     }
 
@@ -142,7 +148,7 @@ public final class History extends AbstractCommand {
         MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
             CheckInfoManager checkInfoManager = PluginLoader.INSTANCE.getDatabaseManager().getCheckInfoManager();
             checkInfoManager.clearLogs(target);
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "commands.history.clean"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.history.clean"));
         });
     }
 

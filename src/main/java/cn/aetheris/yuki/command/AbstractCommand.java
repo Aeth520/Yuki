@@ -41,12 +41,12 @@ public abstract class AbstractCommand implements TabExecutor, Command {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull org.bukkit.command.Command command, @NotNull String label, @NotNull String[] args) {
         if (onlyPlayer && !(sender instanceof Player)) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("only-player"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("only-player"));
             return true;
         }
 
         if (permission != null && !sender.hasPermission(permission)) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("no-permission"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("no-permission"));
             return true;
         }
 

@@ -65,14 +65,14 @@ public final class PayloadHandler extends Check implements PacketCheck {
                 && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_18_2)
                 && player.getClientVersion().isOlderThan(ClientVersion.V_1_19_4);
         if (hasReachHacks && enable) {
-            player.disconnect(Component.text(PluginLoader.INSTANCE.getLangManger().i18nWithoutPrefix(PluginLoader.INSTANCE.getLangManger().format("kick.invalid-forge"))));
+            player.disconnect(Component.text(PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix(PluginLoader.INSTANCE.getLangManager().format("kick.invalid-forge"))));
             return;
         }
 
         final List<String> blackListClient = PluginLoader.INSTANCE.getConfigManager().getConfig().getStringList("output.client-brand.should-kick");
         for (String client : blackListClient) {
             if (brand.contains(client)) {
-                player.disconnect(Component.text(PluginLoader.INSTANCE.getLangManger().i18nWithoutPrefix(PluginLoader.INSTANCE.getLangManger().format("kick.invalid-client"))));
+                player.disconnect(Component.text(PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix(PluginLoader.INSTANCE.getLangManager().format("kick.invalid-client"))));
                 return;
             }
         }
@@ -111,7 +111,7 @@ public final class PayloadHandler extends Check implements PacketCheck {
     }
 
     private void sendBrandMessage() {
-        String message = PluginLoader.INSTANCE.getLangManger().i18n("output.client-brand.format");
+        String message = PluginLoader.INSTANCE.getLangManager().i18n("output.client-brand.format");
         message = PluginLoader.INSTANCE.getExternalAPI().replaceVariables(getPlayer(), message, true);
         message = HookInit.getPlaceholderAPIHook().setPlaceholders(getPlayer().bukkitPlayer, message);
 

@@ -26,30 +26,30 @@ public class Punish extends AbstractCommand {
     @Override
     public void execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
         if (args.length < 1) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.punish.usage"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.punish.usage"));
             return;
         }
 
         Player target = Bukkit.getPlayer(args[0]);
 
         if (target == null) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("not-found").replace("%player%", args[0]));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("not-found").replace("%player%", args[0]));
             return;
         }
 
         if (target == sender) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("not-my-self"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("not-my-self"));
             return;
         }
 
         PlayerData data = PluginLoader.INSTANCE.getPlayerDataManager().getPlayer(target);
         if (data == null) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "not-data-user"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "not-data-user"));
             return;
         }
 
         if (data.isBypass()) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "not-data-user"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "not-data-user"));
             return;
         }
 
@@ -64,7 +64,7 @@ public class Punish extends AbstractCommand {
 
         MHDFScheduler.getGlobalRegionScheduler().runTask(Yuki.getInstance(), () -> {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "commands.punish.message"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.punish.message"));
             target.getWorld().strikeLightningEffect(target.getLocation().clone());
         });
     }

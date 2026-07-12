@@ -85,7 +85,7 @@ public class LatencyUtils implements ILatencyUtils {
     private void handleRunnableError(Exception e) {
         LogUtils.exception("An error has occurred when running transactions for player: " + player.user.getName(), e);
         if (!Boolean.getBoolean("yuki.disable-transaction-kick")) {
-            player.disconnect(Component.translatable(PluginLoader.INSTANCE.getLangManger().i18nWithoutPrefix("kick.timed-out")));
+            player.disconnect(Component.translatable(PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("kick.timed-out")));
         }
     }
 

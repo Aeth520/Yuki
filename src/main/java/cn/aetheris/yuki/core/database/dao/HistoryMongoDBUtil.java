@@ -27,7 +27,7 @@ public final class HistoryMongoDBUtil implements CheckInfoManager {
         MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
             try {
                 Document document = new Document()
-                        .append("server", HookInit.getPlaceholderAPIHook().setPlaceholders(offlinePlayer, PluginLoader.INSTANCE.getLangManger().i18nWithoutPrefix("database-manager.server-name")))
+                        .append("server", HookInit.getPlaceholderAPIHook().setPlaceholders(offlinePlayer, PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("database-manager.server-name")))
                         .append("uuid", player.getUniqueId())
                         .append("player_name", player.getName())
                         .append("check_name", checkName)

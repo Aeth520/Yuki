@@ -16,6 +16,6 @@ public final class Help extends AbstractCommand {
 
     @Override
     public void execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
-        sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18nWithoutPrefix("commands.help.message"));
+        sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("commands.help.message"));
     }
 }

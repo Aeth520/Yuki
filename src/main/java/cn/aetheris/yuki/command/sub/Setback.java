@@ -31,44 +31,44 @@ public final class Setback extends AbstractCommand {
 
         if (args.length == 1) {
             playerName = args[0];
-            mode = PluginLoader.INSTANCE.getLangManger().i18nWithoutPrefix("commands.setback.default-type").toLowerCase();
+            mode = PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("commands.setback.default-type").toLowerCase();
         } else if (args.length == 2) {
             playerName = args[0];
             mode = args[1].toLowerCase();
             if (!MODES.contains(mode)) {
-                sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.setback.no-type"));
+                sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.setback.no-type"));
                 return;
             }
         } else {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.setback.usage"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.setback.usage"));
             return;
         }
 
         String permission = "yuki.commands.setback." + mode;
         if (!sender.hasPermission(permission)) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("no-permission"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("no-permission"));
             return;
         }
 
         Player target = Bukkit.getPlayer(playerName);
         if (target == null) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("not-found").replace("%player%", playerName));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("not-found").replace("%player%", playerName));
             return;
         }
 
         if (target.hasPermission("yuki.nosetback")) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "commands.setback.cannot"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.setback.cannot"));
             return;
         }
 
         if (target == sender) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("not-my-self"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("not-my-self"));
             return;
         }
 
         PlayerData data = PluginLoader.INSTANCE.getPlayerDataManager().getPlayer(target);
         if (data == null) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "not-data-user"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "not-data-user"));
             return;
         }
 
@@ -76,24 +76,24 @@ public final class Setback extends AbstractCommand {
             case "sync" -> setBackSync(data, target, mode, sender);
             case "normal" -> setBackNormal(data, target, mode, sender);
             case "nonsimulating" -> setBackNonSimulating(data, target, mode, sender);
-            default -> sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.setback.no-type"));
+            default -> sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.setback.no-type"));
         }
     }
 
     private void setBackSync(PlayerData data, Player target, String mode, CommandSender sender) {
         data.getSetbackTeleportUtil().executeForceResync();
         BlockUtils.refreshBlocksAroundPlayer(data, target.getLocation());
-        sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "commands.setback.message").replace("%mode%", mode));
+        sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.setback.message").replace("%mode%", mode));
     }
 
     private void setBackNormal(PlayerData data, Player target, String mode, CommandSender sender) {
         data.getSetbackTeleportUtil().executeViolationSetback();
-        sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "commands.setback.message").replace("%mode%", mode));
+        sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.setback.message").replace("%mode%", mode));
     }
 
     private void setBackNonSimulating(PlayerData data, Player target, String mode, CommandSender sender) {
         data.getSetbackTeleportUtil().executeNonSimulatingSetback();
-        sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "commands.setback.message").replace("%mode%", mode));
+        sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.setback.message").replace("%mode%", mode));
     }
 
 

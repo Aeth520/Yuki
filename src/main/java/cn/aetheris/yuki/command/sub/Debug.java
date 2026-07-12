@@ -26,12 +26,12 @@ public final class Debug extends AbstractCommand {
     @Override
     public void execute(@NotNull Player sender, @NotNull String label, @NotNull String[] args) {
         if (args.length < 1) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.debug.usage"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.debug.usage"));
             return;
         }
 
         if (!PluginLoader.INSTANCE.getConfigManager().getConfig().getBooleanElse("function.develop.enable", false)) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.debug.no-develop"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.debug.no-develop"));
             return;
         }
 
@@ -63,7 +63,7 @@ public final class Debug extends AbstractCommand {
                 toggleAnalysisDebug(sender, args);
                 break;
             default:
-                sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.debug.usage"));
+                sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.debug.usage"));
         }
     }
 
@@ -92,7 +92,7 @@ public final class Debug extends AbstractCommand {
     
     private void togglePredictionDebug(Player sender, String[] args) {
         if (args.length < 2) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.debug.usage"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.debug.usage"));
             return;
         }
         Player targetPlayer = getTargetPlayer(sender, args[1]);
@@ -107,7 +107,7 @@ public final class Debug extends AbstractCommand {
     
     private void toggleRotationDebug(Player sender, String[] args) {
         if (args.length < 2) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.debug.usage"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.debug.usage"));
             return;
         }
         Player targetPlayer = getTargetPlayer(sender, args[1]);
@@ -122,7 +122,7 @@ public final class Debug extends AbstractCommand {
     
     private void toggleAnalysisDebug(Player sender, String[] args) {
         if (args.length < 2) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.debug.usage"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.debug.usage"));
             return;
         }
         Player targetPlayer = getTargetPlayer(sender, args[1]);
@@ -134,7 +134,7 @@ public final class Debug extends AbstractCommand {
     private Player getTargetPlayer(Player sender, String playerName) {
         Player targetPlayer = Bukkit.getPlayer(playerName);
         if (targetPlayer == null) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("not-found").replace("%player%", playerName));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("not-found").replace("%player%", playerName));
         }
         return targetPlayer;
     }
@@ -142,10 +142,10 @@ public final class Debug extends AbstractCommand {
     private void toggleAnalysisForPlayer(Player sender, Player targetPlayer) {
         if (!AnalysisA.DEBUG_PLAYERS.contains(targetPlayer.getName())) {
             AnalysisA.DEBUG_PLAYERS.add(targetPlayer.getName());
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.debug.enable").replace("%type%", "analysis"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.debug.enable").replace("%type%", "analysis"));
         } else {
             AnalysisA.DEBUG_PLAYERS.remove(targetPlayer.getName());
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.debug.disable").replace("%type%", "analysis"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.debug.disable").replace("%type%", "analysis"));
         }
     }
 

@@ -27,9 +27,9 @@ public final class Crash extends AbstractCommand {
         String crashType = args.length > 1 ? args[1] : "explosion";
 
         if (processCrash(target, crashType)) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n(target, "commands.crash.message"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.crash.message"));
         } else {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.crash.invalid-type"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.crash.invalid-type"));
         }
     }
 
@@ -71,16 +71,16 @@ public final class Crash extends AbstractCommand {
 
     private boolean validateInput(CommandSender sender, String[] args) {
         if (args.length < 1) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.crash.usage"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.crash.usage"));
             return false;
         }
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("not-found").replace("%player%", args[0]));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("not-found").replace("%player%", args[0]));
             return false;
         }
         if (target == sender) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("not-my-self"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("not-my-self"));
             return false;
         }
         return true;

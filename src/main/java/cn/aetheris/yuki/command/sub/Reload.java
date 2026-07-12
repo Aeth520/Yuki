@@ -15,9 +15,9 @@ public final class Reload extends AbstractCommand {
     public void execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
         try {
             PluginLoader.INSTANCE.getExternalAPI().reload();
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.reload.success"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.reload.success"));
         } catch (RuntimeException e) {
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.reload.fail")
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.reload.fail")
                     .replace("%reason%", e.getMessage()));
         }
     }

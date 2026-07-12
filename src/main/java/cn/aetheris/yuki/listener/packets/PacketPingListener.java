@@ -137,7 +137,7 @@ public final class PacketPingListener extends AbstractPacketListener {
                 DecimalFormat df = new DecimalFormat("#.#");
                 String formatted = df.format(diff);
                 if (diff >= (PluginLoader.INSTANCE.getConfigManager().getHighPingDuration() * 1000L)) {
-                    data.disconnect(Component.text(ColorUtils.color(PluginLoader.INSTANCE.getLangManger().i18nWithoutPrefix("kick.invalid-ping")
+                    data.disconnect(Component.text(ColorUtils.color(PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("kick.invalid-ping")
                             .replace("%ping%", data.getTransactionPing() + "")
                             .replace("%duration%", formatted))));
                 }

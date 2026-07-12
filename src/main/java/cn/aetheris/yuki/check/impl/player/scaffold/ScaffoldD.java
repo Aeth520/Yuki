@@ -51,8 +51,8 @@ public final class ScaffoldD extends BlockPlaceCheck {
 
         if (hasPlaced && (face != lastFace || !cursor.equals(lastCursor) || !pos.equals(lastPos))) {
             final String verbose = "face= " + face + "\nlastFace= " + lastFace
-                    + "\ncursor= " + PluginLoader.INSTANCE.getLangManger().toUnlabledString(cursor) + "\nlastCursor= " + PluginLoader.INSTANCE.getLangManger().toUnlabledString(lastCursor)
-                    + "\npos= " + PluginLoader.INSTANCE.getLangManger().toUnlabledString(pos) + "\nlastPos= " + PluginLoader.INSTANCE.getLangManger().toUnlabledString(lastPos);
+                    + "\ncursor= " + PluginLoader.INSTANCE.getLangManager().toUnlabeledString(cursor) + "\nlastCursor= " + PluginLoader.INSTANCE.getLangManager().toUnlabeledString(lastCursor)
+                    + "\npos= " + PluginLoader.INSTANCE.getLangManager().toUnlabeledString(pos) + "\nlastPos= " + PluginLoader.INSTANCE.getLangManager().toUnlabeledString(lastPos);
             if (!player.canSkipTicks()) {
                 if (buffer++ > 3) {
                     if (flagAndAlert(verbose) && shouldCancel()) {

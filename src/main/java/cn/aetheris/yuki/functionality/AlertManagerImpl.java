@@ -31,8 +31,8 @@ public final class AlertManagerImpl implements AlertManager {
     @Override
     public void toggleAlerts(UUID uuid) {
         toggleSetting(enabledAlerts, uuid,
-                () -> PluginLoader.INSTANCE.getLangManger().i18n("output.alerts.enable"),
-                () -> PluginLoader.INSTANCE.getLangManger().i18n("output.alerts.disable")
+                () -> PluginLoader.INSTANCE.getLangManager().i18n("output.alerts.enable"),
+                () -> PluginLoader.INSTANCE.getLangManager().i18n("output.alerts.disable")
         );
     }
 
@@ -44,8 +44,8 @@ public final class AlertManagerImpl implements AlertManager {
     @Override
     public void toggleVerbose(UUID uuid) {
         toggleSetting(enabledVerbose, uuid,
-                () -> PluginLoader.INSTANCE.getLangManger().i18n("output.verbose.enable"),
-                () -> PluginLoader.INSTANCE.getLangManger().i18n("output.verbose.disable")
+                () -> PluginLoader.INSTANCE.getLangManager().i18n("output.verbose.enable"),
+                () -> PluginLoader.INSTANCE.getLangManager().i18n("output.verbose.disable")
         );
     }
 
@@ -58,16 +58,16 @@ public final class AlertManagerImpl implements AlertManager {
     @Override
     public void toggleDebug(UUID uuid) {
         toggleSetting(enabledDebug, uuid,
-                () -> PluginLoader.INSTANCE.getLangManger().i18n("commands.debug.enable").replace("%type%", "normal"),
-                () -> PluginLoader.INSTANCE.getLangManger().i18n("commands.debug.disable").replace("%type%", "normal")
+                () -> PluginLoader.INSTANCE.getLangManager().i18n("commands.debug.enable").replace("%type%", "normal"),
+                () -> PluginLoader.INSTANCE.getLangManager().i18n("commands.debug.disable").replace("%type%", "normal")
         );
     }
 
     @Override
     public void togglePacketCancelDebug(UUID uuid) {
         toggleSetting(enabledPacketCancel, uuid,
-                () -> PluginLoader.INSTANCE.getLangManger().i18n("commands.debug.enable").replace("%type%", "cancel"),
-                () -> PluginLoader.INSTANCE.getLangManger().i18n("commands.debug.disable").replace("%type%", "cancel")
+                () -> PluginLoader.INSTANCE.getLangManager().i18n("commands.debug.enable").replace("%type%", "cancel"),
+                () -> PluginLoader.INSTANCE.getLangManager().i18n("commands.debug.disable").replace("%type%", "cancel")
         );
     }
 
@@ -79,8 +79,8 @@ public final class AlertManagerImpl implements AlertManager {
     @Override
     public void toggleSyncDebug(UUID uuid) {
         toggleSetting(enabledSync, uuid,
-                () -> PluginLoader.INSTANCE.getLangManger().i18n("commands.debug.enable").replace("%type%", "sync"),
-                () -> PluginLoader.INSTANCE.getLangManger().i18n("commands.debug.disable").replace("%type%", "sync")
+                () -> PluginLoader.INSTANCE.getLangManager().i18n("commands.debug.enable").replace("%type%", "sync"),
+                () -> PluginLoader.INSTANCE.getLangManager().i18n("commands.debug.disable").replace("%type%", "sync")
         );
     }
 
@@ -92,8 +92,8 @@ public final class AlertManagerImpl implements AlertManager {
     @Override
     public void toggleMitigateDebug(UUID uuid) {
         toggleSetting(enabledMitigate, uuid,
-                () -> PluginLoader.INSTANCE.getLangManger().i18n("commands.debug.enable").replace("%type%", "mitigate"),
-                () -> PluginLoader.INSTANCE.getLangManger().i18n("commands.debug.disable").replace("%type%", "mitigate")
+                () -> PluginLoader.INSTANCE.getLangManager().i18n("commands.debug.enable").replace("%type%", "mitigate"),
+                () -> PluginLoader.INSTANCE.getLangManager().i18n("commands.debug.disable").replace("%type%", "mitigate")
         );
     }
 
@@ -105,8 +105,8 @@ public final class AlertManagerImpl implements AlertManager {
     @Override
     public void toggleSetbackDebug(UUID uuid) {
         toggleSetting(enabledSetBack, uuid,
-                () -> PluginLoader.INSTANCE.getLangManger().i18n("commands.debug.enable").replace("%type%", "setback"),
-                () -> PluginLoader.INSTANCE.getLangManger().i18n("commands.debug.disable").replace("%type%", "setback")
+                () -> PluginLoader.INSTANCE.getLangManager().i18n("commands.debug.enable").replace("%type%", "setback"),
+                () -> PluginLoader.INSTANCE.getLangManager().i18n("commands.debug.disable").replace("%type%", "setback")
         );
     }
 

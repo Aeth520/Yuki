@@ -30,12 +30,12 @@ public class Develop extends AbstractCommand {
         if (!config.getBoolean("function.develop.enable")) {
             config.set("function.develop.enable", true);
             config.save(settingsFile);
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.develop.enable"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.develop.enable"));
             PluginLoader.INSTANCE.getConfigManager().reload();
         } else {
             config.set("function.develop.enable", false);
             config.save(settingsFile);
-            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.develop.disable"));
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.develop.disable"));
             PluginLoader.INSTANCE.getConfigManager().reload();
         }
     }

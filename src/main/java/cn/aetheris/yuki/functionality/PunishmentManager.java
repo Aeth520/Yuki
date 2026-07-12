@@ -122,7 +122,7 @@ public final class PunishmentManager {
 
     
     public String replaceAlertPlaceholders(String original, int vl, Check check, String alertString, String verbose) {
-        original = PluginLoader.INSTANCE.getLangManger().format(original
+        original = PluginLoader.INSTANCE.getLangManager().format(original
                 .replace("[alert]", alertString)
                 .replace("[proxy]", alertString)
                 .replace("%check_name%", check.getCheckName())
@@ -151,7 +151,7 @@ public final class PunishmentManager {
 
     
     public boolean handleAlert(PlayerData player, String verbose, Check check, String... info) {
-        String alertString = PluginLoader.INSTANCE.getLangManger().i18n("output.alerts.format.normal");
+        String alertString = PluginLoader.INSTANCE.getLangManager().i18n("output.alerts.format.normal");
         String hoverCMD = hoverAction.replace("%player%", player.getName());
         String hoverString = hoverMessage;
 
@@ -296,8 +296,8 @@ public final class PunishmentManager {
                                             .replace("%anticheat%", antiCheatName)
                                             .replace("%special_random_string%", AESUtil.encrypt(FakeAntiCheatUtils.generateRandomString() + "_" + check.getConfigName())))
                                     );
-                                    String broadcast = PluginLoader.INSTANCE.getLangManger()
-                                            .i18nWithoutPrefix(PluginLoader.INSTANCE.getLangManger().format("broadcast")
+                                    String broadcast = PluginLoader.INSTANCE.getLangManager()
+                                            .i18nWithoutPrefix(PluginLoader.INSTANCE.getLangManager().format("broadcast")
                                             ).replace("%player%", player.getName());
                                     String broadcastCmd = cmd;
                                     if (broadcastCmd.contains(player.getName())) {
