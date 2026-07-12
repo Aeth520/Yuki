@@ -25,6 +25,7 @@ import com.github.retrooper.packetevents.protocol.world.states.type.StateValue;
 import com.github.retrooper.packetevents.util.Vector3i;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public enum BlockPlaceResult {
 
@@ -1088,7 +1089,7 @@ public enum BlockPlaceResult {
 
     NO_DATA((player, place) -> place.set(place.material), ItemTypes.AIR);
 
-    private static Map<ItemType, BlockPlaceResult> lookupMap = new HashMap<>();
+    private static final Map<ItemType, BlockPlaceResult> lookupMap = new ConcurrentHashMap<>();
 
     private final BlockPlaceFactory data;
     private final ItemType[] materials;
@@ -1096,14 +1097,12 @@ public enum BlockPlaceResult {
     BlockPlaceResult(BlockPlaceFactory data, ItemType... materials) {
         this.data = data;
         Set<ItemType> mList = new HashSet<>(Arrays.asList(materials));
-        mList.remove(null); 
+        mList.remove(null);
         this.materials = mList.toArray(new ItemType[0]);
-        init();
     }
 
     BlockPlaceResult(BlockPlaceFactory data, ItemTags tags) {
         this(data, tags.getStates().toArray(new ItemType[0]));
-        init();
     }
 
     BlockPlaceResult(BlockPlaceFactory data, BlockTags tag) {
@@ -1114,7 +1113,6 @@ public enum BlockPlaceResult {
 
         this.data = data;
         this.materials = types.toArray(new ItemType[0]);
-        init();
     }
 
     public static void register() {
@@ -1127,9 +1125,5 @@ public enum BlockPlaceResult {
 
     public static BlockPlaceFactory getMaterialData(ItemType placed) {
         return lookupMap.getOrDefault(placed, NO_DATA).data;
-    }
-
-    private void init() {
-        lookupMap = new HashMap<>();
     }
 }

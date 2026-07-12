@@ -28,6 +28,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Getter
@@ -40,7 +41,7 @@ public class Check implements AbstractCheck {
     public double violations;
     private int maxVL;
 
-    private static final Map<String, Integer> maxVLCache = new HashMap<>();
+    private static final Map<String, Integer> maxVLCache = new ConcurrentHashMap<>();
 
     public static void clearMaxVLCache() {
         maxVLCache.clear();

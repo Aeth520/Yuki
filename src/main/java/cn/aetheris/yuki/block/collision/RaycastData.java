@@ -10,6 +10,7 @@ import com.github.retrooper.packetevents.protocol.world.states.type.StateTypes;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public enum RaycastData {
@@ -38,7 +39,7 @@ public enum RaycastData {
         return new SimpleCollisionBox(0, 0, 0, 1, 1, 1, true);
     }, StateTypes.COMPOSTER, StateTypes.SCAFFOLDING);
 
-    public static final Map<StateType, RaycastData> lookup = new HashMap<>();
+    public static final Map<StateType, RaycastData> lookup = new ConcurrentHashMap<>();
 
     public final StateType[] materials;
     public CollisionBox box;
