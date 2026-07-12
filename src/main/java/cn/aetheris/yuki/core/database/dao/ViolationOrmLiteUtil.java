@@ -35,12 +35,13 @@ public class ViolationOrmLiteUtil implements ViolationManager {
         UUID playerId = offlinePlayer.getUniqueId();
         String uuidStr = playerId.toString();
         String dataType = PluginLoader.INSTANCE.getConfigManager().getConfig().getStringElse("database-manager.data-type", "sqlite").toLowerCase();
+        String ip = getPlayerIp(player);
         if (dataType.equals("sqlite")) {
 
             deleteExistingViolations(uuidStr);
 
             violations.forEach((checkName, severity) -> {
-                Violation violation = new Violation(severity.intValue(), playerId, checkName, player.getUser().getAddress().getHostString());
+                Violation violation = new Violation(severity.intValue(), playerId, checkName, ip);
                 createOrUpdateViolation(violation);
             });
         } else {
@@ -48,11 +49,21 @@ public class ViolationOrmLiteUtil implements ViolationManager {
                 deleteExistingViolations(uuidStr);
 
                 violations.forEach((checkName, severity) -> {
-                    Violation violation = new Violation(severity.intValue(), playerId, checkName, player.getUser().getAddress().getHostString());
+                    Violation violation = new Violation(severity.intValue(), playerId, checkName, ip);
                     createOrUpdateViolation(violation);
                 });
             });
         }
+    }
+
+    private String getPlayerIp(PlayerData player) {
+        try {
+            if (player.getUser() != null && player.getUser().getAddress() != null) {
+                return player.getUser().getAddress().getHostString();
+            }
+        } catch (Exception ignored) {
+        }
+        return null;
     }
 
     @SneakyThrows
