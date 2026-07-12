@@ -5,6 +5,7 @@ import cn.aetheris.yuki.functionality.*;
 import cn.aetheris.yuki.core.database.ViolationDatabaseManager;
 import cn.aetheris.yuki.functionality.moderation.ModerationManager;
 import cn.aetheris.yuki.util.AntiCheatUtil;
+import cn.aetheris.yuki.util.encrypt.AESUtil;
 import cn.aetheris.yuki.util.message.LogUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,6 +42,7 @@ public final class PluginLoader {
         discordWebhookManager = new DiscordWebhookManager();
         featureManager = FeatureManager.getInstance();
         featureManager.loadFromConfig();
+        AESUtil.init();
         databaseManager = new ViolationDatabaseManager();
         alertManager = new AlertManagerImpl();
         spectateManager = new SpectateManager();

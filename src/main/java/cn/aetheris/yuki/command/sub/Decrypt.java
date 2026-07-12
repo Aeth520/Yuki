@@ -25,9 +25,13 @@ public final class Decrypt extends AbstractCommand {
 
         String cipherText = String.join(" ", args).trim();
 
-        String decrypted = AESUtil.decrypt(cipherText);
-
-        sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.punish.message")
-                .replace("%message%", decrypted));
+        try {
+            String decrypted = AESUtil.decrypt(cipherText);
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.punish.message")
+                    .replace("%message%", decrypted));
+        } catch (Exception e) {
+            sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("commands.punish.decrypt")
+                    .replace("%message%", "Failed to decrypt: " + e.getMessage()));
+        }
     }
 }
