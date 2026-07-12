@@ -379,6 +379,8 @@ public final class CheckManagerListener extends PacketListenerAbstract {
 
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
+        if (!Yuki.isEnablePlugin()) return;
+
         PlayerData player = PluginLoader.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
 
         if (player == null) return;
@@ -478,6 +480,7 @@ public final class CheckManagerListener extends PacketListenerAbstract {
 
     @Override
     public void onPacketSend(PacketSendEvent event) {
+        if (!Yuki.isEnablePlugin()) return;
         if (event.getConnectionState() != ConnectionState.PLAY) return;
         PlayerData player = PluginLoader.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
 

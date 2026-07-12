@@ -48,6 +48,7 @@ public class PreViaCheckManagerListener extends PacketListenerAbstract {
 
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
+        if (!Yuki.isEnablePlugin()) return;
         PlayerData player = PluginLoader.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
         if (player == null) return;
 
@@ -171,6 +172,7 @@ public class PreViaCheckManagerListener extends PacketListenerAbstract {
 
     @Override
     public void onPacketSend(PacketSendEvent event) {
+        if (!Yuki.isEnablePlugin()) return;
         PlayerData player = PluginLoader.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
 
 

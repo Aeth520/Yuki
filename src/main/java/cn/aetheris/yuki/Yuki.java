@@ -21,7 +21,7 @@ public final class Yuki extends JavaPlugin {
     private static Yuki instance;
     @Getter
     @Setter
-    private static boolean enablePlugin;
+    private static volatile boolean enablePlugin;
     private PacketEventsManager packetEventsManager;
     private Platform platform;
 
