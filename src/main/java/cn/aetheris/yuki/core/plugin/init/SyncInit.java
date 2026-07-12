@@ -1,9 +1,9 @@
 package cn.aetheris.yuki.core.plugin.init;
 
+import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.core.plugin.interfaces.Init;
-import org.bukkit.Bukkit;
 
 public class SyncInit implements Init {
     @Override
@@ -12,9 +12,9 @@ public class SyncInit implements Init {
             return;
         }
 
-        Bukkit.getScheduler().runTaskTimerAsynchronously(Yuki.getInstance(),
+        MHDFScheduler.getAsyncScheduler().runTaskTimer(Yuki.getInstance(),
                 () -> PluginLoader.INSTANCE.getTickManager().tickSync(), 0, 1);
-        Bukkit.getScheduler().runTaskTimerAsynchronously(Yuki.getInstance(),
+        MHDFScheduler.getAsyncScheduler().runTaskTimer(Yuki.getInstance(),
                 () -> PluginLoader.INSTANCE.getTickManager().tickAsync(), 0, 1);
     }
 }

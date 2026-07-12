@@ -10,7 +10,6 @@ import cn.aetheris.yuki.util.encrypt.AESUtil;
 import cn.aetheris.yuki.util.message.LogUtils;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Bukkit;
 
 @Getter
 public final class PluginLoader {
@@ -89,7 +88,7 @@ public final class PluginLoader {
 
         if (plugin != null) {
             MHDFScheduler.getAsyncScheduler().runTaskLater(plugin, () -> {
-                Bukkit.getScheduler().cancelTasks(plugin);
+                MHDFScheduler.cancel(plugin);
                 plugin.disablePlugin();
             }, 20L);
             LogUtils.console("&3Yuki &8» &cGoodbye!");
