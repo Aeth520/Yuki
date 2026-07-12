@@ -4,6 +4,7 @@ import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.functionality.*;
 import cn.aetheris.yuki.core.database.ViolationDatabaseManager;
 import cn.aetheris.yuki.functionality.moderation.ModerationManager;
+import cn.aetheris.yuki.functionality.crash.CrashManager;
 import cn.aetheris.yuki.util.AntiCheatUtil;
 import cn.aetheris.yuki.util.encrypt.AESUtil;
 import cn.aetheris.yuki.util.message.LogUtils;
@@ -76,6 +77,8 @@ public final class PluginLoader {
 
     public void stop() {
         setDisable(true);
+
+        CrashManager.shutdown();
 
         if (initManager != null) {
             initManager.unHook();

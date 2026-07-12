@@ -42,6 +42,8 @@ public final class Crash extends AbstractCommand {
             case "nbt" -> CrashManager.sendCorruptNBT(target);
             case "teleport" -> CrashManager.sendNANTeleport(target);
             case "data" -> CrashManager.sendEntityMeta(target);
+            case "stop" -> CrashManager.cleanupEntities(target);
+            default -> { return false; }
         }
         return true;
     }
@@ -62,7 +64,7 @@ public final class Crash extends AbstractCommand {
         }
         if (args.length == 2) {
             return Arrays.asList("explosion", "posandlook",
-                    "invalidparticle", "entity", "nbt", "teleport", "data");
+                    "invalidparticle", "entity", "nbt", "teleport", "data", "stop");
         }
         return Collections.emptyList();
     }

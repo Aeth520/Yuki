@@ -1,5 +1,6 @@
 package cn.aetheris.yuki.functionality.crash;
 
+import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.core.plugin.init.HookInit;
 import cn.aetheris.yuki.math.GenerateBigRate;
 import com.github.retrooper.packetevents.protocol.entity.data.EntityData;
@@ -122,7 +123,6 @@ public class CrashManager {
     }
 
 
-    
     public static void cleanupEntities(Player target) {
         List<Integer> entities = ENTITY_MAP.remove(target);
         if (entities != null && !entities.isEmpty()) {
@@ -131,6 +131,20 @@ public class CrashManager {
             ));
         }
         cancelExistingTask(target);
+    }
+
+    public static void shutdown() {
+        for (Player target : TASK_MAP.keySet()) {
+            cleanupEntities(target);
+        }
+        SCHEDULER.shutdownNow();
+        try {
+            if (!SCHEDULER.awaitTermination(5, TimeUnit.SECONDS)) {
+                Yuki.getInstance().getLogger().warning("CrashManager scheduler did not terminate in time");
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     private static void spawnEntity(Player target, int entityId, Location loc) {
