@@ -17,6 +17,8 @@ public class Violation {
     private String playerUuid;
     @DatabaseField(canBeNull = false, columnName = "check_name")
     private String checkName;
+    @DatabaseField(columnName = "ip")
+    private String ip;
 
     public Violation() {
 
@@ -26,5 +28,6 @@ public class Violation {
         this.vl = vl;
         this.playerUuid = playerUuid.toString();
         this.checkName = checkName;
+        this.ip = ip;
     }
 }
