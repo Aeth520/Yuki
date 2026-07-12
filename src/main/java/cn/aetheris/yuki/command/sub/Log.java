@@ -82,9 +82,10 @@ public final class Log extends AbstractCommand {
                 .replace("§6§l", "")
                 .replace("§a", "");
 
+        HttpURLConnection connection = null;
         try {
             String PASTE_UPLOAD_URL = "https://paste.md-5.net/documents";
-            HttpURLConnection connection = (HttpURLConnection) new URL(PASTE_UPLOAD_URL).openConnection();
+            connection = (HttpURLConnection) new URL(PASTE_UPLOAD_URL).openConnection();
             connection.setRequestMethod("POST");
             connection.setDoInput(true);
             connection.setDoOutput(true);
@@ -96,13 +97,17 @@ public final class Log extends AbstractCommand {
             }
 
             Gson gson = new Gson();
-            JsonObject object = gson.fromJson(new InputStreamReader(connection.getInputStream(), Charsets.UTF_8), JsonObject.class);
-            String PASTE_URL = "https://paste.md-5.net/";
-            String pasteUrl = PASTE_URL + object.get("key").getAsString();
-            connection.disconnect();
-            return pasteUrl;
+            try (InputStreamReader reader = new InputStreamReader(connection.getInputStream(), Charsets.UTF_8)) {
+                JsonObject object = gson.fromJson(reader, JsonObject.class);
+                String PASTE_URL = "https://paste.md-5.net/";
+                return PASTE_URL + object.get("key").getAsString();
+            }
         } catch (Exception e) {
             return null;
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
     }
 }

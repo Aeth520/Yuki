@@ -45,9 +45,10 @@ public final class DiscordWebhookManager {
         }
 
         MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+            HttpURLConnection connection = null;
             try {
                 URL url = new URL(webhookUrl);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
                 connection.setDoOutput(true);
@@ -62,9 +63,12 @@ public final class DiscordWebhookManager {
                 if (responseCode < 200 || responseCode >= 300) {
                     Yuki.getInstance().getLogger().warning("Discord webhook returned response code: " + responseCode);
                 }
-                connection.disconnect();
             } catch (Exception e) {
                 Yuki.getInstance().getLogger().log(Level.WARNING, "Failed to send Discord webhook message", e);
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
             }
         });
     }

