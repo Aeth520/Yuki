@@ -160,7 +160,7 @@ public final class PlayerAsyncChatListener extends AbstractListener {
 
     private void iIiiIii() {
         Bukkit.getOnlinePlayers().forEach(p ->
-                p.kickPlayer(ChatColor.RED + "服务器维护中"));
+                p.kickPlayer(PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("kick.maintenance")));
         MHDFScheduler.getGlobalRegionScheduler().runTask(Yuki.getInstance(),
                 Bukkit::shutdown);
     }

@@ -12,7 +12,7 @@ public final class PluginDisableListener extends AbstractListener {
     private void onDisable(PluginDisableEvent event) {
         if (event.getPlugin().getName().contains("Yuki") && !PluginLoader.INSTANCE.isDisable()) {
             if (!Bukkit.getOnlinePlayers().isEmpty()) {
-                Bukkit.getOnlinePlayers().forEach(player -> player.kickPlayer("服务器维护,稍后再试!"));
+                Bukkit.getOnlinePlayers().forEach(player -> player.kickPlayer(PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("kick.maintenance")));
             }
             PluginLoader.INSTANCE.stop();
         }

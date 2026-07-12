@@ -124,6 +124,10 @@ kick:
   # Illegal ping kick: Kicks players whose ping exceeds a certain value for a period of time
   # Illegal ping Kick: Kick out a player whose ping exceeds a certain value and lasts for a period of time
   invalid-ping: "&cYour ping is abnormally high and has lasted &f%duration% &7(%ping%)"
+  # Maintenance kick: Message shown when the server is under maintenance.
+  maintenance: "Server maintenance, please try again later!"
+  # Loading kick: Message shown when the plugin is still loading.
+  loading: "Loading, please wait..."
 ##############################################
 # Command Blocker
 ##############################################

@@ -109,7 +109,7 @@ public final class PacketEventsHook extends AbstractHook {
     
     private void kickAllPlayers() {
         Bukkit.getOnlinePlayers().forEach(player ->
-                player.kickPlayer("服务器维护中，请稍后重连")
+                player.kickPlayer(PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("kick.maintenance"))
         );
     }
 

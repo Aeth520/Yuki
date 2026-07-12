@@ -1,5 +1,6 @@
 package cn.aetheris.yuki.util.bukkit;
 
+import cn.aetheris.yuki.PluginLoader;
 import com.github.retrooper.packetevents.protocol.player.User;
 import io.github.retrooper.packetevents.injector.SpigotChannelInjector;
 import org.bukkit.entity.Player;
@@ -11,7 +12,7 @@ public class CompatibleChannelInjector extends SpigotChannelInjector {
             super.updatePlayer(user, player);
         } catch (NullPointerException e) {
             if (player instanceof Player) {
-                ((Player) player).kickPlayer("Loading");
+                ((Player) player).kickPlayer(PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("kick.loading"));
             } else {
                 throw e;
             }

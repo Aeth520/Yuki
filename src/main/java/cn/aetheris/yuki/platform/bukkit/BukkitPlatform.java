@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.platform.bukkit;
 
 import cn.aetheris.yuki.Yuki;
+import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.platform.Platform;
 import cn.aetheris.yuki.util.message.ColorUtils;
 import org.bukkit.Bukkit;
@@ -33,7 +34,7 @@ public final class BukkitPlatform implements Platform {
     public void disablePlugin() {
         if (!Bukkit.getOnlinePlayers().isEmpty()) {
             Bukkit.getOnlinePlayers().forEach(player ->
-                    player.kickPlayer("Server maintenance, please try again later!"));
+                    player.kickPlayer(PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("kick.maintenance")));
         }
         Bukkit.getServer().getPluginManager().disablePlugin(plugin);
     }

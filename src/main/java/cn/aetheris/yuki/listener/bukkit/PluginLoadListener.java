@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.listener.bukkit;
 
 import cn.aetheris.yuki.Yuki;
+import cn.aetheris.yuki.PluginLoader;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -12,7 +13,7 @@ public final class PluginLoadListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerLogin(PlayerLoginEvent event) {
         if (!Yuki.isEnablePlugin()) {
-            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "服务器加载中...");
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("kick.loading"));
         }
     }
 }
