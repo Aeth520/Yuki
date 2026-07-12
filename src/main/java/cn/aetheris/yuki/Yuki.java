@@ -13,8 +13,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.logging.Level;
-
 @Getter
 @Setter
 public final class Yuki extends JavaPlugin {
@@ -64,13 +62,7 @@ public final class Yuki extends JavaPlugin {
             return;
         }
 
-        try {
-            Class.forName("cn.aetheris.yuki.Main")
-                    .getDeclaredMethod("start")
-                    .invoke(null);
-        } catch (Exception e) {
-            getLogger().log(Level.SEVERE, "Failed to start Yuki", e);
-        }
+        Main.start();
         platform.registerListener(new PluginLoadListener());
         platform.registerListener(new ViaVersionCompatListener());
     }
