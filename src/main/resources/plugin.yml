@@ -28,12 +28,92 @@ permissions:
       yuki.commands.mitigate: true
       yuki.commands.setback: true
       yuki.commands.stopspectating: true
+      yuki.commands.crash: true
+      yuki.commands.dump: true
+      yuki.commands.develop: true
+      yuki.commands.reload: true
+      yuki.commands.discordtest: true
+      yuki.commands.send-alert: true
+      yuki.commands.control: true
+      yuki.commands.controlcheck: true
+      yuki.commands.history: true
+      yuki.commands.history.clear: true
+      yuki.commands.delay: true
+      yuki.commands.punish: true
+      yuki.commands.features: true
+      yuki.commands.perf: true
+      yuki.commands.log: true
+      yuki.commands.info: true
 
   yuki.commands:
     default: op
 
   yuki.commands.alerts.enable-on-join:
     description: Enable alerts on join
+    default: op
+
+  yuki.commands.crash:
+    description: Crash a player's client
+    default: op
+
+  yuki.commands.dump:
+    description: Export diagnostic dump
+    default: op
+
+  yuki.commands.develop:
+    description: Toggle developer mode
+    default: op
+
+  yuki.commands.reload:
+    description: Reload plugin config
+    default: op
+
+  yuki.commands.discordtest:
+    description: Test Discord webhook
+    default: op
+
+  yuki.commands.send-alert:
+    description: Send a broadcast alert
+    default: op
+
+  yuki.commands.control:
+    description: Control player
+    default: op
+
+  yuki.commands.controlcheck:
+    description: Control check status
+    default: op
+
+  yuki.commands.history:
+    description: View violation history
+    default: op
+
+  yuki.commands.history.clear:
+    description: Clear all violation history
+    default: op
+
+  yuki.commands.delay:
+    description: Delay a command
+    default: op
+
+  yuki.commands.punish:
+    description: Punish a player
+    default: op
+
+  yuki.commands.features:
+    description: Toggle features
+    default: op
+
+  yuki.commands.perf:
+    description: Performance monitor
+    default: op
+
+  yuki.commands.log:
+    description: Upload logs
+    default: op
+
+  yuki.commands.info:
+    description: Show player info
     default: op
 
   yuki.brand:

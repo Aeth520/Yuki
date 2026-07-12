@@ -41,6 +41,10 @@ public final class History extends AbstractCommand {
 
         if (args[0].equalsIgnoreCase("clear")) {
             if (args.length == 1) {
+                if (!sender.hasPermission("yuki.commands.history.clear")) {
+                    sender.sendMessage(PluginLoader.INSTANCE.getLangManger().i18n("no-permission"));
+                    return;
+                }
                 clearAllHistory(sender);
             } else if (args.length == 2) {
                 OfflinePlayer target = getOfflinePlayerByName(args[1]);

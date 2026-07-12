@@ -4,7 +4,6 @@ import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import com.google.gson.JsonObject;
-import lombok.Getter;
 
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -12,13 +11,16 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 
-@Getter
 public final class DiscordWebhookManager {
 
     private boolean enabled;
     private String webhookUrl;
     private String username;
     private String avatarUrl;
+
+    public boolean isEnabled() { return enabled; }
+    public String getUsername() { return username; }
+    public String getAvatarUrl() { return avatarUrl; }
 
     public DiscordWebhookManager() {
         reload();
