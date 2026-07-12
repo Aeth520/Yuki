@@ -182,10 +182,10 @@ public class PlayerData implements PlayerAPI {
     public boolean isVoid;
     public int entityID;
     public boolean isSentRotate;
-    public boolean punish;
-    public boolean cancelCommand;
+    public volatile boolean punish;
+    public volatile boolean cancelCommand;
     @Nullable
-    public Player bukkitPlayer;
+    public volatile Player bukkitPlayer;
     public int lastServerChangeSlot;
     
     public Vector3dm clientVelocity = new Vector3dm();
@@ -194,7 +194,7 @@ public class PlayerData implements PlayerAPI {
     public int vehicleTicks;
     public boolean isInBed = false;
     public boolean lastInBed = false;
-    public long transactionPing = 0;
+    public volatile long transactionPing = 0;
     public long lastBlockDig;
     public int windchargeAttackTick;
     public int respawnTick;
@@ -276,8 +276,8 @@ public class PlayerData implements PlayerAPI {
     public int totalMovePacketsSent;
     public boolean serverOpenedInventoryThisTick;
     
-    public boolean noModifyPacketPermission = false;
-    public boolean noSetbackPermission = false;
+    public volatile boolean noModifyPacketPermission = false;
+    public volatile boolean noSetbackPermission = false;
     public boolean wasLastPredictionCompleteChecked;
     public boolean isJumping;
     public boolean lastJumping;
@@ -286,7 +286,7 @@ public class PlayerData implements PlayerAPI {
     public long lastFlying;
     
     
-    public boolean bypass = false;
+    public volatile boolean bypass = false;
     public int sinceWeaponShootTicks;
     private boolean forceStuckSpeed = true;
     public boolean lagging;
@@ -352,16 +352,16 @@ public class PlayerData implements PlayerAPI {
     private int verusTransactionIDCounter = -32768;
     private int transactionSkip;
     private int transactionJoinWaitTime;
-    private long lastTransactionPing = 0;
+    private volatile long lastTransactionPing = 0;
     @Getter
-    private int averagePing;
+    private volatile int averagePing;
     @Setter
     @Getter
     private int currentSlot;
-    private long lastTransactionTime = System.nanoTime();
-    private PacketTracker viaPacketTracker;
+    private volatile long lastTransactionTime = System.nanoTime();
+    private volatile PacketTracker viaPacketTracker;
     @Getter
-    private long playerClockAtLeast = System.nanoTime();
+    private volatile long playerClockAtLeast = System.nanoTime();
     
     private boolean debugPacketCancel = false;
     private int spamThreshold = 100;
@@ -369,7 +369,7 @@ public class PlayerData implements PlayerAPI {
     @Getter
     @Setter
     private boolean experimentalChecks = false;
-    private @Nullable UserConnection viaUserConnection;
+    private volatile @Nullable UserConnection viaUserConnection;
     
     
     
