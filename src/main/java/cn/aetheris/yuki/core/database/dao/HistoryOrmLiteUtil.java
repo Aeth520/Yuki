@@ -6,7 +6,6 @@ import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.core.database.entity.CheckInfo;
 import cn.aetheris.yuki.core.database.interfaces.CheckInfoManager;
 import cn.aetheris.yuki.core.plugin.init.HookInit;
-import cn.aetheris.yuki.player.PlayerData;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.stmt.DeleteBuilder;
@@ -29,13 +28,13 @@ public final class HistoryOrmLiteUtil implements CheckInfoManager {
     }
 
     @Override
-    public void logAlertSync(OfflinePlayer offlinePlayer, PlayerData player, boolean exp, String verbose, String checkName, int violations, String description, String ping, boolean lagging, boolean moveLagging, String tps, String brand, String version) {
+    public void logAlertSync(OfflinePlayer offlinePlayer, boolean exp, String verbose, String checkName, int violations, String description, String ping, boolean lagging, boolean moveLagging, String tps, String brand, String version) {
         final String dataType = PluginLoader.INSTANCE.getConfigManager().getConfig().getString("database-manager.data-type");
 
         CheckInfo entity = new CheckInfo(
                 HookInit.getPlaceholderAPIHook().setPlaceholders(offlinePlayer, PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("database-manager.server-name")),
-                player.getUniqueId(),
-                player.getName(),
+                offlinePlayer.getUniqueId(),
+                offlinePlayer.getName(),
                 checkName,
                 verbose,
                 violations,

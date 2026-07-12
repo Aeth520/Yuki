@@ -3,7 +3,6 @@ package cn.aetheris.yuki.api.storage;
 import cn.aetheris.yuki.core.database.entity.CheckInfo;
 import cn.aetheris.yuki.core.database.interfaces.CheckInfoManager;
 import cn.aetheris.yuki.core.database.interfaces.ViolationManager;
-import cn.aetheris.yuki.player.PlayerData;
 import org.bukkit.OfflinePlayer;
 
 import java.util.List;
@@ -33,11 +32,11 @@ public final class CompositeStorage implements Storage {
     }
 
     @Override
-    public void logAlert(OfflinePlayer offlinePlayer, PlayerData player, boolean exp, String verbose,
+    public void logAlert(OfflinePlayer offlinePlayer, boolean exp, String verbose,
                          String checkName, int violations, String description, String ping,
                          boolean lagging, boolean moveLagging, String tps, String brand, String version) {
         if (checkInfoManager != null) {
-            checkInfoManager.logAlertSync(offlinePlayer, player, exp, verbose, checkName, violations,
+            checkInfoManager.logAlertSync(offlinePlayer, exp, verbose, checkName, violations,
                     description, ping, lagging, moveLagging, tps, brand, version);
         }
     }

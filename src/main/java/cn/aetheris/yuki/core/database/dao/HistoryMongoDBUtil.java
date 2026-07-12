@@ -6,7 +6,6 @@ import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.core.database.entity.CheckInfo;
 import cn.aetheris.yuki.core.database.interfaces.CheckInfoManager;
 import cn.aetheris.yuki.core.plugin.init.HookInit;
-import cn.aetheris.yuki.player.PlayerData;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import org.bukkit.OfflinePlayer;
@@ -23,13 +22,13 @@ public final class HistoryMongoDBUtil implements CheckInfoManager {
     }
 
     @Override
-    public void logAlertSync(OfflinePlayer offlinePlayer, PlayerData player, boolean exp, String verbose, String checkName, int violations, String description, String ping, boolean lagging, boolean moveLagging, String tps, String brand, String version) {
+    public void logAlertSync(OfflinePlayer offlinePlayer, boolean exp, String verbose, String checkName, int violations, String description, String ping, boolean lagging, boolean moveLagging, String tps, String brand, String version) {
         MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
             try {
                 Document document = new Document()
                         .append("server", HookInit.getPlaceholderAPIHook().setPlaceholders(offlinePlayer, PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("database-manager.server-name")))
-                        .append("uuid", player.getUniqueId())
-                        .append("player_name", player.getName())
+                        .append("uuid", offlinePlayer.getUniqueId())
+                        .append("player_name", offlinePlayer.getName())
                         .append("check_name", checkName)
                         .append("exp", exp)
                         .append("verbose", verbose)

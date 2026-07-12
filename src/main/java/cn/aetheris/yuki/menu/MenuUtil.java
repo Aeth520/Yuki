@@ -26,6 +26,59 @@ public class MenuUtil {
 
     public static boolean isNew = Yuki.getInstance().getPacketEventsManager().getServerVersion().isNewerThan(ServerVersion.V_1_12_2);
 
+    private static Material getCheckMaterial(CheckType type) {
+        return switch (type) {
+            case ELYTRA -> Material.FEATHER;
+            case GROUNDSPOOF -> Material.DIRT;
+            case NOSLOW -> Material.DIAMOND_SWORD;
+            case MOVEMENT_VALIDATION -> Material.STICK;
+            case SPRINT -> Material.LEATHER_BOOTS;
+            case VEHICLE -> Material.MINECART;
+            case AIM -> Material.BOW;
+            case ANALYSIS -> Material.BOOK;
+            case AUTOBLOCK -> Material.IRON_SWORD;
+            case KILLAURA -> Material.REDSTONE;
+            case REACH -> Material.STONE_SWORD;
+            case VELOCITY -> resolveMaterial("SNOW_BALL", "LEGACY_SNOW_BALL");
+            case CLIENT -> Material.COMPASS;
+            case SPAM -> Material.PAPER;
+            case AIRPLACE -> Material.COBBLESTONE;
+            case AUTOCLICKER -> Material.BLAZE_ROD;
+            case AUTOTOTEM -> resolveMaterial("GOLDEN_APPLE", "totem_of_undying");
+            case BADPACKETS -> Material.BOOK;
+            case BARITONE -> resolveMaterial("RECORD_3", "MUSIC_DISC_BLOCKS");
+            case BLINK -> Material.REDSTONE;
+            case BREAK -> Material.STONE_PICKAXE;
+            case CRASH -> Material.TNT;
+            case ENTITY -> Material.ROTTEN_FLESH;
+            case EXPLOIT -> Material.FURNACE;
+            case IMPOSSIBLE -> Material.BEDROCK;
+            case INTERACT -> Material.IRON_AXE;
+            case FASTPLACE -> resolveMaterial("WOOL", "WHITE_WOOL");
+            case INVENTORY -> Material.CHEST;
+            case PINGSPOOF -> Material.TRIPWIRE_HOOK;
+            case POST -> Material.PAPER;
+            case SCAFFOLD -> Material.LADDER;
+            case TIMER -> resolveMaterial("WATCH", "CLOCK");
+            case XRAY -> Material.GLASS;
+            case MULTIACTIONS -> Material.DIAMOND_AXE;
+            case NONE -> Material.BARRIER;
+            case CHAT -> Material.WRITABLE_BOOK;
+            case BEDROCK -> Material.BEDROCK;
+        };
+    }
+
+    private static Material resolveMaterial(String... names) {
+        for (String name : names) {
+            try {
+                Material m = Material.matchMaterial(name);
+                if (m != null) return m;
+            } catch (Exception ignored) {
+            }
+        }
+        throw new IllegalStateException("No compatible Material for " + Arrays.toString(names));
+    }
+
     public static void setCheckItems(FastInv inventory, CheckType[] types) {
         List<Integer> glassSlots = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 37, 38, 39, 40, 41, 42, 43);
         for (int i : glassSlots) {
@@ -35,7 +88,7 @@ public class MenuUtil {
             if (glassSlots.contains(i)) continue;
             int finalI = i;
 
-            ItemBuilder builder = new ItemBuilder(types[i].getItems()[0]).name(ColorUtils.color("&b" + types[i].name()));
+            ItemBuilder builder = new ItemBuilder(getCheckMaterial(types[i])).name(ColorUtils.color("&b" + types[i].name()));
             inventory.setItem(i, builder.build(), e -> {
                 e.setCancelled(true);
                 FastInv fi = new FastInv(fastInv -> {

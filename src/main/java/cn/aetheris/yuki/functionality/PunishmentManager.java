@@ -2,6 +2,7 @@ package cn.aetheris.yuki.functionality;
 
 import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
+import java.util.logging.Level;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.api.AbstractCheck;
 import cn.aetheris.yuki.api.events.CheckToggleEvent;
@@ -232,7 +233,6 @@ public final class PunishmentManager {
                                     OfflinePlayer offlinePlayer = Yuki.getInstance().getServer().getOfflinePlayer(player.getUniqueId());
                                     PluginLoader.INSTANCE.getDatabaseManager().getCheckInfoManager().logAlertSync(
                                             offlinePlayer,
-                                            player,
                                             check.getExperimental(),
                                             verbose,
                                             check.getCheckName(),
