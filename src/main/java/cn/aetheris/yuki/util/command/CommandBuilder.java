@@ -1,5 +1,6 @@
 package cn.aetheris.yuki.util.command;
 
+import cn.aetheris.yuki.Yuki;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandMap;
@@ -12,6 +13,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 public final class CommandBuilder {
 
@@ -57,7 +59,7 @@ public final class CommandBuilder {
             constructor.setAccessible(true);
             command = constructor.newInstance(name, plugin);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            Yuki.getInstance().getLogger().log(Level.SEVERE, "Failed to create PluginCommand: " + name, exception);
         }
         return command;
     }

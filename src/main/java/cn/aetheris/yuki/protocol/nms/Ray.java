@@ -1,10 +1,13 @@
 package cn.aetheris.yuki.protocol.nms;
 
+import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.data.Pair;
 import cn.aetheris.yuki.math.vector.Vector3dm;
 import lombok.Getter;
 import lombok.ToString;
+
+import java.util.logging.Level;
 
 @Getter
 @ToString
@@ -46,7 +49,7 @@ public final class Ray implements Cloneable {
             cloned.direction = this.direction.clone();
             return cloned;
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            Yuki.getInstance().getLogger().log(Level.SEVERE, "Failed to clone Ray", e);
         }
         return null;
     }

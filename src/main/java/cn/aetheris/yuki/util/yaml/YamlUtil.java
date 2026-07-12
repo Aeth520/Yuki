@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 
 public final class YamlUtil {
 
@@ -96,7 +97,7 @@ public final class YamlUtil {
 
             config.save(configFile);
         } catch (IOException e) {
-            e.printStackTrace();
+            Yuki.getInstance().getLogger().log(Level.SEVERE, "Failed to update config: " + configFile.getName(), e);
         }
     }
 }

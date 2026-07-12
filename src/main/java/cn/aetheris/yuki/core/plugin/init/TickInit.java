@@ -18,6 +18,7 @@ import sun.misc.Unsafe;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 
 
 @SuppressWarnings(value = {"unchecked", "deprecated"})
@@ -101,7 +102,7 @@ public final class TickInit implements Init, Listener {
             }
             return true;
         } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
+            Yuki.getInstance().getLogger().log(Level.SEVERE, "Failed to hook tick list", e);
             return false;
         }
     }

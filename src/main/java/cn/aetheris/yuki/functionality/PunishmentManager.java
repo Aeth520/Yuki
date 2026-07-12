@@ -211,7 +211,7 @@ public final class PunishmentManager {
                                         }
                                     } catch (Exception e) {
                                         LogUtils.console("[code]运行错误：" + command.command);
-                                        e.printStackTrace();
+                                        Yuki.getInstance().getLogger().log(Level.SEVERE, "[code] script error", e);
                                     }
                                 }
                             } else switch (command.command) {

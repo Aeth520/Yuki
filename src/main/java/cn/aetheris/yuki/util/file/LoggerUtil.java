@@ -32,8 +32,7 @@ public class LoggerUtil {
         try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)))) {
             pw.println(log);
         } catch (IOException e) {
-            Yuki.getInstance().getLogger().log(Level.SEVERE, "无法写入日志到 " + playerName + " 的文件中！");
-            e.printStackTrace();
+            Yuki.getInstance().getLogger().log(Level.SEVERE, "无法写入日志到 " + playerName + " 的文件中！", e);
         }
     }
 }
