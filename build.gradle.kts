@@ -25,26 +25,22 @@ java {
 
 repositories {
     mavenLocal()
-    maven("https://maven.aliyun.com/repository/public") // 阿里云Maven仓库
-    maven("https://repo.booky.dev/releases/") { content { includeGroup("net.kyori") } }
-    maven("https://mvn.lumine.io/repository/maven-public/") // Lumine仓库
-    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") // Spigot仓库
-    maven("https://jitpack.io/") // JitPack仓库
+    maven("https://maven.aliyun.com/repository/public") // 阿里云Maven仓库（优先，包含 Maven Central 镜像）
+    // 特殊包优先的仓库
+    maven("https://nexus.scarsz.me/content/repositories/releases") // Configuralize仓库 (github.scarsz:configuralize)
+    maven("https://jitpack.io/") // JitPack仓库 (fr.mrmicky:FastInv 等)
     maven("https://repo.papermc.io/repository/maven-public")
-    maven("https://repo.viaversion.com") // ViaVersion仓库
-    maven("https://repo.convallyria.com/snapshots")
-    maven("https://repo.aikar.co/content/groups/aikar/") // ACF仓库
-    maven("https://nexus.scarsz.me/content/repositories/releases") // Configuralize仓库
-    maven("https://repo.opencollab.dev/maven-snapshots/") // Floodgate（快照版）仓库
-    maven("https://repo.opencollab.dev/maven-releases/") // Floodgate（正式版）仓库
-    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-    maven("https://repo.grim.ac/snapshots") { // Grim API
-        content {
-            includeGroup("com.github.retrooper")
-        }
-    }
     maven("https://papermc.io/repo/repository/maven-releases/")
-    mavenCentral() // Maven中央仓库
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") // Spigot仓库
+    maven("https://repo.viaversion.com") // ViaVersion仓库
+    maven("https://mvn.lumine.io/repository/maven-public/") // Lumine仓库
+    maven("https://repo.aikar.co/content/groups/aikar/") // ACF仓库
+    maven("https://repo.opencollab.dev/maven-releases/") // Floodgate（正式版）仓库
+    maven("https://repo.opencollab.dev/maven-snapshots/") // Floodgate（快照版）仓库
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+    maven("https://repo.booky.dev/releases/") { content { includeGroup("net.kyori") } }
+    maven("https://repo.convallyria.com/snapshots")
+    mavenCentral() // Maven中央仓库 (放在最后，避免 429 影响前面的仓库解析)
 }
 
 dependencies {
@@ -90,7 +86,9 @@ dependencies {
     compileOnly("org.geysermc.floodgate:api:2.2.4-SNAPSHOT")
     compileOnly("io.netty:netty-all:4.1.85.Final")
     compileOnly(files("ViaVersion-5.10.1-SNAPSHOT.jar"))
-    compileOnly("io.lumine:Mythic-Dist:5.6.1")
+    // 原始: compileOnly("io.lumine:Mythic-Dist:5.6.1")
+    // mvn.lumine.io 仓库因 TLS 握手问题无法访问，使用本地 stub jar 满足编译期 API 要求
+    compileOnly(files("Mythic-Dist-stub.jar"))
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
 
     // Manifold 编译期处理器
