@@ -1,0 +1,92 @@
+name: NekoAntiCheat
+version: 1.6.0
+main: cn.dg32z.neko.NekoAntiCheat
+folia-supported: true
+load: POSTWORLD
+api-version: 1.13
+authors: [ "Dg32z_", "Kolleen", "P01_4rU5er", "ChengZhiYa", "KleeLoveLife", "OuHuang", "112233", "pi_ka", "tjshawa", "SharkGod", "Mr.He", "Avalbane_" ]
+
+permissions:
+  neko.staff:
+    children:
+      neko.brand: true
+      neko.exempt.cancel: true
+      neko.exempt.highpingkick: true
+      neko.exempt.setback: true
+      neko.commands.alert: true
+      neko.commands.freeze: true
+      neko.commands.unfreeze: true
+      neko.commands.decrypt: true
+      neko.commands.alerts.enable-on-join: true
+      neko.commands.spectate: true
+      neko.commands.mitigate: true
+      neko.commands.setback: true
+      neko.commands.stopspectating: true
+      neko.commands.record: true
+
+  neko.commands.alerts.enable-on-join:
+    description: Enable alerts on join
+    default: op
+
+  neko.commands.alerts.hover:
+    default: op
+
+  neko.brand:
+    description: Show client brands on join
+    default: op
+
+  neko.antiplugin:
+    default: op
+
+  neko.protocol:
+    description: Allow Neko custom payload protocol packets
+    default: false
+
+  neko.exempt:
+    description: Exempt from all checks
+    default: op
+    children:
+      neko.exempt.*: true
+
+  neko.exempt.shuffle:
+    description: Exempt shuffle from anticheat
+    default: op
+
+  neko.exempt.cancel:
+    description: Exempt cancel from anticheat
+    default: op
+
+  neko.exempt.highpingkick:
+    default: op
+
+  neko.exempt.modify:
+    description: Disable modifying packets
+    default: false
+
+  neko.exempt.setback:
+    description: Disable setback
+    default: op
+
+softdepend:
+  - ViaVersion
+  - ViaBackwards
+  - ViaRewind
+  - Geyser-Spigot
+  - floodgate
+  - PlaceholderAPI
+  - GSit
+  - MythicMobs
+  - Brewery
+  - MyPet
+  - MCPets
+  - CrackShot
+  - MBedwars
+  - Apollo-Bukkit
+  - Apollo-Folia
+  - LabyModServerAPI
+  - BadlionClientModAPI
+  - CraftEngine
+  - eco
+  - EcoItems
+  - EcoEnchants
+

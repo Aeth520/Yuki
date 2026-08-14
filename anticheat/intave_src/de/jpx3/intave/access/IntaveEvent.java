@@ -1,0 +1,31 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  org.bukkit.event.Event
+ *  org.bukkit.event.HandlerList
+ */
+package de.jpx3.intave.access;
+
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+
+public abstract class IntaveEvent
+extends Event {
+    private static final HandlerList handlers = new HandlerList();
+
+    public IntaveEvent() {
+        super(true);
+    }
+
+    public abstract void referenceInvalidate();
+
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+}
+

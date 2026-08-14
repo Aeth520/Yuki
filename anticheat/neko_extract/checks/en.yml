@@ -1,0 +1,775 @@
+# ******************************************************************************************************************************
+#  ███    ██     ███████     ██   ██      ██████      ██
+#  ████   ██     ██          ██  ██      ██    ██     ██
+#  ██ ██  ██     █████       █████       ██    ██     ██
+#  ██  ██ ██     ██          ██  ██      ██    ██
+#  ██   ████     ███████     ██   ██      ██████      ██
+# ******************************************************************************************************************************
+##############################################
+# Check Configuration
+# This file controls check thresholds, strictness presets, setback points and ignore lists.
+# Change values gradually and observe alerts before making large adjustments.
+##############################################
+
+##############################################
+# Movement Checks
+##############################################
+
+# MovementValidation
+# Master movement preset for the whole simulation-based movement stack.
+MovementValidation:
+  # strictness: Available presets: "strict" / "balanced" / "lenient" / "lenient_high" / "chaos" / "custom".
+  # Strict: strongest restriction, best for clean environments, but most likely to false flag.
+  # Balanced: recommended starting point for most servers.
+  # Lenient: more forgiving and safer for mixed environments.
+  # Lenient_high: very forgiving and mainly focused on stability.
+  # Chaos: the loosest preset, intended for highly unusual environments.
+  # Custom: uses the custom values below when supported by the check.
+  # Default: "balanced"
+  strictness: "balanced"
+
+  # special: Enables a special compatibility mode for unusual environments.
+  # Default: false
+  special: false
+
+  # silent: Records or alerts only without forcing setback handling from this option.
+  # Default: false
+  silent: false
+
+  # ignore-ghost-block: Skips this movement judgement when ghost-block conditions are involved.
+  # Default: false
+  ignore-ghost-block: false
+
+  # join-wait-time: Delay before checks begin after a player joins, in seconds.
+  # Default: 5
+  join-wait-time: 5
+
+  # decay: Reserved parameter kept for compatibility with this preset block.
+  # Default: 0.85
+  decay: 0.85
+
+# SpeedB
+# Main speed simulation check for ground, air and strafe movement.
+SpeedB:
+  # strictness: Uses the same preset meanings as MovementValidation.
+  # Strict = strongest but most demanding on environment quality.
+  # Balanced = recommended default for most servers.
+  # Lenient / Lenient_high = safer when compatibility matters more than raw pressure.
+  # Chaos = loosest preset for highly unusual environments.
+  # Custom = uses the values in the custom block below.
+  # Default: "balanced"
+  strictness: "balanced"
+
+  # setback-on-loss: Whether Neko should setback when prediction loss becomes too large.
+  # Default: true
+  setback-on-loss: true
+
+  custom:
+    # ground / air / strafe: Lower values are stricter.
+    ground: 0.019
+    air: 0.022
+    strafe: 0.03
+
+    # min-ground-speed / min-air-speed: Lower values let slower movement enter this analysis more often.
+    min-ground-speed: 0.11
+    min-air-speed: 0.12
+
+    # setback-offset-loss / advantage-cap: Lower values react earlier and suppress advantage sooner.
+    setback-offset-loss: 0.155
+    advantage-cap: 0.52
+
+    # strafe-angle: Lower values isolate sharper redirection sooner.
+    strafe-angle: 95.0
+
+# SpeedA
+SpeedA:
+  # multiplier: Main cap multiplier.
+  multiplier: 1.03
+
+SpeedC:
+  # setback-vl: Lower values react earlier.
+  setback-vl: 10
+
+SpeedD:
+  # setback-vl: Lower values react earlier.
+  setback-vl: 8
+
+# SpeedE
+# Compares the prediction engine offset against thresholds.
+SpeedE:
+  # max-offset: Offset above this starts scoring. Flying players are checked too
+  # unless function.flying-check.abilities is true (abilities-based flying exempt).
+  max-offset: 0.001
+  # max-setback-offset: Immediate intervention threshold on excess.
+  max-setback-offset: 0.05
+
+GravityB:
+  # setback-vl: Lower values react earlier.
+  setback-vl: 10
+
+# WebOffset
+# Offset check for cobweb movement, corresponding to NoWebA.
+WebOffset: # Corresponds to NoWebA
+  # strictness: Usually keep this aligned with MovementValidation first.
+  # Presets: strict / balanced / lenient / lenient_high / chaos / custom.
+  # Default: "balanced"
+  strictness: "balanced"
+
+# ElytraOffset
+# Offset check for elytra movement, corresponding to ElytraB.
+ElytraOffset: # Corresponds to ElytraB
+  # strictness: Tune this separately only when elytra environments need special handling.
+  # Presets: strict / balanced / lenient / lenient_high / chaos / custom.
+  # Default: "balanced"
+  strictness: "balanced"
+
+# LiquidOffset
+# Offset check for liquid movement, corresponding to JesusA.
+LiquidOffset: # Corresponds to JesusA
+  # strictness: Water-heavy environments often start by adjusting this branch.
+  # Presets: strict / balanced / lenient / lenient_high / chaos / custom.
+  # Default: "balanced"
+  strictness: "balanced"
+
+# VehicleOffset
+# Offset check for vehicle movement, corresponding to VehicleFlyA.
+VehicleOffset: # Corresponds to VehicleFlyA
+  # strictness: Vehicle-heavy servers usually tune this separately before touching broader movement presets.
+  # Presets: strict / balanced / lenient / lenient_high / chaos / custom.
+  # Default: "balanced"
+  strictness: "balanced"
+
+# JumpA
+# HighJump vertical motion check.
+JumpA:
+  # max-offset: Lower values are stricter.
+  max-offset: 0.00085
+  # setback-offset: Harder protection line for immediate interruption. Lower values react earlier.
+  setback-offset: 0.01
+
+# JumpB
+# LowJump vertical motion check split from JumpA.
+JumpB:
+  # max-offset: Lower values are stricter.
+  max-offset: 0.00085
+  # setback-offset: Harder protection line for immediate interruption.
+  setback-offset: 0.01
+
+PhaseA:
+  # setback-vl: Lower values setback earlier.
+  setback-vl: 5
+  # trust-next-ground: More forgiving around the next ground-state edge when enabled.
+  trust-next-ground: true
+  # block-blacklist: Blocks excluded from this path to avoid troublesome edge cases.
+  block-blacklist:
+    - SAND
+    - CHEST
+    - BEDROCK
+    - BAMBOO
+
+NoSlowA:
+  # strict: More aggressive variant. Leave off unless you really need extra pressure here.
+  strict: false
+  # threshold: Lower values react earlier.
+  threshold: 0.012
+  # setback-vl: Lower values setback earlier.
+  setback-vl: 10
+  # decay: Higher values clear the accumulated weight faster.
+  decay: 0.55
+  # setback-threshold: Lower values interrupt earlier.
+  setback-threshold: 0.12
+  # mitigate-vl: Lower values begin mitigation earlier.
+  mitigate-vl: 10
+
+NoSlowH:
+  # setback-vl: Lower values setback earlier.
+  setback-vl: 10
+  # decay: Higher values clear the accumulated weight faster.
+  decay: 2
+
+GroundSpoofA:
+  # setback-vl: Lower values setback earlier.
+  setback-vl: 7
+  # ignore-ghost: More forgiving around ghost-block influence when enabled.
+  ignore-ghost: false
+
+GroundSpoofB:
+  # setback-vl: Lower values setback earlier.
+  setback-vl: 8
+  # ignore-ghost: This branch is more willing to skip ghost-block influence.
+  ignore-ghost: true
+
+GroundSpoofC:
+  # setback-vl: Lower values setback earlier.
+  setback-vl: 7
+
+NoSaddleA:
+  # setback-vl: Early protection line for controlled-entity behaviour.
+  setback-vl: 1
+
+NoSaddleB:
+  # setback-vl: Early protection line for the secondary controlled-entity branch.
+  setback-vl: 1
+
+
+##############################################
+# Placement and Scaffold Checks
+# These checks mainly operate around placement order, support visibility and scaffold-style movement.
+##############################################
+
+InteractD:
+  # cancel-vl: Cancel threshold for this placement path.
+  # Smaller values interrupt earlier.
+  cancel-vl: 3
+
+FarPlace:
+  # only-crystal: Restricts this to crystal placement contexts only.
+  only-crystal: false
+  # cancel-vl: Cancel threshold.
+  cancel-vl: 3
+  # kick-range: Hard safety line for extreme placement distance.
+  kick-range: 15
+
+Scaffold2:
+  # cancel-vl: Cancel threshold for this scaffold path.
+  cancel-vl: 5
+
+InteractF:
+  # cancel-vl: Lower values interrupt earlier.
+  cancel-vl: 9
+
+ScaffoldB:
+  # cancel-vl: Cancel threshold.
+  cancel-vl: 12
+  # check-god-bridge: Enables tighter handling for extreme bridge patterns.
+  check-god-bridge: false
+
+ScaffoldH:
+  # cancel-vl: Lower values interrupt earlier.
+  cancel-vl: 7
+
+ScaffoldI:
+  # cancel-vl: Lower values interrupt earlier.
+  cancel-vl: 5
+
+ScaffoldK:
+  # cancel-vl: Mainly affects downward scaffold interruption timing.
+  cancel-vl: 3
+
+
+##############################################
+# Combat Checks
+# These checks mainly use rotation samples, hit visibility, reach and knockback-related behaviour.
+##############################################
+
+AimF:
+  # buffer: Smaller values react earlier.
+  buffer: 12
+  # min-deltaX: Lower values include finer horizontal movement.
+  min-deltaX: 0.4D
+  # max-deltaX-accel: Lower values are stricter.
+  max-deltaX-accel: 0.1D
+  # max-rotation-angle: Lower values allow less abrupt turn size.
+  max-rotation-angle: 5D
+
+AimG:
+  # buffer: Smaller values react earlier.
+  buffer: 7
+  # min-deltaY: Lower values include finer vertical movement.
+  min-deltaY: 0.4D
+  # max-deltaY-accel: Lower values are stricter.
+  max-deltaY-accel: 0.1D
+
+AimH:
+  # buffer: Smaller values react earlier.
+  buffer: 7
+  min-deltaX: 1D
+  # max-deltaY: Lower values are stricter around vertical consistency.
+  max-deltaY: 0.0001D
+
+AimM:
+  # sample-size: Larger values are steadier but slower to conclude.
+  sample-size: 25
+  # max-invalid-rows: Lower values tolerate fewer broken rows inside one sample window.
+  max-invalid-rows: 3
+  # min-row-length: Lower values let shorter repeating rows count sooner.
+  min-row-length: 3
+  # min-average-rot: Lower values allow this to begin on smaller overall movement.
+  min-average-rot: 1.5
+  # buffer: Smaller values react earlier.
+  buffer: 5
+  # mitigate-vl: Lower values start mitigation earlier.
+  mitigate-vl: 4
+
+AnalysisB:
+  # buffer: Smaller values react earlier.
+  buffer: 2.85
+  # min-possibility: Lower values let this confirmation stage start earlier.
+  min-possibility: 85
+  # only-player: Restricts this confirmation branch to player targets only.
+  only-player: true
+  # decay: Higher values clear the stored weight faster.
+  decay: 0.015
+
+AnalysisH:
+  # only-player: Restricts the analysis target type.
+  only-player: false
+
+KillAuraF:
+  # min-flag-interval-ms: Minimum interval between alerts in milliseconds.
+  min-flag-interval-ms: 300
+
+KillAuraG:
+  # accuracy: Higher values are pickier.
+  accuracy: 95
+  # size: Larger values are steadier but slower.
+  size: 200
+  # reach: Lower values keep the target-distance requirement tighter.
+  reach: 1.2
+  # combat-time: Time window in seconds used for this branch. Larger values keep more of the same fight together.
+  combat-time: 8
+  # only-player: Restricts this branch to player targets only.
+  only-player: true
+  # min-average-target-movement: Lower values allow this to work on slower-moving targets more often.
+  min-average-target-movement: 0.325
+  # min-cps: Minimum CPS before this branch starts caring.
+  min-cps: 6
+  # should-cancel: Cancels hits once this branch is active.
+  should-cancel: true
+
+KillAuraJ:
+  # max-sample: Larger values are steadier but slower to conclude.
+  max-sample: 1600
+  # min-ping-diff: Lower values react earlier to divergence between timing sources.
+  min-ping-diff: 70
+  # min-receive-diff: Lower values react earlier to suspicious receive-side delay.
+  min-receive-diff: 70
+  # min-update-diff: Lower values react earlier to delayed movement updates during combat.
+  min-update-diff: 100
+  # min-combat-ratio: Lower values allow this branch to act with a smaller suspicious ratio.
+  min-combat-ratio: 0.9
+  # min-invalid-samples: Minimum amount of suspicious samples required before this branch can settle on a result.
+  min-invalid-samples: 16
+
+KillAuraK:
+  # percentile-threshold: Delay percentile above which a gap is considered anomalous (1-100). Higher = stricter.
+  percentile-threshold: 99
+  # chi-threshold: Minimum chi-squared for lag-vs-combat correlation. Higher = needs stronger evidence.
+  chi-threshold: 6.0
+
+
+VelocityA:
+  # strictness: Same preset meaning as the movement presets above.
+  strictness: "balanced"
+  # exempt-when-colliding-with-blocks: More forgiving around tight collision-heavy terrain when enabled.
+  exempt-when-colliding-with-blocks: false
+
+VelocityB:
+  # threshold: Lower values react earlier.
+  threshold: 0.085
+  # setback-vl: Lower values setback earlier.
+  setback-vl: 3
+  # ignore-invalid: More forgiving around invalid explosion-state samples when enabled.
+  ignore-invalid: false
+
+AutoBlock:
+  # setback-vl: Lower values setback earlier.
+  setback-vl: 6
+
+KillAuraC:
+  # block-blacklist: Blocks excluded from this visibility path to avoid troublesome edge cases.
+  block-blacklist:
+    - sand
+    - chest
+
+Reach:
+  # when checking if a ray intersects the entity hitbox.
+  # Increase this if Hitboxes false-flags on your server due to interpolation desync.
+  # 0.0 = strict (original Grim behavior), 0.1 = lenient, 0.2+ = very lenient
+  extra-expansion: 0.01
+  # threshold: Lower values are stricter.
+  threshold: 0.01
+  # buffer: Smaller values reach reaction stages sooner.
+  buffer: 2
+  # increment: Larger values accumulate faster per hit.
+  increment: 0.5
+  # decay: Larger values clear accumulated suspicion faster.
+  decay: 0.45
+  # ignore-non-player-targets: Restricts this branch more heavily to player combat when enabled.
+  ignore-non-player-targets: false
+  # block-impossible-hits: Stops obviously impossible hit paths more aggressively.
+  block-impossible-hits: true
+  # component-change-mitigation: Extra 1.21.11+ attack-range-component sanity gate.
+  # Disable this if rapid same-tick slot swaps still create Reach edge cases on your setup.
+  component-change-mitigation: true
+  # invalid-equipment-attribute-change: False-positive fix for same-tick multi-slot
+  # equipment attribute swaps when the final attack item exposes ATTACK_RANGE but start-of-tick state does not.
+  invalid-equipment-attribute-change: false
+  # ignore-ender-dragon: Ignores dragon hits when enabled.
+  ignore-ender-dragon: false
+  # tolerant-box-moving: More forgiving while targets are moving when enabled.
+  tolerant-box-moving: false
+  # entity-blacklist: Entities excluded from this branch to avoid unreliable edge cases.
+  entity-blacklist:
+    - BAT
+    - ITEM_FRAME
+    - AREA_EFFECT_CLOUD
+    - BOAT
+    - SQUID
+    - ELDER_GUARDIAN
+    - SLIME
+    - HORSE
+    - ABSTRACT_HORSE
+    - CHESTED_HORSE
+    - SKELETON_HORSE
+    - ZOMBIE_HORSE
+    - ARMOR_STAND
+    - GUARDIAN
+    - CHEST_BOAT
+    - SHULKER
+    - CAT
+
+
+##############################################
+# Click and Behaviour Checks
+# These checks focus on click rhythm, timer drift, packet order and inventory interaction patterns.
+##############################################
+
+AutoClickerA:
+  # Left-click (attack) settings.
+  left-click:
+    # max-cps: Max left clicks per second. Set -1 to disable left-click check.
+    max-cps: 30
+    # vl-multiplier: VL added per 1 CPS over the cap.
+    vl-multiplier: 0.5
+    # cancel: Whether to cancel the animation packet on flag.
+    cancel: false
+  # Right-click (placement) settings.
+  right-click:
+    # limit: Max placements in the window. Set -1 to disable right-click check.
+    limit: 26
+    # window-ms: Time window in ms for counting placements.
+    window-ms: 1000
+    # vl-multiplier: VL added per 1 placement over the limit.
+    vl-multiplier: 0.5
+    # cancel: Whether to cancel the placement and resync the block on flag.
+    cancel: false
+
+AutoClickerE:
+  # min-cps: Minimum CPS before this pattern is evaluated.
+  min-cps: 16
+  # max-kurtosis: Lower values treat unusual rhythm shapes more aggressively.
+  max-kurtosis: 4
+  # should-cancel: Cancels only after this branch has built enough weight.
+  should-cancel: false
+
+AutoClickerF:
+  # sample-size: Larger values are steadier but slower.
+  sample-size: 100
+  # max-delta: Lower values are stricter.
+  max-delta: 0.015
+  # max-similarity: Lower values treat repeated rhythm more aggressively.
+  max-similarity: 0.8
+  # threshold: Smaller values react earlier.
+  threshold: 5
+
+BadPacketsO:
+  # skips: Lower values tolerate fewer missed transaction/confirm responses.
+  skips: 0
+  # join-time: Grace period after join, in seconds.
+  join-time: 5
+
+BadPacketsU:
+  # max-time-offset: Max tolerated time offset before this path starts caring.
+  # Lower values are stricter; higher values are more forgiving.
+  max-time-offset: 50
+
+TimerA:
+  # setback-vl: Lower values setback earlier.
+  setback-vl: 10
+  # drift: Allowed carried timing slack. Larger values are more forgiving but also softer.
+  drift: 150
+  # ping-abuse-limit-threshold: Lower values react to ping abuse earlier.
+  ping-abuse-limit-threshold: 500
+  # ignored-teleport-tick: More forgiving around teleport edges when enabled.
+  ignored-teleport-tick: false
+
+TimerD:
+  # setback-vl: Lower values setback earlier.
+  setback-vl: 20
+  # min-rate: Packet-rate gate. The balance check only runs after the client packet
+  #            rate reaches this multiplier (measured via CLIENT_TICK_END or POS packets).
+  #            Set it above the acceleration you want to allow, e.g. 1.15 allows ~1.1x.
+  min-rate: 1.01
+
+TimerB:
+  # setback-vl: Lower values setback earlier.
+  setback-vl: 6
+
+TimerC:
+  # negative-streak-threshold: Number of consecutive clearly-slow movement ticks required before negative timer is considered active.
+  negative-streak-threshold: 40
+  # multiply-threshold: Negative timer ratio threshold; samples must stay below this to build buffer. The code clamps it to at most 0.96.
+  multiply-threshold: 0.85
+  # max-buffer: Buffer threshold required before the check alerts.
+  max-buffer: 10.0
+
+InventoryM:
+  # mitigate: Applies stronger follow-up handling when this branch lands.
+  # Enable this if you want the branch to do more than just log.
+  mitigate: true
+  std:
+    # std: Lower values are more sensitive to unusually stable or unusual rhythm.
+    swap: 3.0
+    throw: 1.75
+  limit:
+    # limit: Caps how much of each action can pile up inside the short window.
+    quick-move: 12
+    throw: 10
+    pick-up: 6
+
+InventoryL:
+  # max-open-ticks: Larger values keep the post-open window active longer.
+  max-open-ticks: 10
+  # threshold: Smaller values react earlier.
+  threshold: 4
+
+LagAssistI:
+  # max-queue-size: Lower values treat queue buildup as suspicious earlier.
+  max-queue-size: 4
+  # min-keepalive-delta: Lower values react earlier to ping divergence.
+  min-keepalive-delta: 100
+  # min-transaction-delta: Lower values react earlier to transaction spike changes.
+  min-transaction-delta: 100
+  # min-ticks: Grace period before the branch starts.
+  # Larger values are more conservative.
+  min-ticks: 300
+  # threshold: Smaller values react earlier.
+  threshold: 65
+
+LagAssistH:
+  # hitbox-margin: Extra margin added to the hitbox for reach calculation.
+  hitbox-margin: 0.13
+  # min-pending-transactions: Minimum pending transactions required for backtrack evidence.
+  min-pending-transactions: 2
+  # min-queue-size: Minimum queued transactions required for backtrack evidence.
+  min-queue-size: 3
+  # min-ticks: Minimum player ticks before detection starts.
+  min-ticks: 300
+  # min-reach-delta: Smaller values react earlier to reach anomalies.
+  min-reach-delta: 0.075
+  # min-server-client-offset: Minimum hitbox offset between client-stale and server-latest positions.
+  min-server-client-offset: 0.03125
+  # threshold: Smaller values react earlier.
+  threshold: 7.5
+
+FarBreak:
+  # setback-vl: Lower values setback earlier.
+  setback-vl: 3
+  # kick-range: Hard safety line for extreme break distance.
+  kick-range: 15
+
+FastBreakC:
+  # diff: How many ms earlier than the expected dig time this branch still allows.
+  # Values closer to 0 are stricter; lower negative values are more forgiving.
+  # It is usually safer to keep this below zero so normal latency and version edge cases still have some room.
+  diff: -125
+
+FastPlaceB:
+  # sample-size: Larger values are steadier but slower.
+  sample-size: 40
+  # max-deviation: Lower values react more strongly to overly stable timing.
+  max-deviation: 0.4125
+
+AutoAnchorA:
+  # instant-charge-ms: Flags when place -> glowstone delay is at or below this value, in ms.
+  instant-charge-ms: 25
+
+AutoAnchorB:
+  # charge-spread-ms: Max spread between the smallest and largest sampled charge delays, in ms.
+  charge-spread-ms: 10
+  # rhythm-samples: Number of samples needed before the stable-charge check evaluates.
+  rhythm-samples: 5
+  # charge-window-ms: Max place -> glowstone delay accepted into the sample window, in ms.
+  charge-window-ms: 200
+  # idle-reset-ms: Clears the sample window after this much idle time, in ms.
+  idle-reset-ms: 8000
+
+AutoTotemI:
+  # refill-probe-ms: Max observation window after a totem pop, in ms.
+  refill-probe-ms: 150
+  # min-refill-ms: Ignores clicks earlier than this after a totem pop, in ms.
+  min-refill-ms: 40
+
+InteractB:
+  # ignored-blocks: Blocks ignored by this visibility path.
+  ignored-blocks: []
+
+XRayA:
+  # blocks: Keep this focused on the high-value blocks you actually care about.
+  blocks:
+    - DIAMOND_ORE
+    - DEEPSLATE_DIAMOND_ORE
+    - DEEPSLATE_REDSTONE_ORE
+    - DEEPSLATE_GOLD_ORE
+    - DEEPSLATE_COPPER_ORE
+    - DEEPSLATE_EMERALD_ORE
+    - DEEPSLATE_LAPIS_ORE
+    - ANCIENT_DEBRIS
+    - GOLD_ORE
+    - COPPER_ORE
+    - REDSTONE_ORE
+    - LAPIS_ORE
+    - EMERALD_ORE
+
+XRayB:
+  # blocks: Add extra ore types here
+  blocks:
+    - DIAMOND_ORE
+    - DEEPSLATE_DIAMOND_ORE
+    - DEEPSLATE_REDSTONE_ORE
+    - DEEPSLATE_GOLD_ORE
+    - DEEPSLATE_COPPER_ORE
+    - DEEPSLATE_EMERALD_ORE
+    - DEEPSLATE_LAPIS_ORE
+    - ANCIENT_DEBRIS
+    - GOLD_ORE
+    - COPPER_ORE
+    - REDSTONE_ORE
+    - LAPIS_ORE
+    - EMERALD_ORE
+  # envi-detection-range: Sampling radius used for nearby natural-exposure checks.
+  envi-detection-range: 3
+  # air-threshold: Air exposure count needed before the ore is treated as naturally exposed.
+  air-threshold: 14
+  # cave-air-multiplier: Weight applied when counting cave_air as exposure.
+  cave-air-multiplier: 5
+  # max-cluster-distance: Maximum connected distance when treating ores as part of the same vein.
+  max-cluster-distance: 5
+  # cluster-threshold: Number of suspicious vein transitions required before this branch alerts.
+  cluster-threshold: 3
+  # turn-threshold: Maximum obvious turn count tolerated in the mined path.
+  turn-threshold: 10
+  # branch-threshold: Maximum branching pattern count tolerated in the mined path.
+  branch-threshold: 6
+  # y-change-threshold: Maximum large Y-change count tolerated in the mined path.
+  y-change-threshold: 4
+
+XRayD:
+  # blocks: Empty means inherit XRayA.blocks.
+  blocks: []
+  # retention-seconds: How long explosion-exposed ore positions remain relevant.
+  retention-seconds: 600
+  # match-radius: Position tolerance when matching a mined ore to an explosion exposure.
+  match-radius: 1
+  # suspicious-rate: Minimum explosion-exposed ore hit rate before this check alerts.
+  suspicious-rate: 0.1
+  # penalty-multiplier: Buffer gain when a mined ore was exposed by a recent explosion.
+  penalty-multiplier: 2.0
+  # min-samples: Minimum ore samples before evaluating the hit rate.
+  min-samples: 8
+  # min-hits: Minimum explosion-exposed ore hits before evaluating the hit rate.
+  min-hits: 2
+  # buffer: Minimum buffer before alerting.
+  buffer: 2.0
+  environment:
+    # radius: Nearby block scan radius used by cave/liquid false-positive filters.
+    radius: 3
+    # air-count: Weighted air count treated as natural cave exposure.
+    air-count: 14
+    # cave-air-multiplier: CAVE_AIR weight.
+    cave-air-multiplier: 5
+    # water-count/lava-count: Liquid exposure thresholds.
+    water-count: 14
+    lava-count: 14
+
+XRayE:
+  # blocks: Empty means inherit XRayA.blocks.
+  blocks: []
+  # path-max-blocks: Maximum retained mining path blocks.
+  path-max-blocks: 500
+  # cleanup-after-minutes: Path history retention after inactivity.
+  cleanup-after-minutes: 15
+  # min-path-blocks: Minimum blocks between ore hits before path analysis runs.
+  min-path-blocks: 10
+  # turning-limit/branching-limit/y-shift-limit: Path feature limits before the path is suspicious.
+  turning-limit: 10
+  branching-limit: 6
+  y-shift-limit: 4
+  # y-shift-min: Minimum vertical jump counted as one Y-shift.
+  y-shift-min: 3
+  # buffer: Minimum buffer before alerting.
+  buffer: 2.0
+  environment:
+    radius: 3
+    air-count: 14
+    cave-air-multiplier: 5
+    water-count: 14
+    lava-count: 14
+  fake-cave-detection:
+    # enabled: Tracks artificial open-tunnel context without exempting the path.
+    enabled: true
+    min-blocks: 10
+    radius: 1
+    sample-limit: 20
+    air-ratio: 0.3
+    max-triggers: 5
+    reset-minutes: 20
+
+XRayF:
+  # blocks: Empty means inherit XRayA.blocks.
+  blocks: []
+  # distance: Max radius used when counting blocks in the same ore vein.
+  distance: 5
+  # small-size: Veins smaller than this are considered small.
+  small-size: 4
+  # trigger-count: Consecutive small veins required before alerting.
+  trigger-count: 3
+  # max-scan-blocks: Hard cap for vein BFS.
+  max-scan-blocks: 96
+  # buffer: Minimum buffer before alerting.
+  buffer: 1.0
+  environment:
+    radius: 3
+    air-count: 14
+    cave-air-multiplier: 5
+    water-count: 14
+    lava-count: 14
+
+#############################################
+# Misc Checks
+# Client brand checks and spam handling are grouped here.
+##############################################
+
+ClientA:
+  # check-for-meteor: Leave disabled unless you really want to rely on that brand signal.
+  check-for-meteor: false
+
+ClientB:
+  # check-tweaker-oo: Uses extra brand-side hints. More useful when you trust brand information.
+  check-tweaker-oo: true
+
+SpamB:
+  # should-cancel: Cancels messages after this path is active.
+  should-cancel: true
+  threshold:
+    # cancel-vl: Lower values cancel earlier.
+    cancel-vl: 5
+    # similarity: Lower values treat repeated content as the same message more aggressively.
+    similarity: 0.8
+  frequency-detection:
+    # fast-threshold: Lower values are stricter on repeated sending rate.
+    fast-threshold: 3
+  history-settings:
+    # message-history: Larger values keep a longer repeated-message chain for comparison.
+    message-history: 5
+  alert-settings:
+    # enable: Sends a warning when this branch reacts.
+    enable: true
+
+# BlinkC
+# Detects stuck-in-air blink cheats by comparing time since last ground tick against interaction timing.
+BlinkC:
+  # air-tolerance: Maximum allowed time (ms) between last on-ground tick and interaction before flagging.
+  # Lower values are stricter; higher values are more forgiving for high-ping players.
+  air-tolerance: 100

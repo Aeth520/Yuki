@@ -1,0 +1,874 @@
+# 检测参数配置
+# 这里控制各项检测的开关阈值、缓解时机和少量例外名单。
+# 建议先观察告警，再逐项调整，不要一次改很多项。
+
+##############################################
+# 移动类检测
+##############################################
+
+# MovementValidation
+# 总移动校验的主预设。通常先调整这里，再去改单项移动检测。
+MovementValidation:
+  # strictness: 移动预设强度。
+  # 越严格越容易拦截异常移动，也越依赖服务器环境稳定。
+  # Strict: 最严格，能拦更多异常移动，但更依赖环境干净，误报风险也最高。
+  # Balanced: 平衡模式，适合大多数常规服务器。
+  # Lenient: 更宽松，适合环境较复杂或更注重稳定性的服务器。
+  # Lenient_high: 非常宽松，适合兼容优先的环境。
+  # Chaos: 极宽松，适合玩法很特殊、限制较少的服务器。
+  # Custom: 使用下面自定义参数。
+  # Default (默认值): "balanced"
+  strictness: "balanced"
+
+  # special: 是否启用特殊兼容模式。
+  # 只在你的服存在特殊地形、特殊移动机制或明显环境干扰时再打开。
+  # Default (默认值): false
+  special: false
+
+  # silent: 命中后只记录或告警，不执行拉回。
+  # Default (默认值): false
+  silent: false
+
+  # ignore-ghost-block: 涉及幽灵方块时是否跳过这部分移动判断。
+  # Default (默认值): false
+  ignore-ghost-block: false
+
+  # join-wait-time: 玩家进服后延迟多久再开始检查，单位为秒。
+  # Default (默认值): 5
+  join-wait-time: 5
+
+  # decay: 预留参数。当前主要还是以 strictness 预设为主。
+  # Default (默认值): 0.85
+  decay: 0.85
+
+# SpeedB
+# 常规速度模拟检测，覆盖地面、空中和变向移动。
+SpeedB:
+  # strictness: 该检测自己的强度预设。
+  # strict / balanced / lenient / lenient_high / chaos / custom 的含义与上面一致。
+  # Default (默认值): "balanced"
+  strictness: "balanced"
+
+  # setback-on-loss: 偏差过大时是否直接拉回。
+  # Default (默认值): true
+  setback-on-loss: true
+
+  # custom: 仅在 strictness = "custom" 时生效。
+  custom:
+    # 基础阈值。值越小越严格。
+    ground: 0.019
+    air: 0.022
+    strafe: 0.03
+
+    # 低于这些速度时通常不进入该项判定。
+    # 越低越容易把更慢的移动也带进分析。
+    min-ground-speed: 0.11
+    min-air-speed: 0.12
+
+    # 拉回与优势限制相关参数。
+    # setback-offset-loss 越小越早拉回；advantage-cap 越小越早压住优势。
+    setback-offset-loss: 0.155
+    advantage-cap: 0.52
+
+    # 变向判定角度。
+    # 越小越容易把斜拉、急拐这类动作单独看待。
+    strafe-angle: 95.0
+
+# SpeedA
+SpeedA:
+  # multiplier: 主速度上限倍率。
+  multiplier: 1.03
+
+# SpeedC
+# 处理空中阶段的异常加速。
+SpeedC:
+  # setback-vl: 当检测到异常时多少vl才进行拉回。
+  # 越小越早介入。
+  setback-vl: 10
+
+# SpeedD
+# 处理梯子、藤蔓等攀爬场景的异常速度。
+SpeedD:
+  # setback-vl: 当检测到异常时多少vl才进行拉回。
+  # 越小越早介入。
+  setback-vl: 8
+
+# SpeedE
+# 直接比较预测引擎计算出的 offset 与阈值。
+SpeedE:
+  # max-offset: offset 超过该值时开始计分。飞行玩家同样会被检查,
+  # 除非 function.flying-check.abilities 为 true(视为能力飞行而豁免)。
+  max-offset: 0.001
+  # max-setback-offset: 超过该差值立即介入拉回。
+  max-setback-offset: 0.05
+
+# GravityB
+# 处理鞘翅相关的重力异常。
+GravityB:
+  # setback-vl: 当检测到异常时多少vl才进行拉回。
+  # 越小越早介入。
+  setback-vl: 10
+
+# WebOffset
+# 蜘蛛网场景下的偏移检测，对应 NoWebA。
+WebOffset: # 对应NoWebA
+  # strictness: 该检测自己的强度预设。
+  # Default (默认值): "balanced"
+  # 建议先和 MovementValidation 保持同级，再看单项是否需要收紧。
+  strictness: "balanced"
+
+# ElytraOffset
+# 鞘翅移动的偏移检测，对应 ElytraB。
+ElytraOffset: # 对应ElytraB
+  # strictness: 该检测自己的强度预设。
+  # Default (默认值): "balanced"
+  # 鞘翅环境特殊时再单独调整这一项。
+  strictness: "balanced"
+
+# LiquidOffset
+# 液体中的偏移检测，对应 JesusA。
+LiquidOffset: # 对应JesusA
+  # strictness: 该检测自己的强度预设。
+  # Default (默认值): "balanced"
+  # 液体玩法多时更适合先从这里做宽松处理。
+  strictness: "balanced"
+
+# VehicleOffset
+# 载具移动的偏移检测，对应 VehicleFlyA。
+VehicleOffset: # 对应VehicleFlyA
+  # strictness: 该检测自己的强度预设。
+  # Default (默认值): "balanced"
+  # 载具玩法多时建议优先单独调整这一项。
+  strictness: "balanced"
+
+# JumpA
+# 处理异常高跳。
+JumpA:
+  # max-offset: 移动偏移阈值，当玩家的实际移动与预测移动的偏移超过此值时触发检测
+  # 值越小检测越严格
+  max-offset: 0.00085
+  # setback-offset: 立即拉回阈值，当偏移超过此值时立即拉回玩家
+  # 这是更强的保护线，越小越容易直接介入。
+  setback-offset: 0.01
+
+# JumpB
+# 处理异常低跳，从 JumpA 拆分。
+JumpB:
+  # max-offset: 移动偏移阈值，当玩家的实际移动与预测移动的偏移超过此值时触发检测
+  max-offset: 0.00085
+  # setback-offset: 立即拉回阈值，当偏移超过此值时立即拉回玩家
+  setback-offset: 0.01
+
+# PhaseA
+# 处理玩家进入方块或贴方块移动的异常情况。
+PhaseA:
+  # setback-vl: 当检测到异常时多少vl才进行拉回
+  setback-vl: 5
+  # trust-next-ground: 是否在下一次地面状态切换时给一次额外宽容。
+  # 开启后更偏兼容，复杂地形里更稳。
+  trust-next-ground: true
+  # block-blacklist: 这些方块不参与该项检测。
+  # 用于排除容易造成边缘问题的方块。
+  block-blacklist:
+    - SAND
+    - CHEST
+    - BEDROCK
+    - BAMBOO
+
+# NoSlowA
+# 主要处理使用物品时的异常不减速。
+NoSlowA:
+  # strict: 是否启用更严格的判定。只建议在误报可控时开启。
+  strict: false
+  # threshold: 检测阈值，高于该值可能触发检测。
+  # 越小越容易更早累计。
+  threshold: 0.012
+  # setback-vl: 当检测到异常时多少vl才进行拉回
+  setback-vl: 10
+  # decay: 预留参数。当前不建议把它当作主要调节项。
+  decay: 0.55
+  # setback-threshold: 拉回阈值，高于该值触发拉回。
+  # 越小越容易直接打断。
+  setback-threshold: 0.12
+  # mitigate-vl: 达到多少后开始做缓解处理。
+  # 越小越早开始附加处理。
+  mitigate-vl: 10
+
+# NoSlowH
+# 作为额外的不减速补充检测。
+NoSlowH:
+  # setback-vl: 当检测到异常时多少vl才进行拉回
+  setback-vl: 10
+  # decay: 该项内部缓冲的衰减速度。
+  # 越大掉得越快。
+  decay: 2
+
+# GroundSpoofA
+# 处理地面状态异常。
+GroundSpoofA:
+  # setback-vl: 当检测到异常时多少vl才进行拉回
+  setback-vl: 7
+  # ignore-ghost: 幽灵方块场景下是否跳过该项判断。
+  # 开启后更宽松。
+  ignore-ghost: false
+
+# GroundSpoofB
+# 另一组地面状态异常检测。
+GroundSpoofB:
+  # setback-vl: 当检测到异常时多少vl才进行拉回
+  setback-vl: 8
+  # ignore-ghost: 幽灵方块场景下是否跳过该项判断。
+  # 这一组默认更愿意绕开 ghost-block 影响。
+  ignore-ghost: true
+
+# GroundSpoofC
+# 地面状态异常的进阶补充项。
+GroundSpoofC:
+  # setback-vl: 当检测到异常时多少vl才进行拉回。
+  setback-vl: 7
+
+# NoSaddleA
+# 处理玩家控制实体时的异常输入。
+NoSaddleA:
+  # setback-vl: 当检测到异常时多少vl才进行拉回
+  # 因为这是实体控制场景，所以默认保护线更早。
+  setback-vl: 1
+
+# NoSaddleB
+# 另一组实体控制异常检测。
+NoSaddleB:
+  # setback-vl: 当检测到异常时多少vl才进行拉回
+  setback-vl: 1
+
+##############################################
+# 放置与搭路类检测
+##############################################
+
+# InteractD 检查：检测空中或无有效支撑的异常放置。
+InteractD:
+  # cancel-vl: 当检测到异常空中放置行为时的撤销阈值。
+  # 越小越容易更早取消这类放置。
+  cancel-vl: 3
+
+# FarPlace 检查：检测远距离放置行为，支持仅针对水晶情况检测。
+FarPlace:
+  # only-crystal: 是否仅检测水晶相关放置。
+  # 如果你的服大量使用水晶玩法，可以先从这里判断是否只针对那部分场景收紧。
+  only-crystal: false
+  # cancel-vl: 撤销行为阈值。
+  cancel-vl: 3
+  # kick-range: 当玩家的放置距离超过这个值就直接踢出
+  # 这是更强的保护线，一般不建议设得太低。
+  kick-range: 15
+
+# Scaffold2 检查：检测伪造放置行为。
+Scaffold2:
+  # cancel-vl: 撤销行为阈值。
+  # 越小越容易更早打断这类放置链。
+  cancel-vl: 5
+
+# InteractF 检查：检测放置时是否真的看到了目标方块。
+InteractF:
+  # cancel-vl: 撤销行为阈值。
+  # 越小越容易更早打断。
+  cancel-vl: 9
+
+# ScaffoldB 检查：检测建筑时的旋转异常。
+ScaffoldB:
+  # cancel-vl: 撤销行为阈值。
+  cancel-vl: 12
+  # check-god-bridge: 是否检测神桥
+  # 开启后会更关注极限搭路动作，兼容要求也更高。
+  check-god-bridge: false
+
+# ScaffoldH 检查：检测建筑时的旋转异常。
+ScaffoldH:
+  # cancel-vl: 撤销行为阈值。
+  # 越小越容易更早打断。
+  cancel-vl: 7
+
+# ScaffoldH 检查：检测建筑时的旋转异常。
+ScaffoldI:
+  # cancel-vl: 撤销行为阈值。
+  # 越小越容易更早打断。
+  cancel-vl: 5
+
+# ScaffoldK 检查：检测玩家在地面时向下搭路的异常放置。
+ScaffoldK:
+  # cancel-vl: 撤销行为阈值。
+  # 主要影响向下搭路时的打断时机。
+  cancel-vl: 3
+
+##############################################
+# 战斗类检测
+##############################################
+
+# AimF 检查：用于检测旋转作弊，主要检测X轴旋转变化、加速度和旋转角度。
+AimF:
+  # buffer: 检测缓冲区分数，当累计分超过该值则判定为作弊。
+  # 越小越早介入。
+  buffer: 12
+  # min-deltaX: 最小X轴旋转变化阈值，用于过滤微小变化。
+  # 越小越容易把很细碎的转动也算进样本。
+  min-deltaX: 0.4D
+  # max-deltaX-accel: 最大X轴加速度阈值，超出该值可能为作弊迹象。
+  # 越小越严格。
+  max-deltaX-accel: 0.1D
+  # max-rotation-angle: 单次旋转允许的最大角度。
+  # 越小越不接受突兀的大转向。
+  max-rotation-angle: 5D
+
+# AimG 检查：检测Y轴旋转变化和加速度。
+AimG:
+  # buffer: 允许误判的次数。
+  buffer: 7
+  # min-deltaY: 最小Y轴旋转变化阈值。
+  # 越小越容易记录细小纵向变化。
+  min-deltaY: 0.4D
+  # max-deltaY-accel: 最大Y轴加速度阈值。
+  # 越小越严格。
+  max-deltaY-accel: 0.1D
+
+# AimH 检查：针对X轴旋转变化和Y轴加速度的检测。
+AimH:
+  # buffer: 允许误判的次数。
+  buffer: 7
+  # min-deltaX: 最小X轴旋转变化阈值，此处设定更高要求。
+  min-deltaX: 1D
+  # max-deltaY: 最大Y轴加速度阈值。
+  # 越小越容易把过于平或过于尖的纵向变化算进来。
+  max-deltaY: 0.0001D
+
+# AimM 检查：样本数量、无效行数、行长度、平均旋转和缓冲设置。
+AimM:
+  # sampleSize: 用于分析的样本数量。
+  # 越大越稳，但反馈更慢。
+  sample-size: 25
+  # maxInvalidRows: 最大允许的无效数据行数。
+  # 越低越不接受坏样本。
+  max-invalid-rows: 3
+  # minRowLength: 最小数据行长度。
+  # 越低越容易让短重复段也开始计数。
+  min-row-length: 3
+  # minAverageRot: 最小平均旋转阈值。
+  # 越小越容易在低幅度动作里也开始分析。
+  min-average-rot: 1.5
+  # buffer: 允许误判的次数。
+  # 越小越早介入。
+  buffer: 5
+  # mitigate-vl: 减伤的vl。
+  # 越小越早开始缓解。
+  mitigate-vl: 4
+
+# AnalysisB 检查：通过机器分析来确认是否是外挂
+AnalysisB:
+  # buffer: 允许误判的次数。
+  buffer: 2.85
+  # min-possibility: 当玩家的可疑度达到百分之多少时才进行检测。
+  # 越低越早进入这一步确认。
+  min-possibility: 85
+  # only-player: 是否只检测对玩家的准确概率
+  only-player: true
+  # decay: 衰减系数，用于缓冲分的衰减。
+  decay: 0.015
+
+# AnalysisH
+# 云端分析相关设置。
+AnalysisH:
+  # only-player: 是否只检测对玩家的准确概率
+  only-player: false
+
+# KillAuraF 检查：检测诱饵实体命中响应
+KillAuraF:
+  # min-flag-interval-ms: 两次告警之间的最小间隔，单位毫秒。
+  min-flag-interval-ms: 300
+
+# KillAuraG 检查：检查精准度
+KillAuraG:
+  # accuracy: 检测准确度百分比。
+  # 越高越挑剔。
+  accuracy: 95
+  # size: 样本大小，用于检测分析。
+  # 越大越稳，但进入结论更慢。
+  size: 200
+  # reach: 攻击范围阈值。
+  # 越低越容易把目标距离压得更紧。
+  reach: 1.2
+  # combat-time: 战斗时间阈值，单位为秒。
+  # 越大越容易把同一段战斗合在一起观察。
+  combat-time: 8
+  # only-player: 是否只检测对玩家的准确概率
+  only-player: true
+  # min-average-target-movement: 最小平均目标移动距离阈值。
+  # 越低越容易在站桩或低移动目标上也开始工作。
+  min-average-target-movement: 0.325
+  # min-cps: 最小可触发检测的cps
+  # 越低越早开始工作。
+  min-cps: 6
+  # should-cancel: 是否取消此检测下的操作。
+  # 开启后会更直接地拦下这类命中。
+  should-cancel: true
+
+KillAuraJ:
+  # max-sample: 样本队列大小，用于存储检测数据。
+  # 值越大检测越准确但延迟越高，值越小检测越快但可能误报。
+  max-sample: 1600
+  # min-ping-diff: 延迟差异阈值(毫秒)。
+  # 当真实延迟(traPing)和保持连接延迟(keepAlivePing)差异超过此值时视为可疑，并计入一个样本
+  # 越低越早把时序分叉算进来。
+  min-ping-diff: 70
+  # min-receive-diff: 真实延迟返回延迟
+  # 当真实延迟(traPing)的返回的延迟异常的高时则计入视为可疑，并计入一个样本
+  # 越低越早累计。
+  min-receive-diff: 70
+  # min-update-diff: 玩家位置更新的延迟
+  # 当玩家在发送PosLook/Flying/TICK数据包时将会被记录，如果只在攻击中更新延迟变高则计入视为可疑，并计入一个样本
+  # 越低越早累计。
+  min-update-diff: 100
+  # min-combat-ratio: 战斗中无效样本的最小比例(0.0~1.0)。
+  # 当战斗中的无效样本比例超过此值时触发检测。
+  # 越低越容易出结论。
+  min-combat-ratio: 0.9
+  # min-invalid-samples: 触发检测的最小无效样本数。
+  # 防止在样本量不足时误报，建议值大于10。
+  # 越低越快，越高越稳。
+  min-invalid-samples: 16
+
+# KillAuraK 检查：通过鲁棒百分位分析与衰减加权列联表检测战斗微延迟时序
+KillAuraK:
+  # percentile-threshold: 延迟百分位阈值（1–100），高于此百分位的间隔视为异常。越高越严格。
+  percentile-threshold: 99
+  # chi-threshold: 延迟与战斗距离卡方检验的最小触发值。越高要求越强的统计证据。
+  chi-threshold: 6.0
+
+
+# VelocityA 检查：检测击退数据是否异常。
+VelocityA:
+  # strictness: 检测严格度，可选 "strict" / "balanced" / "lenient" / "lenient_high" / "chaos" / "custom"。
+  # 这里同样建议先从 balanced 开始。
+  strictness: "balanced"
+  # exempt-when-colliding-with-blocks: 是否允许玩家在方块内时无击退
+  # 开启后更宽松，复杂地形里更稳。
+  exempt-when-colliding-with-blocks: false
+
+# VelocityB 检查：检测玩家因爆炸产生的异常数据。
+VelocityB:
+  # threshold: 爆炸检测阈值。
+  # 越小越容易更早认定异常。
+  threshold: 0.085
+  # setback-vl: 拉回的vl。
+  # 越小越早拉回。
+  setback-vl: 3
+  # isIgnoreInvalid: 是否忽略无效的爆炸数据。
+  # 开启后更宽松。
+  ignore-invalid: false
+
+# AutoBlock 检查：检测自动阻挡行为是否异常。
+AutoBlock:
+  # setback-vl: 自动阻挡偏移值。
+  # 越小越早拉回。
+  setback-vl: 6
+
+# 利用Raytrace对玩家的攻击进行检测,是否穿墙/实体等
+KillAuraC:
+  # block-blacklist: 不检测列表里面的的方块
+  # 主要留给一些容易造成可见性边缘误差的方块。
+  block-blacklist:
+    - sand
+    - chest
+
+# Reach 检查：检测击打范围异常，包括缓冲、增量、衰减及多种忽略规则。
+Reach:
+  # threshold: 击打范围阈值。
+  # 越小越严格。
+  threshold: 0.01
+  # buffer: 缓冲区大小。
+  # 越小越早进入处罚阶段。
+  buffer: 2
+  # increment: 每次击打增加的增量值。
+  # 越大累计越快。
+  increment: 0.5
+  # decay: 衰减系数。
+  # 越大掉得越快，越不容易长期累计。
+  decay: 0.45
+  # ignore-non-player-targets: 是否忽略非玩家目标。
+  # 开启后更偏玩家战斗环境。
+  ignore-non-player-targets: false
+  # block-impossible-hits: 是否阻止不可能的击打行为。
+  # 开启后会更直接地拦下明显不合理的命中路径。
+  block-impossible-hits: true
+  # ignore-ender-dragon: 是否忽略末影龙目标。
+  # 开启后会跳过这类特殊大实体目标。
+  ignore-ender-dragon: false
+  # tolerant-box-moving: 在移动时对玩家的碰撞箱进行宽容处理,这应该可以减少一些误判
+  # 开启后更偏兼容，关闭后更偏精度。
+  tolerant-box-moving: false
+  # entity-blacklist: 忽略的实体，用于ReachD/B
+  # 主要留给命中盒容易不稳定、玩法插件容易改形状的实体。
+  entity-blacklist:
+    - BAT
+    - ITEM_FRAME
+    - AREA_EFFECT_CLOUD
+    - BOAT
+    - SQUID
+    - ELDER_GUARDIAN
+    # 这会修复大部分投影插件导致的错误
+    # 尽管我已经对此做出了缓解，但是依然可能会因为负数的size导致错误
+    # 比如
+    # 这会生成一个倒置的史莱姆，Neko!目前并没有计划支持这个
+    - SLIME
+    - HORSE
+    - ABSTRACT_HORSE
+    - CHESTED_HORSE
+    - SKELETON_HORSE
+    - ZOMBIE_HORSE
+    - ARMOR_STAND
+    - GUARDIAN
+    - CHEST_BOAT
+    - SHULKER
+    - CAT
+
+##############################################
+# 点击与行为类检测
+##############################################
+
+# AutoClickerA 检查：检测玩家左键攻击频率与右键放置频率
+AutoClickerA:
+  # 左键（攻击）配置
+  left-click:
+    # max-cps: 单秒最大左键次数。填 -1 不检测左键。
+    # 越低越早拦截高 CPS。
+    max-cps: 30
+    # vl-multiplier: 超出 CPS 时每 1 CPS 加多少 VL。
+    # 越大累计越快。
+    vl-multiplier: 0.5
+    # cancel: 命中后是否取消本次动画包。
+    cancel: false
+  # 右键（放置）配置
+  right-click:
+    # limit: 时间窗口内允许的最大放置次数。填 -1 不检测右键。
+    # 越低越严格。
+    limit: 26
+    # window-ms: 右键统计的时间窗口（毫秒）。
+    # 越短越严格。
+    window-ms: 1000
+    # vl-multiplier: 超出 limit 时每 1 次加多少 VL。
+    vl-multiplier: 0.5
+    # cancel: 命中后是否取消本次放置并回滚方块。
+    cancel: false
+
+# AutoClickerE 检查：检测玩家左键点击太高时频率是否异常。
+AutoClickerE:
+  # min-cps: 当cps来到多少时进行检测
+  min-cps: 16
+  # max-kurtosis: 节奏分布允许的最大离散程度。
+  # 越小越容易把“不自然稳定”或“不自然尖锐”的高 CPS 节奏算进去。
+  max-kurtosis: 4
+  # should-cancel: 是否取消异常点击行为 (当在vl大于4时才撤销)
+  should-cancel: false
+
+# AutoClickerF 检查：检测相邻点击样本之间过于相似的模式。
+AutoClickerF:
+  # sample-size: 单次分析使用的样本数量。
+  # 越大越稳，越小越快。
+  sample-size: 100
+  # max-delta: 两次相似度变化允许的最大差值。
+  # 越小越严格。
+  max-delta: 0.015
+  # max-similarity: 当前窗口允许的最大相似度。
+  # 越小越容易把重复节奏当成异常。
+  max-similarity: 0.8
+  # threshold: 触发警报前所需的累计缓冲。
+  threshold: 5
+
+# BadPacketsO 检查：检测异常数据包行为。
+BadPacketsO:
+  # skips: 跳过检测的次数计数。
+  # 越低越不接受漏回 transaction/confirm 包。
+  skips: 0
+  # join-time: 玩家加入后的检测等待时间，单位为秒。
+  join-time: 5
+
+# BadPacketsU 检查：检测1.21+异常数据包行为。
+BadPacketsU:
+  # max-time-offset: 最大容忍度
+  # 越小越严格，越大越宽松。
+  max-time-offset: 50
+
+# TimerA 检查：检测计时相关异常行为。
+TimerA:
+  # setback-vl: 当检测到异常时多少vl才进行拉回。
+  setback-vl: 10
+  # drift: 玩家卡顿时可以累积以供以后使用的毫秒数,如果设置得太高
+  # 可能会允许 1.8 快速使用/快速治疗/快速弓箭绕过，150 毫秒似乎是一个很好的平衡
+  drift: 150
+  # ping-abuse-limit-threshold: Ping滥用限制阈值。
+  # 越低越早把高延迟利用算进去。
+  ping-abuse-limit-threshold: 500
+  # ignored-teleport-tick: 忽略在tp的前后tick,这会修复TimerA的大量误判，但是也会导致被滥用一些拉回漏洞,但这不会导致更抽象的绕过
+  # 谨慎开启此选项
+  ignored-teleport-tick: false
+
+# TimerD 检查：基于发包速率门槛的余额计时检测。
+# 因此允许低于 min-rate 的持续加速。
+TimerD:
+  # setback-vl: 当检测到异常时多少vl才进行拉回。
+  setback-vl: 20
+  # min-rate: 发包速率门槛。客户端发包速率达到该倍率后才执行余额检查。
+  # 配置为比你想允许的加速更高一点的值，例如 1.15 允许约 1.1x。
+  min-rate: 1.01
+
+# TimerB 检查：玩家在乘骑时使用Timer
+TimerB:
+  # setback-vl: 当检测到异常时多少vl才进行拉回。
+  # 越小越早拉回。
+  setback-vl: 6
+
+# TimerC 检查：检测低于 1.0 的慢时钟 / 负 timer。
+TimerC:
+  # negative-streak-threshold: 连续多少个明显慢于 50ms 的移动 tick 后，才视为进入 negative timer 状态。
+  negative-streak-threshold: 40
+  # multiply-threshold: 负 timer 的倍率阈值，必须低于该值才累计 buffer；代码内部会强制限制不高于 0.85。
+  multiply-threshold: 0.85
+  # max-buffer: buffer 超过这个值后才进入 flag 流程。
+  max-buffer: 10.0
+
+# InventoryM 检查：检测玩家物品操作（交换、快速移动、丢弃）是否异常。
+InventoryM:
+  # mitigate: 是否在检查到玩家异常的时候惩罚玩家如撤销玩家的发包和还原玩家的背包等
+  # 开启后更偏直接干预。
+  mitigate: true
+  # std: 这一组控制“节奏波动”允许范围。
+  # 越小越容易把过于稳定或过于不自然的操作算进去。
+  std:
+    # swap: 当玩家交换手的次数的标准差超过此值时则flag (时间1.0秒)
+    swap: 3.0
+    # throw: 当玩家丢出物品的次数的标准差超过此值时则flag (时间1.0秒)
+    throw: 1.75
+  # limit: 这一组控制短时间内能堆多少次对应操作。
+  limit:
+    # quick-move: 当玩家发送快捷移动包的次数在一定时间内的超过此值时则flag (时间0.6秒)
+    quick-move: 12
+    # throw: 当玩家发送丢出物品的次数在一定时间内的超过此值时则flag (时间0.6秒)
+    throw: 10
+    # pick-up: 当玩家发送选择物品的次数在一定时间内的超过此值时则flag (时间0.6秒)
+    pick-up: 6
+
+# InventoryL 检查：检测玩家打开背包后的首击补货节奏。
+InventoryL:
+  # max-open-ticks: 打开背包后多少tick内仍然被视为首击检测窗口。
+  # 越大越容易把更长的补货窗口算进去。
+  max-open-ticks: 10
+    # threshold: 首击模式累计多少缓冲后触发。
+  # 越小越早报警。
+  threshold: 4
+
+# LagAssistI 检查：检测确认队列堆积和ping尖峰同时出现的异常战斗延迟。
+LagAssistI:
+  # max-queue-size: 待确认事务队列至少多大时开始检测。
+  # 越低越早把确认堆积看作异常。
+  max-queue-size: 4
+  # min-keepalive-delta: keepalive与transaction ping差值下限。
+  # 越低越早把延迟分叉算进去。
+  min-keepalive-delta: 100
+  # min-transaction-delta: 相邻transaction ping差值下限。
+  # 越低越早把抖动算进去。
+  min-transaction-delta: 100
+    # min-ticks: 玩家在线至少多少tick后才检测。
+    # 越大越偏保守。
+  min-ticks: 300
+  # threshold: 触发警报前所需的累计缓冲。
+  # 越小越早报警。
+  threshold: 65
+
+LagAssistH:
+  # hitbox-margin: 命中框额外余量，用于计算攻击距离。
+  hitbox-margin: 0.13
+  # min-pending-transactions: 判定回溯证据所需的最小待确认事务数。
+  min-pending-transactions: 2
+  # min-queue-size: 判定回溯证据所需的最小排队事务数。
+  min-queue-size: 3
+  # min-ticks: 玩家最低 tick 数，低于此值不启动检测。
+  min-ticks: 300
+  # min-reach-delta: 攻击距离异常判定阈值，越小越敏感。
+  min-reach-delta: 0.075
+  # min-server-client-offset: 客户端旧位置与服务端最新位置之间的命中框偏移阈值。
+  min-server-client-offset: 0.03125
+  # threshold: 触发警报前所需的累计缓冲。
+  # 越小越早报警。
+  threshold: 7.5
+
+# FarPlace 检查：检测远距离放置行为，支持仅针对水晶情况检测。
+FarBreak:
+  # setback-vl: 异常行为拉回阈值。
+  setback-vl: 3
+  # kick-range: 当玩家的挖掘距离超过这个值就直接踢出
+  # 一般不建议设得太低。
+  kick-range: 15
+
+# FastBreakC 检查：检测方块破坏完成时间是否明显早于正常挖掘节奏。
+FastBreakC:
+  # diff: 允许比预期挖掘时间提早多少毫秒。
+  # 越接近 0 越严格；越小越宽松。
+  # 一般建议保持负数，给正常网络与版本差留一点余量。
+  diff: -125
+
+# FastPlaceB 检查：检测方块放置延迟是否过于一致。
+FastPlaceB:
+  # sample-size: 单次分析样本数。
+  # 越大越稳，越小越快。
+  sample-size: 40
+  # max-deviation: 样本标准差低于该值时开始累计。
+  # 越小越容易把过于稳定的放置节奏算进来。
+  max-deviation: 0.4125
+  # threshold: 触发警报前所需的累计缓冲。
+  threshold: 1.5
+
+# InteractB 检查：检测破坏方块时视线是否真的能看到目标方块。
+InteractB:
+  # ignored-blocks: 直接忽略的方块类型。
+  # 可用于排除玩法插件自定义挖掘交互容易出边缘问题的方块。
+  ignored-blocks: []
+
+# XRay 检查：检测玩家使用了不合法的模组如自动挖矿和使用了不合法的材质包进行精确的挖掘方块
+XRayA:
+  # blocks: 检测的方块
+  # 只建议放你真正关心的高价值矿物。
+  blocks:
+    - DIAMOND_ORE
+    - ANCIENT_DEBRIS
+    - DEEPSLATE_DIAMOND_ORE
+
+# XRayD 检查：检测玩家是否持续命中近期爆炸暴露过的矿物。
+XRayD:
+  # blocks: 留空时继承 XRayA.blocks。
+  blocks: []
+  # retention-seconds: 爆炸暴露矿物位置保留时间。
+  retention-seconds: 600
+  # match-radius: 挖掘位置匹配爆炸暴露矿物时允许的半径。
+  match-radius: 1
+  # suspicious-rate: 爆炸暴露矿物命中率超过该值后进入可疑路径。
+  suspicious-rate: 0.1
+  # penalty-multiplier: 命中爆炸暴露矿物时的缓冲增长倍率。
+  penalty-multiplier: 2.0
+  # min-samples: 开始计算命中率所需的最小矿物样本数。
+  min-samples: 8
+  # min-hits: 开始计算命中率所需的最小爆炸暴露命中数。
+  min-hits: 2
+  # buffer: 触发警报前所需的缓冲。
+  buffer: 2.0
+  environment:
+    # radius: 洞穴/液体降误判扫描半径。
+    radius: 3
+    # air-count: 加权空气数量达到该值时视为自然洞穴暴露。
+    air-count: 14
+    # cave-air-multiplier: CAVE_AIR 权重。
+    cave-air-multiplier: 5
+    # water-count/lava-count: 水/岩浆环境阈值。
+    water-count: 14
+    lava-count: 14
+
+# XRayE 检查：分析矿点之间的挖掘路径特征。
+XRayE:
+  # blocks: 留空时继承 XRayA.blocks。
+  blocks: []
+  # path-max-blocks: 最多保留的挖掘路径方块数。
+  path-max-blocks: 500
+  # cleanup-after-minutes: 挖掘路径历史清理时间。
+  cleanup-after-minutes: 15
+  # min-path-blocks: 两次矿物命中之间至少多少方块后才分析路径。
+  min-path-blocks: 10
+  # turning-limit/branching-limit/y-shift-limit: 路径特征超过这些值后进入可疑路径。
+  turning-limit: 10
+  branching-limit: 6
+  y-shift-limit: 4
+  # y-shift-min: 单次 Y 轴变化达到多少才计入一次大幅纵向变化。
+  y-shift-min: 3
+  # buffer: 触发警报前所需的缓冲。
+  buffer: 2.0
+  environment:
+    radius: 3
+    air-count: 14
+    cave-air-multiplier: 5
+    water-count: 14
+    lava-count: 14
+  fake-cave-detection:
+    # enabled: 记录人工开阔矿道上下文，但不直接豁免路径。
+    enabled: true
+    min-blocks: 10
+    radius: 1
+    sample-limit: 20
+    air-ratio: 0.3
+    max-triggers: 5
+    reset-minutes: 20
+
+# XRayF 检查：检测连续小矿脉聚类命中。
+XRayF:
+  # blocks: 留空时继承 XRayA.blocks。
+  blocks: []
+  # distance: 统计同一矿脉时允许的最大半径。
+  distance: 5
+  # small-size: 小于该大小的矿脉视为小矿脉。
+  small-size: 4
+  # trigger-count: 连续小矿脉达到多少次后触发。
+  trigger-count: 3
+  # max-scan-blocks: 矿脉 BFS 的最大扫描方块数。
+  max-scan-blocks: 96
+  # buffer: 触发警报前所需的缓冲。
+  buffer: 1.0
+  environment:
+    radius: 3
+    air-count: 14
+    cave-air-multiplier: 5
+    water-count: 14
+    lava-count: 14
+
+##############################################
+# 杂项检测
+##############################################
+
+# ClientA 检测 : 检测玩家发送不合法的客户端品牌
+ClientA:
+  # check-for-meteor: 是否检测meteor的客户端品牌
+  # 大部分情况下推荐为false，因为部分模组也会发送类似于meteor的客户端品牌
+  check-for-meteor: false
+
+# ClientB 检测 : 检测玩家发送不合法的客户端品牌
+ClientB:
+  # check-tweaker-oo: 是否检测tweakeroo的客户端品牌,和一些客户端欺骗
+  # 开启后更容易识别特定品牌线索，但也更依赖品牌本身是否可信。
+  check-tweaker-oo: true
+
+# SpamB 检查：检测玩家聊天刷屏行为
+SpamB:
+  # should-cancel: 达到该违规等级后是否取消数据包
+  # 开启后会更直接地拦下刷屏消息。
+  should-cancel: true
+  threshold:
+    # cancel-vl: 达到该违规等级后取消数据包
+    # 越小越早拦截。
+    cancel-vl: 5
+    # similarity: 相似度检测阈值（0.0-1.0）
+    # 越低越容易把重复内容判成同类消息。
+    similarity: 0.8
+  # frequency-detection: 频率检测配置
+  frequency-detection:
+    # fast-threshold: 每秒允许的最大消息数
+    # 越低越严格。
+    fast-threshold: 3
+  # history-settings: 历史记录配置
+  history-settings:
+    # message-history: 保留的历史消息数量
+    # 越大越能看到更长的重复链。
+    message-history: 5
+  # alert-settings: 警告玩家设置
+  alert-settings:
+    # enable: 警告玩家
+    enable: true
+
+# BlinkC
+# 通过比较最后一次触地 tick 到交互包的时长来检测卡空中作弊。
+BlinkC:
+  # air-tolerance: 最后一次触地后允许的最大交互时间（毫秒）。
+  # 值越小越严格；高延迟玩家建议调大。
+  air-tolerance: 100

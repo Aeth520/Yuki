@@ -1,0 +1,44 @@
+﻿To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.10.2/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :
+WARNING: Using dev build, don't leak it
+WARNING: An AntiCheat Plugin | Powered By Aetheris
+WARNING: devBuild: true
+WARNING: ver: 26.7.1
+
+> Task :processResources UP-TO-DATE
+> Task :generateTestEffectiveLombokConfig UP-TO-DATE
+> Task :processTestResources NO-SOURCE
+> Task :generateEffectiveLombokConfig
+> Task :compileJava
+.\gradlew.bat : ����: ʹ�� incubating ģ��: jdk.incubator.vector
+At C:\Users\Administrator\AppData\Local\Temp\trae-agent-toolhost\jobs\job-5c8bae0b21dc465c8d1e9367c0160a95\command.ps1:
+15 char:7750
++ ... \jdk-17.0.18.8-hotspot"; .\gradlew.bat build --no-daemon 2>&1 | Out-F ...
++                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (����: ʹ�� incub...ncubator.vector:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+����: ʹ�� incubating ģ��: jdk.incubator.vector
+����: ʹ�� incubating ģ��: jdk.incubator.vector
+����: ʹ�� incubating ģ��: jdk.incubator.vector
+����: ʹ�� incubating ģ��: jdk.incubator.vector
+ע: ĳЩ�����ļ�ʹ�û򸲸����ѹ�ʱ�� API��
+ע: �й���ϸ��Ϣ, ��ʹ�� -Xlint:deprecation ���±��롣
+ע: ĳЩ�����ļ�ʹ����δ�����򲻰�ȫ�Ĳ�����
+ע: �й���ϸ��Ϣ, ��ʹ�� -Xlint:unchecked ���±��롣
+5 ������
+
+> Task :classes
+> Task :jar
+> Task :assemble
+> Task :shadowJar
+> Task :compileTestJava NO-SOURCE
+> Task :testClasses UP-TO-DATE
+> Task :test NO-SOURCE
+> Task :check UP-TO-DATE
+> Task :build
+
+BUILD SUCCESSFUL in 1m 49s
+6 actionable tasks: 4 executed, 2 up-to-date

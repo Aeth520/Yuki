@@ -38,7 +38,11 @@ public final class ViolationDatabaseManager {
         BackendRegistry registry = BackendRegistry.getInstance();
         registry.clear();
         registry.register(new OrmLiteDatabaseManager());
-        registry.register(new MongoDBDatabaseManager());
+        try {
+            registry.register(new MongoDBDatabaseManager());
+        } catch (NoClassDefFoundError e) {
+            LogUtils.consolePrefixed("&7MongoDB driver not bundled — rebuild with &b-PdbDrivers=mongodb &7to enable MongoDB support.");
+        }
 
         String resolvedType = resolveType(dataManagerType);
         backend = registry.getOrDefault(resolvedType, "sqlite");

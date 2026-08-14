@@ -1,0 +1,997 @@
+
+# ******************************************************************************************************************************
+#  ███    ██     ███████     ██   ██      ██████      ██
+#  ████   ██     ██          ██  ██      ██    ██     ██
+#  ██ ██  ██     █████       █████       ██    ██     ██
+#  ██  ██ ██     ██          ██  ██      ██    ██
+#  ██   ████     ███████     ██   ██      ██████      ██
+# ******************************************************************************************************************************
+# #############################################
+# 基础输出与展示
+# 这里控制告警输出、客户端品牌处理和旁观者显示。
+# #############################################
+
+# 是否上报匿名统计到 bStats。
+# 只会影响统计，不影响核心检测。
+BStats: true
+
+output:
+  # 告警输出设置。
+  alerts:
+    # console: 是否在控制台输出告警。
+    console: true
+    # enable-on-join: 进服时自动开启告警(持有 neko.commands.alerts
+    # 与 neko.commands.alerts.enable-on-join 权限的玩家)。
+    enable-on-join: true
+    # throttle: 同一玩家两次告警之间的最小间隔(毫秒)。
+    # 间隔内的告警会被静默丢弃,不影响 verbose 和 debug。
+    # 设为 0 表示不限制。
+    throttle: 500
+
+  # 详细日志输出设置。
+  verbose:
+    # console: 是否在控制台输出 verbose。
+    console: false
+    # enable-on-join: 进服时自动开启 verbose(持有 neko.commands.verbose
+    # 与 neko.commands.verbose.enable-on-join 权限的玩家)。
+    enable-on-join: false
+
+  # 客户端品牌处理。
+  # 可设置直接踢出的品牌，以及忽略显示的品牌。
+  client-brand:
+    # should-kick: 命中这些品牌时直接踢出。
+    should-kick:
+      - acdisable
+      - smoke
+      - CB
+      - Lunar-Client
+      - CM-Pack
+      - Blazing-Pack
+      - Crystalware
+      - Vivecraft
+      - Vape-Crack
+      - glide
+    # ignores: 这些品牌不参与常规提示，可使用正则。
+    ignores:
+      - "^badlion$"
+      - "^optifine$"
+      - "^quilt$"
+      - "^vanilla$"
+      - "^fabric$"
+      - "^Feather Fabric$"
+      - "(^lunarclient:v\\d+\\.\\d+\\.\\d+-\\d{4},(?:fabric|forge)$)|(^lunarclient:[a-z0-9]{7}/[\\w_/-]{3,32}$)"
+      - "^labymod$"
+
+  # 旁观者显示设置。
+  spectators:
+    # hide-all: 是否隐藏旁观者相关显示。
+    hide-all: false
+    # allowed-world: 只在这些世界显示旁观者信息。
+    # 如果你不需要限制世界，建议保留当前默认内容并按实际环境验证。
+    allowed-world:
+      - ""
+
+  # proxy-bridge: 把 alert / verbose 转发到代理端桥插件，用于 BungeeCord / Velocity 全服广播。
+  # 注意：需要在 BungeeCord / Velocity 代理端安装对应的桥插件才能生效，仅在后端服务端开启无效。
+  # 不影响本服原本的告警显示。
+  proxy-bridge:
+    # alerts: 是否转发 alerts。
+    alerts: false
+    # verbose: 是否转发 verbose。
+    verbose: false
+
+# #############################################
+# 同步设置
+# #############################################
+sync:
+  # enable: 是否启用整体同步。
+  enable: true
+  movement:
+    died:
+      # 玩家死亡后的同步。
+      enable: true
+      # packet: 是否通过数据包同步。
+      packet: true
+      # bukkit: 是否额外通过 Bukkit 同步。
+      bukkit: false
+
+    wrong-offset:
+      # 错位修正开关。
+      enable: true
+
+    # in-bed: 是否同步床相关状态。
+    in-bed: true
+    # interact: 是否同步交互状态。
+    interact: true
+    # vehicle: 是否同步载具状态。
+    vehicle: true
+
+  vehicles:
+    died:
+      # 载具销毁后的同步。
+      enable: true
+      # packet: 是否通过数据包同步。
+      packet: true
+      # bukkit: 是否额外通过 Bukkit 同步。
+      bukkit: false
+
+    # wrong-offset: 是否修正载具错位。
+    wrong-offset: true
+    # packet: 是否同步载具相关数据包。
+    packet: true
+    # in-bed: 是否同步特殊姿态状态。
+    in-bed: true
+
+# #############################################
+# 功能与行为设置
+# #############################################
+function:
+  # register-paper-end-tick: 是否注册 Paper 的 ServerTickEndEvent 来驱动每 tick 末尾的检测发送。
+  # 开启后部分检查能在服务端 tick 边界统一 flush，提升检查强度，但会额外消耗一定带宽。
+  # 仅 Paper 系核心支持；特殊/魔改核心或注入异常时保持关闭。
+  # Default (默认值): false
+  register-paper-end-tick: false
+  transaction:
+    # max-skips-kick: 连续忽略 transaction/confirm 包达到这个值时踢出。
+    # 这个值主要用于防止客户端长时间不回传确认包，导致实时调度与延迟判定失真。
+    max-skips-kick: 40
+    # type: transaction 包 ID 生成模式。
+    # grim / neko / latency
+    # Default (默认值): grim
+    type: grim
+    # netty: 是否异步通过 Netty 路径发送 transaction 包。
+    # 开启后可能降低一部分主线程占用，但也可能让 join 初期和同步边界更脆弱。
+    # Default (默认值): false
+    netty: false # 实验性, 这个功能开启后可以降低一些占用, 但是会导致一些同步问题然后反作弊误判
+    # kick-high-ping: 基于 transaction ping 的高延迟踢出保护。
+    kick-high-ping:
+      # enable: 是否启用超高 transaction ping 踢出。
+      # Default (默认值): false
+      enable: false
+      # max-ping: transaction ping 达到多少后开始累计。
+      # 单位为毫秒。
+      # Default (默认值): 300
+      max-ping: 300
+      # duration: 高于上面阈值持续多久后踢出，单位秒。
+      # Default (默认值): 8
+      duration: 8
+  # force-complete: 玩家进服时是否强制尽快放行网关中的初始化数据。
+  # 这个选项主要影响 join 初期的发包完成顺序，常用于修复 1.9+ 初期卡包、阻塞和不同步。
+  # 如果你的主环境以 1.8 为主，通常更建议关闭后再观察；高版本环境更常保持开启。
+  # Default (默认值): true
+  force-complete: true
+  # random-seed: 伪造种子相关数据以封堵种子破解器（如 SeedcrackerX）。
+  random-seed:
+    # 总开关。false 时所有子选项均不生效。
+    enable: false
+    # 伪造 Login/Respawn 包中的 hashed seed。
+    hashed-seed: true
+    # 重写 chunk 数据中的末影柱基岩高度，破坏柱子种子破解。
+    end-pillars: true
+    # 用假种子重写 chunk 数据中的生物群系调色板（气候类别内置换）。
+    biomes: false
+    # 重写 chunk 数据中的末地城品红玻璃为玻璃板。
+    end-city-glass: true
+    # 主世界结构方块替换（不还原）：TNT/绊线钩/海晶灯/凝灰岩砖/沙石台阶/炼药锅/工作台。
+    # 破坏 DesertPyramid/JunglePyramid/Monument/TrialChambers/DesertWell/SwampHut/Igloo 的模式匹配。
+    overworld-structures: true
+    # 结构方块替换强度。控制建筑内特征方块（如下界砖、菌光体）被替换的比例。
+    # 替换这些方块可以防止种子破解器通过识别建筑结构来推算世界种子。
+    # aggressive: 全部替换，防御最强但建筑会变得难以辨认
+    # balanced: 仅替换约 1/4，保留建筑轮廓，玩家仍能正常辨认建筑，同时足以防破解
+    # light: 仅替换约 1/8，建筑几乎不受影响，防御较弱
+    # 建议使用 balanced（默认），兼顾防御与游戏体验
+    # Default (默认值): "balanced"
+    structure-replace-strength: "balanced"
+    # 地狱建筑方块替换（不还原）：将菌光体和下界砖替换为下界岩。
+    # 防止破解器通过识别下界要塞和巨型菌类来推算种子。
+    nether-structures: true
+    # 绿宝石矿混淆：chunk 发送时将绿宝石矿替换为下方 emerald-ore-replace 指定的方块。
+    # 玩家挖掘/放置/爆炸接近 restore-radius 格内时延迟补偿还原原始方块。
+    # 破坏 EmeraldOre finder 的矿石扫描。
+    emerald-ore: true
+    # 绿宝石矿替换为的方块名称。必须是有效的 Minecraft 方块 ID。
+    # Default: STONE
+    emerald-ore-replace: STONE
+    # 绿宝石矿接近还原半径（格）。玩家在此距离内挖掘/放置/爆炸时还原原始绿宝石矿。
+    # Default: 3
+    restore-radius: 3
+    # 用于生物群系/柱子重写的稳定假种子。0 = 每次服务器重启随机。
+    fake-seed: 0
+    # 装饰物线索混淆的强度预设。
+    # strict: 最严格，隐藏地牢刷怪笼和末地传送门方块实体，扰动藏宝箱和沙漠井
+    # balanced: 平衡，扰动地牢地板/藏宝箱/沙漠井，保留刷怪笼
+    # lenient: 宽松，只扰动地牢地板圆石数量
+    # Default (默认值): "balanced"
+    decorator-strictness: "balanced"
+    # 下界基岩混淆：将部分基岩替换为黑曜石，破坏下界基岩层模式扫描。
+    # Default (默认值): true
+    nether-bedrock: true
+    # 影子状态防火墙：拦截后续方块更新包，防止客户端看到真实方块状态。
+    # 注意：绿宝石矿不受此限制，走独立的接近还原机制。
+    # Default (默认值): true
+    shadow-state-firewall: true
+    # fake-command: 注册 seedcracker/seed/minecraft:seed 命令覆盖原版。
+    # seedcracker 静默消费所有输入；seed 和 minecraft:seed 对有 minecraft.command.seed 权限的人显示真实种子，无权限静默无输出。
+    # Default (默认值): true
+    fake-command: true
+  # can-reset-player-use-item: 是否允许物品使用重置类缓解生效。
+  # 关闭后会一起影响 NoSlow / AutoBlock 一类依赖 use-item reset 的缓解逻辑。
+  # Default (默认值): true
+  can-reset-player-use-item: true
+  # 服务器卡顿保护。
+  lag-track:
+    # tick: 多久的卡顿才视为服务器异常，单位毫秒。
+    # 值越小越敏感，也越容易把正常抖动当成问题。
+    tick: 1000
+    # math: 是否启用额外的卡顿计算方式。
+    math: false # 实验性
+    # setback: 服务器明显卡顿时是否仍允许拉回。
+    setback: false
+    # print-stacktrace: 卡顿时是否额外打印堆栈。
+    print-stacktrace: false
+    # message: 命中时如果服务器也在卡顿，输出这条提示。
+    message: "&c检测到玩家 &f%player% &c的异常操作,但是服务器已经停止运行了 &f%time%&7/&f%time2%/&f%time3%&7{%sum%} &c毫秒! &7(%check_name%)"
+  # command-settings: 命令默认行为与分页配置。
+  # 这里集中收口各命令的默认类型、分页大小等行为参数。
+  # 与 messages.yml 中的提示文本分离,避免翻译时误改功能值。
+  command-settings:
+    # 点击告警后执行的动作命令。
+    action: "neko spectate %player%"
+    # setback: 拉回命令未指定模式时的默认模式。
+    setback:
+      default-type: "normal"
+    # history: 历史记录命令每页显示条目数。
+    history:
+      pages: 8
+    # crash: 崩溃命令未指定模式时的默认模式。
+    crash:
+      default-type: "explosion"
+    # mitigate: 缓解命令未指定模式时的默认模式。
+    mitigate:
+      default-type: "damage"
+      types:
+        killaura:
+          # 传送攻击者到目标身后后,回拉前等待的 tick 数。
+          tick: 10
+    # help: /neko help 命令的分页设置。
+    help:
+      # page-size: 每页显示的命令条目数。
+      page-size: 6
+  # 命令别名设置。
+  # 修改这里来改变主命令的触发词和别名。
+  # 列表第一位是主命令名称，后面的是别名。
+  command-alias:
+    aliases:
+      - "nekoanticheat"
+      - "neko"
+      - "neko!"
+      - "nyacho"
+      - "nk"
+  # 命令阻挡与伪装设置。
+  command-blocker:
+    # plugin-name: 对外展示时使用的伪装名称。
+    plugin-name: "KarhuAC"
+    # tab-complete: 是否拦截可疑的命令补全。
+    tab-complete: true
+    # command: 命令阻挡的总开关。
+    command:
+      # enable: 是否拦截可疑命令执行。
+      enable: true
+      # blocks: 命令匹配规则。
+      blocks:
+        # contains: 只要命令里包含这些内容就拦截。
+        contains:
+          - nekoanticheat
+          - anticheat
+          - neko!
+          - nyacho
+          - matrix
+          - crack
+          - seedcracker
+          - database
+          - vulcan
+          - spiter
+          - polar
+          - grimac
+          - medusa
+          - verus
+          - aac
+        # equals: 只有完整命中这些内容才拦截。
+        equals:
+          - seed
+          - nyacho
+          - crack
+          - neko
+      # fake-plugins-add: 在插件列表相关输出里额外加入的伪装名称。
+      fake-plugins-add:
+        - PolarLoader
+        - MagicBlock
+  # silence: 只保留记录和提示，不做主动缓解。
+  silence: false
+  # violation-reward: 违规值的自动衰减与重置。
+  violation-reward:
+    # reset-all: 全局违规值多久重置一次，单位秒。
+    reset-all: 300
+    # reduce-need-time: 多久允许执行一次自然衰减，单位秒。
+    reduce-need-time: 3
+  # 配置更新行为。
+  config-refresh:
+    # punishments: 重载时是否同时同步处罚配置的默认结构。
+    punishments: false
+  # ignore-exempt-permissions: 是否忽略全部 exempt 相关权限。
+  # 开启后 `neko.exempt`、`neko.exempt.modify`、`neko.exempt.setback`、`neko.exempt.cancel`、`neko.exempt.highpingkick`
+  # 这类权限都不再生效，OP 也会按普通玩家一样进入检测。
+  # 只影响权限豁免，不影响你手动使用 `/neko control` 这类命令。
+  ignore-exempt-permissions: false
+  # fix-sprint-desync: 实验性。用于缓解部分特殊服务端环境下的冲刺状态不同步问题。
+  # 如果你的服务器存在跨版本、特殊核心或自定义机制导致的冲刺相关误差，可以尝试开启。
+  # 建议仅在明确需要时再调整；如果你不确定这个选项的用途，保持默认关闭即可。
+  fix-sprint-desync: false
+  # 手动处罚命令设置。
+  command-punish:
+    # command: 执行 /neko punish 后实际调用的命令。
+    # 变量:
+    # %random_int% - 随机1-10的整数
+    # %random_string% - 随机短字符串
+    # %anticheat% - 随机反作弊名字
+    # %anticheat_color% - 对应前一个的随机反作弊的主题
+    # %world% - 对应玩家所在世界
+    # %transaction_ping% - 显示玩家对应的真实延迟
+    # %keepalive_ping% - 显示玩家对应的延迟
+    # %neko_placeholder_ban% - 读取 function.placeholder.ban 中的整段命令模板
+    # %neko_placeholder_kick% - 读取 function.placeholder.kick 中的整段命令模板
+    # %player% - 玩家的名
+    # %server% - 服务器名
+    command: "neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-LiK108 S=%server%]"
+  # flush-player-permission: 权限刷新间隔，单位秒。
+  # 不建议设置得太低。
+  flush-player-permission: 10
+  # kick-broadcast: 处罚时是否广播。
+  kick-broadcast: true
+  # kick-strike-lightning-effect: 处罚时是否播放闪电效果。
+  kick-strike-lightning-effect: true
+  # disallow-flags-after-punishment: 处罚后是否停止继续告警。
+  disallow-flags-after-punishment: false
+  # save-violations-on-leave: 玩家离线时是否保存违规值。
+  save-violations-on-leave: false
+  # fix-duplicate-command-punish: 尽量避免同一时间重复执行多条处罚命令。
+  fix-duplicate-command-punish: true
+  # ignore-elytra: 是否让部分移动模拟忽略鞘翅阶段。
+  # 只在鞘翅环境特殊时考虑开启。
+  ignore-elytra: false
+  # max-attack-slow-pre-process: 每 tick 最多处理多少次攻击减速相关状态。
+  max-attack-slow-pre-process: 2
+
+  # KillAura NPC 诱导检测：通过数据包生成的虚拟NPC捕捉自动攻击行为
+  # KillAura NPC Trap: Use packet-only fake NPC to capture automated aura attacks.
+  killaura-npc:
+    # 新手建议只调这几个：enable / profile / default-duration-ticks / auto-spawn.in-combat
+    # New users only need these: enable / profile / default-duration-ticks / auto-spawn.in-combat.
+    # profile 可选: safe / balanced / aggressive
+    # - safe: 更保守，触发更少，兼容性更高
+    # - balanced: 默认推荐
+    # - aggressive: 触发更积极，排查效率更高
+    # 默认值 (Default): balanced
+    profile: balanced
+    # 总开关：是否启用 KillAura NPC 诱导系统
+    # Master switch: Enable or disable KillAura NPC trap system.
+    # 默认值 (Default): true
+    enable: true
+    # 每次命令触发时 NPC 默认存在时长（tick）
+    # Default NPC lifetime for command trigger (tick).
+    # 默认值 (Default): 350
+    default-duration-ticks: 350
+    # NPC 移动更新间隔（tick）
+    # NPC movement update interval (tick).
+    # 默认值 (Default): 2
+    move-interval-ticks: 2
+    # 默认模式：BACK / CIRCLE / DIAGONAL
+    # BACK: 后方保持距离；CIRCLE: 头顶悬停；DIAGONAL: 后方斜向摆动
+    # 默认值 (Default): BACK
+    default-mode: BACK
+    # 是否让 NPC 隐身
+    # Whether NPC should be invisible.
+    # 默认值 (Default): false
+    invisible: false
+
+    humanize:
+      # BACK 模式后方距离（单位：格）
+      # Default follow distance in BACK mode (blocks).
+      # 默认值 (Default): 2.15
+      back-distance: 2.15
+      # DIAGONAL 摆动速度（每次更新弧度增量）
+      # Wave speed for DIAGONAL mode (angle increment per update).
+      # 默认值 (Default): 0.24
+      circle-speed: 0.24
+      # BACK/DIAGONAL 模式高度（单位：格）
+      # Y offset for BACK/DIAGONAL modes (blocks).
+      # 默认值 (Default): 2.6
+      base-height: 2.6
+      # CIRCLE 模式头顶高度（单位：格）
+      # Head-top orbit height for CIRCLE mode (blocks).
+      # 默认值 (Default): 3.95
+      circle-height: 3.5
+      # XZ 随机抖动（拟人化）
+      # Random XZ jitter for humanization.
+      # 默认值 (Default): 0.09
+      jitter: 0.09
+      # Y 方向随机扰动（拟人化）
+      # Random Y noise for humanization.
+      # 默认值 (Default): 0.03
+      y-noise: 0.03
+      # DIAGONAL 模式横向摆动幅度（单位：格）
+      # Side wave amplitude for DIAGONAL mode (blocks).
+      # 默认值 (Default): 0.55
+      diagonal-wave: 0.55
+      # 与玩家最小安全距离（避免贴脸）
+      # Minimum safe distance from player (anti face-close).
+      # 默认值 (Default): 1.65
+      min-keep-distance: 1.65
+      # 防止出现在玩家正前方的回拉距离
+      # Pull-back distance when bot is in front of player.
+      # 默认值 (Default): 1.9
+      anti-front-distance: 1.9
+      # 大转头时防瞬移到面前的保底距离
+      # Anti snap-to-front safe distance on fast turn.
+      # 默认值 (Default): 2.5
+      anti-snap-distance: 2.5
+      # 每次移动更新时挥手动画触发概率(0.0~1.0)
+      # Swing animation chance each movement update (0.0~1.0).
+      # 默认值 (Default): 0.22
+      swing-chance: 0.22
+
+    hit-rise:
+      # 当 NPC 被击中时，向上攀升的持续时间（tick）
+      # Rise duration after being hit (tick).
+      # 默认值 (Default): 40
+      ticks: 40
+      # 向上攀升后的恢复时间（tick）
+      # Recover duration after rise (tick).
+      # 默认值 (Default): 35
+      recover-ticks: 35
+      # 向上攀升的最大高度（单位：格）
+      # Maximum rise height after hit (blocks).
+      # 默认值 (Default): 1.1
+      height: 1.1
+      # 被击中后额外延长存在时间（tick）
+      # Extra lifetime added after a hit (tick).
+      # 默认值 (Default): 90
+      extend-duration-ticks: 90
+
+    auto-spawn:
+      # 是否允许在战斗中随机触发 NPC
+      # Whether to randomly trigger NPC during combat.
+      # 默认值 (Default): false
+      in-combat: false
+      # 连击窗口（毫秒），窗口内攻击次数达到阈值才会考虑生成
+      # Burst window in milliseconds for combat trigger.
+      # 默认值 (Default): 750
+      burst-window-ms: 750
+      # 连击窗口内最小攻击次数（建议 3~5）
+      # Minimum attacks in burst window (recommended 3~5).
+      # 默认值 (Default): 3
+      burst-min-attacks: 3
+      # 视角突变 Yaw 阈值（度），用于识别不自然的锁头切换
+      # Yaw snap threshold in degrees for unnatural lock switches.
+      # 默认值 (Default): 32.0
+      yaw-snap-threshold: 32.0
+      # 视角突变 Pitch 阈值（度）
+      # Pitch snap threshold in degrees.
+      # 默认值 (Default): 18.0
+      pitch-snap-threshold: 18.0
+      # 触发概率百分比（1~100）
+      # Trigger chance in percent (1~100).
+      # 默认值 (Default): 12
+      chance-percent: 12
+      # 两次自动触发之间的最小冷却（tick）
+      # Minimum cooldown between auto spawns (tick).
+      # 默认值 (Default): 60
+      cooldown-ticks: 60
+      # 自动触发后 NPC 存在时长（tick）
+      # NPC lifetime for auto-spawn (tick).
+      # 默认值 (Default): 120
+      duration-ticks: 120
+      # 自动触发模式：BACK / CIRCLE / DIAGONAL
+      # Auto-spawn mode: BACK / CIRCLE / DIAGONAL.
+      # 默认值 (Default): DIAGONAL
+      mode: BACK
+      # 示例：中等强度自动触发（更不容易被常见 AntiBot 策略识别）
+      # Example medium profile:
+      # in-combat: true
+      # burst-window-ms: 800
+      # burst-min-attacks: 3
+      # yaw-snap-threshold: 28.0
+      # chance-percent: 10
+      # cooldown-ticks: 80
+
+    spoof:
+      # 伪造 NPC 在 TabList 里的游戏模式
+      # Spoof NPC game mode in TabList.
+      # 可选: SURVIVAL/CREATIVE/ADVENTURE/SPECTATOR
+      # 默认值 (Default): SURVIVAL
+      gamemode: SURVIVAL
+      meta:
+        # 是否启用实体元数据伪装
+        # Enable entity metadata spoof.
+        # 默认值 (Default): true
+        enable: true
+        # 默认值 (Default): true
+        sprinting: true
+      potion:
+        # 是否发送一个基础药水效果做拟人噪声
+        # Send a baseline potion effect as human-like noise.
+        # 默认值 (Default): true
+        enable: true
+      equipment:
+        # 是否发送装备伪装包（使用随机装备组合）
+        # Send equipment spoof packets (randomized gear set).
+        # 默认值 (Default): true
+        enable: true
+      team:
+        # 是否启用队伍伪装（用于 NameTag 与碰撞规则）
+        # Enable team spoof for name tag & collision rules.
+        # 默认值 (Default): true
+        enable: true
+        # 是否隐藏 NPC 名字
+        # Hide NPC name tag.
+        # 默认值 (Default): true
+        hide-name-tag: true
+        # 是否关闭 NPC 与玩家碰撞
+        # Disable collision between NPC and player.
+        # 默认值 (Default): true
+        no-collision: true
+
+  vector:
+    # simd-boost: 是否启用向量加速。
+    simd-boost: false
+
+  raytrace:
+    # fast-mode: 是否启用更轻量的射线遍历。
+    # 开启后更省性能，关闭后更偏向精度。
+    fast-mode: false
+    # fast-step-scale: 快速模式下每步前进距离。越小越细，性能开销也越高。
+    fast-step-scale: 0.25
+    # lenient-target-box: 是否对目标盒做少量宽容，降低边缘误差。
+    lenient-target-box: true
+
+  # 内部变量配置。
+  # 这里会在重载时注册为内部静态变量，可在处罚命令、消息模板等位置直接使用。
+  # 在下面添加任意 key，会自动注册为 %neko_placeholder_<key>% 变量。
+  # value 支持单条字符串或多条命令列表（列表时按顺序逐条执行）。
+  # 例如定义 ban / kick / cps 等，其它地方写 %neko_placeholder_ban% 即可引用。
+  placeholder:
+    # ban: 默认封禁命令模板，对应内部变量 %neko_placeholder_ban%。
+    ban: "neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+    # kick: 默认踢出命令模板，对应内部变量 %neko_placeholder_kick%。
+    kick: "neko delay %random_int% kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+    # 自定义示例（列表形式，会按顺序逐条执行）：
+    # multi-ban:
+    #   - "coc %player% 1=1 do /0/ neko delay 3 ban %player% 30d <#FFACAC>异常行为 &7(%special_random_string% m=%fast_math% S=%server%)"
+    #   - "neko crash %player%"
+
+  knock-back:
+    # x: X 方向击退系数。
+    x: 0.75
+    # y: Y 方向击退系数。
+    y: 0.5
+    # z: Z 方向击退系数。
+    z: 0.75
+  freeze:
+    punish:
+      # enable: 是否允许冻结后自动执行处罚命令。
+      enable: true
+      # command: 冻结阶段执行的处罚命令。
+      command: "banip -p %player% &5Karhu&fAC &7> &c拒绝查端 &7[LastID= %player%]"
+  # experimental: 是否启用实验性功能。
+  experimental: false
+  # flying-check: 飞行相关辅助判定。
+  flying-check:
+    # abilities: 是否读取 abilities 状态。
+    abilities: true
+    # packet: 是否读取数据包状态。
+    packet: true
+  # kick-invalid-forge-player: 是否踢出已知存在兼容问题的 Forge 客户端。
+  kick-invalid-forge-player: true
+  # allowed-cinematic: 是否对电影视角输入做宽容处理。
+  # 这个值由 CinematicProcessor 参与旋转样本判断，开启后能减少电影模式带来的视角类误报。
+  # 但也会降低一部分旋转异常场景的敏感度。
+  # Default (默认值): false
+  allowed-cinematic: false
+  develop:
+    # enable: 开发模式总开关。
+    enable: false
+    # send: 调试信息发送目标。
+    send: "player"
+    # log: 是否记录调试日志。
+    log: false
+    # sync: 是否输出同步相关调试。
+    sync: true
+    # raytrace: 是否输出射线调试。
+    raytrace: true
+    # desync: 是否输出失步相关调试。
+    # 主要给 ghost-block / 不同步排查用。
+    desync: true
+    # cancel: 是否在调试时允许取消动作。
+    cancel: true
+    # mitigate: 是否保留缓解动作。
+    mitigate: true
+    # setback: 是否保留拉回动作。
+    setback: true
+    cancel-trace:
+      # enable: 是否追踪第一个把 packet/update 变为 cancelled 的 handler 来源。
+      enable: false
+      # console: 没有玩家 debug session 观看时，也将 cancel trace 输出到控制台。
+      console: true
+      # stack: 是否在 hover/details 中带一段短 Java 堆栈。
+      stack: true
+      # stack-depth: 每次 cancel trace 保留的最大堆栈行数，范围 0-32。
+      stack-depth: 8
+  click-listener:
+    # mode: 点击监听方式。
+    # auto   = 自动选择，1.17+ 使用 bukkit，低版本使用 packet。
+    # bukkit = 适合 1.17+，高版本重复包和动作包行为更复杂。
+    # packet = 适合 1.17 以下，老版本点击链路更稳定。
+    # Default (默认值): auto
+    mode: auto
+  encryption:
+    # method: 处罚命令中 check name 的加密方式。
+    # xor          = XOR 异或 + Base64，密文较长。
+    # substitution = 字符替换密码，密文与原文等长。
+    # vigenere     = 维吉尼亚密码，密文与原文等长。
+    # Default (默认值): xor
+    method: xor
+  limit:
+    # max-tps: 低于这个 TPS 时暂停部分检测。
+    max-tps: 19.5
+    # max-mspt: 高于这个 MSPT 时暂停部分检测。
+    max-mspt: 50.0
+    # transaction-timeout: 玩家多久没有响应 transaction/confirm 包时踢出，单位秒。
+    # Default (默认值): 30
+    transaction-timeout: 30
+    # packet: 单周期最大处理包数量。
+    packet: 80
+    # xaero-map: 是否限制相关地图类功能。
+    xaero-map: false
+    ping:
+      # abilities-change: 飞行阶段允许的最大延迟。
+      abilities-change: 450
+      # firework-boost: 烟花加速阶段允许的最大延迟。
+      firework-boost: 450
+
+# #############################################
+# 插件联动
+# 这里控制与其他插件或平台的兼容功能。多数改动建议重启后再观察。
+# #############################################
+hooks:
+  # extra-packet: 是否启用额外延迟数据支持。
+  extra-packet: false # 仅为企业版用户提供
+  # craft-engine: 是否启用 CraftEngine 兼容。
+  # 这类自定义方块/物品插件会影响碰撞、放置和可见性判断，未接入时更容易出现环境侧误差。
+  craft-engine: false
+  # craft-engine-real-block: 是否兼容 CraftEngine 的 RealBlock 自定义方块。
+  # 开了之后玩家站在这类方块上的碰撞会被正确识别，不会误判成悬空。
+  # 这是专门给星梦乡服务器使用的。
+  craft-engine-real-block: false
+  # eco: 是否启用 Auxilor eco / EcoItems / EcoEnchants 兼容。
+  # 涵盖任何通过 eco 注册的自定义物品、自定义方块、自定义实体（也包括通过 eco 桥接的 Oraxen / Nexo / ItemsAdder）。
+  # 如果你在使用任何基于 eco 框架的插件就开启它。
+  eco: false
+  # gsit: 是否启用 GSit 兼容。
+  # 主要影响坐姿、躺姿和交互姿态场景。版本不对时这类姿态很容易被误读。
+  gsit: false
+  # crack-shot: 是否启用 CrackShot 兼容。
+  # 涉及自定义枪械/射击玩法时再考虑开启。
+  crack-shot: false
+  # ultimate-manager: 我自己服用的，你们别管这个
+  ultimate-manager: false
+  # mythicmobs: 是否启用 MythicMobs 兼容。
+  # 自定义实体会影响实体类型、命中盒和战斗上下文，相关玩法服更需要这一项。
+  mythicmobs: false
+  # brewery: 是否启用 Brewery 兼容。
+  brewery: false
+  # mypet: 是否启用 MyPet 兼容。
+  mypet: false
+  # mc-pets: 是否启用 MCPets 兼容。
+  mc-pets: false
+  # 7-pay: 是否启用 7-pay 兼容。
+  7-pay: false
+  # mbed-wars: 是否启用 MBedWars 兼容。
+  mbed-wars: false
+  # apollo: 是否启用 Apollo 兼容。
+  apollo: false
+  # laby-mod-api: 是否启用 LabyMod API 兼容。
+  laby-mod-api: false
+  # carpet-place: 是否启用 Carpet Place payload 兼容。
+  # 开启后会接收 carpet:hello 的自定义放置协议，并转成正常的使用/放置数据包给反作弊处理。
+  carpet-place: false
+
+  # server-bridge: 是否启用代理服 Server-Bridge 兼容。
+  # 开启后子服反作弊会监听 neko:server_bridge 频道，接收 BungeeCord/Velocity 代理端推送的当前服务器名，
+  # 并缓存为内部使用的服务器名，省去在 database.yml 里手动配置 server-name 的麻烦。
+  # 需要在代理端安装对应的 Server-Bridge / Server-Bridge-Velocity 插件。
+  server-bridge:
+    enable: false
+
+  geyser:
+    # enable: 是否启用 Geyser 兼容。
+    enable: false
+    # brand: 是否额外依赖品牌判断 Geyser。可能被伪装，谨慎开启。
+    brand: false # 可能会被作弊客户端欺骗, 建议别开
+    # api: 是否启用 Geyser API。
+    api: true
+    # uuid: 是否使用 Geyser UUID 兼容。
+    uuid: true
+    # bungee: 是否启用代理服兼容。
+    bungee: true
+    # check-geyser-player: 是否在检测时额外检查基岩版玩家是否作弊
+    check-geyser-player: false
+
+# #############################################
+# 缓解与保护设置
+# 这里控制命中检测后的附加处理，例如减伤、重置、拉回和同步。
+# #############################################
+mitigates:
+  attack:
+    # reduce-damage: 是否在命中后降低伤害。
+    reduce-damage: true
+    # reduce-type: 减伤模式。
+    # dynamic     = 根据 VL 动态调整减伤比例。
+    # fixed       = 固定百分比减伤（由下方 damage 控制）。
+    # attackspeed = 根据攻速属性调整减伤，攻速越高减伤越少。
+    # random      = 随机减伤比例。
+    # strict      = 严格减伤，固定 80% 削减。
+    # Default (默认值): Fixed
+    reduce-type: Fixed
+    # damage: Fixed 模式下的减伤百分比。
+    damage: 60
+    # use: 是否一并处理攻击中的用物品状态。
+    use: true
+
+  # no-slow: 不减速缓解设置。
+  no-slow:
+    # enable: 总开关。关闭后这一组都不会再处理。
+    enable: true
+    # other: 是否处理部分额外重置场景。
+    other: false
+    # sprint: 是否处理疾跑中的不减速。
+    sprint: true
+    # inventory: 是否处理开背包阶段。
+    inventory: true
+    # digging: 是否处理挖掘中的不减速状态。
+    digging: false
+    # slot-change: 是否处理切换快捷栏阶段。
+    slot-change: true
+    # switch-item: 是否处理切换物品栏位导致的不减速状态。
+    switch-item: false
+    # switch-item-exp: 是否处理切换物品后的额外实验性分支。
+    switch-item-exp: false
+    # drop-item: 是否处理丢弃物品阶段。
+    drop-item: false
+    # use-item: 是否主动重置使用物品状态。
+    use-item: false
+    # bad-packets: 是否处理结束使用时的异常包序列。
+    bad-packets: true
+    # invalid: 是否处理手持物品状态异常。
+    invalid: false
+    # strict: 额外严格模式。没有明确需要时建议关闭。
+    strict: false
+
+  invalid-break:
+    # invalid-break: 破坏方块相关的补充保护。
+    # 当前代码实际读取的是 mitigates.invalid-break.enable。
+    enable: true
+    # min-delay: 两次破坏之间允许的最小间隔。
+    # 这个值当前主要用于保留配置结构，是否被其它扩展逻辑使用取决于你的分支实现。
+    min-delay: 3
+
+  invalid-pos:
+    # transaction-skip: 是否处理“客户端跳过了应答 teleport transaction”的情况。
+    transaction-skip:
+      # enable: 总开关。关闭后这一组不再介入这类 teleport skip。
+      enable: true
+      # max-value: 至少跳过多少个 transaction 后才开始处理。
+      # 越小越早介入。
+      max-value: 3
+
+  elytra:
+    # elytra: 鞘翅相关保护。
+    enable: true
+    # sprint: 是否处理鞘翅阶段的异常水平加速。
+    # 开启后对跳跃+疾跑叠出的异常加速更敏感，但也更依赖环境稳定。
+    sprint: false # 在玩家跳跃+疾跑的时候会不断给鞘翅移动增加0.2的水平速度, 这会被一些黑客利用来进行高速的鞘翅移动, 开启这个选项可以解决这个问题
+    # ground: 是否处理鞘翅阶段的离地状态异常。
+    ground: true
+
+  ghost-block:
+    # Master switch for placement tracking.
+    place: true
+    # Pulls the player back when a ghost-block is confirmed.
+    mitigate: true
+    # Sends block-state sync when a ghost-block is confirmed.
+    sync: false
+    placement:
+      # 检测已放置但实际不存在的方块。
+      enable: true
+      # 累计多少次后拉回。
+      max-buffer: 2
+      # 每次不触发时衰减的量。
+      buffer-decay: 0.05
+    ground-desync:
+      # 纠正玩家地面状态不一致。
+      enable: true
+    placed-foot:
+      # 检查玩家放置后方块脚下的状态。
+      enable: true
+    liquid:
+      # 检查玩家周围液体的差异。
+      enable: true
+
+  duplicate:
+    # ignore: 是否忽略重复包。
+    # 更适合拿来缓和重复同步包造成的噪声。
+    ignore: true
+    # cancel: 是否取消重复包。
+    # 比 ignore 更强，问题多时可以先关这个再观察。
+    cancel: true
+
+  #   # 这会修复https://github.com/CCBlueX/LiquidBounce/issues/7225
+  #   # 一般来说不会造成任何影响, 开启就行
+  #   # 默认值 (Default): true
+
+  trident:
+    # trident: 三叉戟相关保护。
+    enable: true
+    limit-use:
+      # enable: 是否限制三叉戟连续使用。
+      enable: true
+      # buffer: 连续异常次数上限。
+      # 越小越容易更早介入。
+      buffer: 1
+      # reset: 计数重置时间，单位毫秒。
+      reset: 7000
+    # riptiding: 是否处理激流阶段的异常状态。
+    riptiding: true
+
+  velocity:
+    # velocity: 击退与速度缓解设置。
+    enable: true
+    # jump: 是否处理跳跃阶段。
+    jump: true
+    # invalid: 是否处理无效速度。
+    invalid: true
+
+  visual:
+    # visual: 视觉干扰设置。
+    # 主要影响客户端看到的其他玩家信息，不是直接修改服务端判定。
+    enable: true
+    # food-saturation: 是否伪造饱食度显示。
+    food-saturation: false # 实验性
+    scoreboard:
+      # enable: 是否启用计分板干扰。
+      enable: false
+      # object: 是否伪造记分项。
+      object: false
+      # score: 是否伪造分数。
+      score: false
+    equipment:
+      # enable: 是否启用装备干扰。
+      enable: true
+      # enchantments: 是否伪造附魔显示。
+      enchantments: true
+    meta:
+      # enable: 是否启用实体元数据干扰。
+      enable: true
+      # only-player: 是否只处理玩家实体。
+      only-player: true
+      # health: 是否伪造生命值。
+      health: true
+      # absorption: 是否伪造吸收量。
+      absorption: true
+
+  # inventory: 是否处理背包相关异常数据包行为。
+  inventory: true
+
+  # invalid-slot-kick: 玩家访问无效槽位时是否踢出。关闭后只记录日志不踢人。
+  # 当控制台出现 "Tried to get slot ... in a container with only ... slots" 警告时触发。
+  # 正常情况下不会有问题,默认开启,这会解决一些 no-slow 绕过。
+  invalid-slot-kick: true
+
+  # auto-cw: 是否处理异常水晶放置。
+  auto-cw: false
+
+  # stay-unload-chunk: 玩家进入未加载区块时是否停止同步并直接拉回。
+  stay-unload-chunk: true
+
+  # blink: Blink 相关缓解。
+  blink:
+    # resend-packet: 当玩家卡顿的时候，取消服务器发送的所有数据包 思路来自dw1e (https://github.com/dw1e/Axiom)
+    resend-packet: false
+    type-a:
+      # enable: 是否启用该子类型缓解。
+      enable: false
+      # min-allowed-ping-tick: 允许的最小延迟波动。越大越宽松。
+      min-allowed-ping-tick: 1.0
+      # disable-setback: 关闭命中后的拉回。
+      # 这个检查可能会帮助一些绕过的产生，比如 blink antivoid，因为其的性质非常特殊，其的逻辑导致了我们收到的最后一个位置是在还没掉落虚空的站立位置，
+      # 这可能会导致这个检查会在黑客 blink 后帮助其 tp 回来，我们还在寻找解决的办法，如果贵服在起床战争，或者空岛这种游戏，请暂时禁用这个选项。
+      disable-setback: false
+    type-b:
+      # enable: 是否启用该子类型缓解。
+      enable: false
+      # wait: 允许的等待时间，单位毫秒。
+      # 越长越宽松。
+      wait: 1000
+      # max-distance: 等待窗口内允许的最大距离。
+      # 越小越容易把短时突进当成问题。
+      max-distance: 0.015
+
+  lag-spoof:
+    # lag-spoof: 延迟伪装相关缓解。
+    # 这一组主要处理假延迟、回溯、延后接包和背包走等网络侧优势，不直接决定检测是否成立。
+    enable: true
+    # fake-lag: 是否启用假延迟缓解。
+    # 开启后会更积极地处理看起来像“故意把动作和确认拆开”的情况。
+    fake-lag: false # 实验性，默认关闭，总开关
+    fake-lag-settings:
+      attack:
+        # enable: 攻击 fake-lag 子开关，需总开关开启。
+        enable: true
+        # cancel-window: 普通 burst 检测后取消攻击次数。
+        cancel-window: 3
+        # cancel-window-severe: 严重 burst 检测后取消攻击次数。
+        cancel-window-severe: 6
+        # burst-threshold-lo: delta 低于此值视为严重 burst（毫秒）。
+        burst-threshold-lo: 3
+        # burst-threshold-hi: delta 低于此值视为普通 burst（毫秒）。
+        burst-threshold-hi: 6
+        # burst-min-count: 全缓冲区最少 burst 次数触发普通 tier。
+        burst-min-count: 3
+        # severe-burst-min-count: 全缓冲区最少严重 burst 次数触发 severe tier。
+        severe-burst-min-count: 4
+        # recent-burst-min: 最近 5 次最少 burst 次数触发普通 tier。
+        recent-burst-min: 2
+        # recent-burst-severe-min: 最近 5 次最少严重 burst 次数触发 severe tier。
+        recent-burst-severe-min: 3
+        # idle-min: 空闲 delta 平均值高于此值才触发。
+        idle-min: 30
+        # burst-ratio-max: attackAvg/idleAvg 上限，普通 tier。
+        burst-ratio-max: 0.35
+        # severe-ratio-max: attackAvg/idleAvg 上限，严重 tier。
+        severe-ratio-max: 0.2
+      placement:
+        # enable: 搭路 fake-lag 子开关，需总开关开启。
+        enable: true
+        # cancel-window: 搭路检测到 burst 后取消放置次数。
+        cancel-window: 2
+        # burst-threshold: 搭路 delta 低于此值视为 burst（毫秒），比攻击宽松。
+        burst-threshold: 10
+        # burst-min-count: 搭路全缓冲区最少 burst 次数触发。
+        burst-min-count: 4
+        # recent-burst-min: 搭路最近 4 次最少 burst 次数触发。
+        recent-burst-min: 2
+        # idle-min: 搭路时空闲 delta 平均值高于此值才触发。
+        idle-min: 40
+        # ratio-max: 搭路时 attackAvg/idleAvg 上限，比攻击宽松。
+        ratio-max: 0.45
+      # debug: 是否输出 CSV 调试数据到 fakeLag/ 目录。
+      debug: false
+    # back-track: 是否处理回溯类延迟行为。
+    # 开启后更容易压制"先看旧位置再补命中"的优势。
+    back-track: true
+    # inventory: 是否处理背包行走相关延迟行为。
+    inventory: true # 实验性
+    # delay-use-item: 是否延后处理用物品状态。
+    # 常用于压制某些把 use-item 时序拆开的做法。
+    delay-use-item: true
+    # delay-accept-packet: 是否延后处理确认包。
+    # 开得越激进，对兼容要求越高。
+    delay-accept-packet: false # 实验性
+    # 在服务器发送Velocity数据包时, 玩家是否延迟接收了数据包
+    # 思路来自P01_4rU5er
+    # 默认值 (Default): 250
+    confirm-velocity: 250
+    # 高延迟速度超时拉回阈值（毫秒）
+    # High-latency velocity timeout setback threshold (ms)
+    # 默认值 (Default): 5000
+    confirm-velocity-pos-update: 5000

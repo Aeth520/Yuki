@@ -1,0 +1,563 @@
+# ******************************************************************************************************************************
+#  ███    ██     ███████     ██   ██      ██████      ██
+#  ████   ██     ██          ██  ██      ██    ██     ██
+#  ██ ██  ██     █████       █████       ██    ██     ██
+#  ██  ██ ██     ██          ██  ██      ██    ██
+#  ██   ████     ███████     ██   ██      ██████      ██
+# ******************************************************************************************************************************
+#############################################
+# Message Configuration
+# This file defines command messages, alerts, warnings, kick reasons and UI text.
+# Most content is read internally by the plugin; editing here only changes presentation.
+# Editing this file changes presentation and prompts, not the detection logic itself.
+#############################################
+
+# #############################################
+# Message Prefixes
+# main-prefix is the root prefix. Other prefixes that contain the %prefix% placeholder will have it replaced with the main-prefix value.
+# #############################################
+# main-prefix: Shared prefix used by all prompt messages and %prefix% replacement.
+main-prefix: "Neko&c!"
+# core-prefix: Core system message prefix.
+core-prefix: "&d%prefix% &f(CORE) &7> &f"
+# gate-prefix: Gate / connection control message prefix.
+gate-prefix: "&5%prefix% &f(GATE) &7> &f"
+# ext-prefix: External API message prefix.
+ext-prefix: "&b%prefix% &f(EX) &7> &f"
+# debug-prefix: Debug message prefix.
+debug-prefix: "&d%prefix% &f(DEBUGGER) &7> "
+# raytrace-prefix: Raytrace debug message prefix.
+raytrace-prefix: "&d%prefix% &f(RAYTRACE) &7> "
+# sync-prefix: Sync message prefix.
+sync-prefix: "&d%prefix% &f(SYNC) &7> "
+# desync-prefix: Desync message prefix.
+desync-prefix: "&d%prefix% &f(DESYNC) &7> "
+# cancel-prefix: Packet cancellation message prefix.
+cancel-prefix: "&d%prefix% &f(PACKET_CONTROLLER) &7> "
+# mitigate-prefix: Mitigation message prefix.
+mitigate-prefix: "&d%prefix% &f(MITIGATION) &7> "
+# setback-prefix: Setback message prefix.
+setback-prefix: "&d%prefix% &f(SETBACK) &7> "
+# useitem-reset-prefix: Use-item reset message prefix.
+useitem-reset-prefix: "&d%prefix% &f(USEITEM_RESET) &7> "
+
+# #############################################
+# Base Prompts
+# Used mostly by the command framework and general state guards.
+# #############################################
+# only-player: Prompt when a console/command block runs a player-only command.
+only-player: "&c✘ Only players can use this command!"
+# no-permission: Prompt when the sender lacks permission.
+no-permission: "&c✘ You do not have permission to do that!"
+# unknown-command: Prompt for an unrecognised sub-command.
+unknown-command: "&c✘ Unknown command!"
+# not-found: The specified player does not exist. %player% is the input name.
+not-found: "&c✘ Player &f%player%&c was not found"
+# not-data-user: Player is exempt or has no data record. %player% is the input name.
+not-data-user: "&c✘ Player &f%player%&c is bypassed or has no data record!"
+# not-my-self: Prompt when running a restricted command on yourself.
+not-my-self: "&c✘ You cannot use this command on yourself!"
+# stop-chat: Prompt when the server is overloaded and refuses processing.
+stop-chat: "&c✘ Please slow down, the server is already struggling..."
+# kick-when-plugin-disabled: Kick text when the plugin is disabled.
+kick-when-plugin-disabled: "&cThe server is disabled right now, please try again later!"
+# anticheat-loading: Prompt while the plugin is still loading.
+anticheat-loading: "&cThe anti-cheat is still loading, please try again later!"
+
+#############################################
+# Output Formatting
+# Defines alert, profile and other output formats.
+#############################################
+output:
+  # client-brand: Brand join format shown when a player enters with a detected client brand.
+  client-brand:
+    # format: Join message template for client brand announcements.
+    format: "&f✦ Player &5%player% &fjoined with &5%brand% &7(&5%channel%&7)"
+
+  # alerts: Main alert output text and VL bar formatting.
+  # Corresponds to the alert channel toggled by /neko alerts.
+  alerts:
+    # enable: Prompt shown when alerts are turned on.
+    enable: "&f%poem%                                                        &a&lALL CHECKS HAVE BEEN ENABLED"
+    # disable: Prompt shown when alerts are turned off.
+    disable: "&eStopped viewing alerts..."
+    # exp-symbol: Marker added to experimental checks.
+    exp-symbol: "&c⚠&f"
+
+    # vl-bar: Colors and length used by the rendered VL progress bar.
+    vl-bar:
+      # after: Filled section color.
+      after: "&5"
+      # before: Empty section color.
+      before: "&f"
+      # length: Total bar character length.
+      length: 10
+
+    # alert-format: Main alert line used when [alert] is triggered.
+    alert-format: "&5ID: &f%player% | &5Type: &f%check_name%%exp% &f| &5VL: %vlbar% &f| &5Ping: &f%mix_ping% &f| &5CPS: &f%cps%"
+
+  # verbose: Prompt text for verbose mode toggles.
+  # Corresponds to the verbose data channel toggled by /neko verbose.
+  verbose:
+    # enable / disable: Prompts shown when verbose view is toggled.
+    enable: "&f%poem%                                                       &a&lVERBOSE HAS BEEN ENABLED"
+    disable: "&aStopped viewing verbose output!"
+    # hover: Hover text attached to alerts for staff with hover permission.
+    # Staff see this detailed info when hovering over an alert message.
+    # Contains ping/TPS/version/check description/detail data, last line is click-to-teleport.
+    hover: |-
+      &5Ping: &f%mix_ping% &7(&fLag= &c%lagging% &7| &c%move_lagging%&7)&f | &5TPS: &f%tps% | &5Version: &f%brand% %version%
+      &f
+      &5Description:
+      &f%description%
+      &f
+      &5Detail:
+      &f%verbose%
+      &f
+      &5Click to teleport to &f%player% &c!
+
+  # debug: Debug output formatting.
+  # After enabling /neko debug, various debug info is formatted here.
+  # format is the single-line chat format, detail-line is each hover line, hover is the full hover text.
+  debug:
+    format: "&5%type% &8| &f%player% &8| &7%reason% &8(&f%summary%&8)"
+    detail-line: "&5%key%: &f%value%"
+    hover: |-
+      &5Neko Debug
+      &f
+      &5Player: &f%player%
+      &5Type: &f%type%
+      &5Reason: &f%reason%
+      &5World: &f%world%
+      &f
+      &5Detail:
+      &f%details%
+
+#############################################
+# Broadcast and Kick Reasons
+# broadcast is used for punish announcements; kick.* is used for different disconnect reasons.
+#############################################
+# broadcast: Punishment broadcast text.
+# Available variables: %player% (punished player name).
+broadcast: |-
+  &7&m--------------------------------------------------&r
+  &r&c&l✗ &5&lKARHU CHEAT DETECTION
+  &r&fKarhu &7has removed a player from the network due to cheating
+  &7&m--------------------------------------------------&r
+
+kick:
+  # invalid-forge: Kick text for the known Forge-side incompatibility case.
+  invalid-forge: "&c✘ Invalid client state &7(FORGE: github.com/MinecraftForge/MinecraftForge/issues/9309)"
+  # packet: Kick text for invalid packet flow.
+  packet: "&c✘ Invalid packet data"
+  # The following texts are used as disguised disconnect reasons sent to the client to hide the real kick reason.
+  # timed-out: Kick reason when a player stops responding to anti-cheat packets.
+  # default: Default kick reason when anti-cheat mitigation triggers a kick; the console will log the specific cause.
+  timed-out: "Internal Exception: io.netty.channel.unix.Errors$NativeIoException: readAddress(..) failed: Connection reset by peer (T)"
+  default: "Internal Exception: io.netty.channel.unix.Errors$NativeIoException: readAddress(..) failed: Connection reset by peer (D)"
+  invalid-client: "&cYour client is not allowed on this server. Some modified clients change too much behaviour to be considered valid anymore. &7(%brand%)"
+  # high-ping: Kick text when player ping stays too high.
+  # Available variables: %duration% (duration), %ping% (ping value).
+  high-ping: "&cYour ping has stayed abnormally high for &f%duration% &7(%ping%)"
+  # skip-transaction: Kick reason when a player skips anti-cheat transaction checks.
+  skip-transaction: "Internal Exception: io.netty.channel.unix.Errors$NativeIoException: readAddress(..) failed: Connection reset by peer (S)"
+  # invalid-slot: Kick message for accessing invalid slots. Supports minimessage color codes.
+  invalid-slot: "&c✘ Slot resolution failed, please contact an administrator!"
+
+commands:
+  # help: Show available commands with pagination.
+  # Usage: /neko help [page]
+  help:
+    description: "Show available commands"
+    # usage: Prompt for invalid args or insufficient permission.
+    usage: "&5✦ Usage: &f/neko help [page]"
+    # header: Top line of the rendered help page.
+    header: "&8&m=========&r &d%prefix% &7Help &8&m=========&r"
+    # entry: %usage% usage / %description% description / %aliases_suffix% aliases suffix
+    entry: "&8» &f%usage% &7%description%%aliases_suffix%"
+    # aliases: Suffix shown when aliases exist.
+    aliases: " &8(&7%aliases%&8)"
+    # empty: Prompt shown when the sender has no visible commands.
+    empty: "&7You do not have any available commands right now"
+    # page-info: %page% current page / %total_pages% total pages
+    page-info: "&8» &7Page &f%page% &7/ &f%total_pages%"
+    # page-nav: clickable buttons with hover tooltip; disabled style at boundaries
+    page-nav:
+      # prev: Previous page button text (clickable)
+      prev: "&8[&aPrev&8]"
+      # prev-disabled: Previous page disabled style (first page)
+      prev-disabled: "&8[&7Prev&8]"
+      # next: Next page button text (clickable)
+      next: "&8[&aNext&8]"
+      # next-disabled: Next page disabled style (last page)
+      next-disabled: "&8[&7Next&8]"
+      # separator: Separator between prev and next buttons
+      separator: " &7| "
+      # hover: Tooltip shown on hover, %page% = target page number
+      hover: "&fClick to go to page %page%"
+    # footer: Bottom line of the rendered help page.
+    footer: "&8&m============================="
+
+  # profile: Used by /neko profile to display live player state from placeholders.
+  profile:
+    description: "View player profile information"
+    # usage: Basic syntax hint.
+    usage: "&5✦ Usage: &f/neko profile <player>"
+    # message: Multi-line live profile output, one info point per line to avoid stacking.
+    # Available placeholders: %player% %mix_ping% %lagging% %move_lagging% %cps% %last_cps% %teleporting% %riding% %version% %brand% %h_sensitivity% %v_sensitivity% %wrapper_sensitivity% %fast_math% %chunks% %jump_reset_prob% %jump_reset_avg% %jump_reset_std%
+    message: |-
+      &8&m=======&r &d%player% &7Profile &8&m=======&r
+      &r&5✦ Ping: &f%mix_ping%
+      &r&5✦ Lag: &fLag=%lagging% | MoveLag=%move_lagging%
+      &r&5✦ Clicks: &f%cps%/%last_cps%
+      &r&5✦ Teleporting: &f%teleporting%
+      &r&5✦ Riding: &f%riding%
+      &r&5✦ Version: &f%version%
+      &r&5✦ Client: &f%brand%
+      &r&5✦ Sensitivity: &fHorizontal %h_sensitivity%% | Vertical %v_sensitivity%%
+      &r&5✦ Combined Sensitivity: &f%wrapper_sensitivity%
+      &r&5✦ Fast Math: &f%fast_math%
+      &r&5✦ Loaded Chunks: &f%chunks%
+      &r&5✦ JumpReset: &fprob %jump_reset_prob% | avg %jump_reset_avg%t | std %jump_reset_std%t
+      &8&m========================&r
+
+  # reload: Used by /neko reload.
+  reload:
+    description: "Reload plugin configuration"
+    # usage: No arguments, just run the reload.
+    usage: "&5✦ Usage: &f/neko reload"
+    # fail: Error prompt returned when reload throws or aborts.
+    fail: "&c✘ Reload failed! &7(%reason%)"
+    # success: Prompt shown after a successful reload.
+    success: "&a✔ Configuration reload complete"
+
+  # #############################################
+  # Settings Command (Settings Command)
+  # #############################################
+  # settings: View or modify toggle items in the policy panel.
+  # Usage: /neko settings [setting] [enable|disable]
+  # No args lists all, with a setting name shows current value, with an action modifies it (explicit enable/disable, no toggle).
+  settings:
+    description: "View or update settings menu toggles"
+    # usage: Prompt for invalid args or insufficient permission.
+    usage: "&5✦ Usage: &f/neko settings [setting] [enable|disable]"
+    # invalid-setting: %input% user input / %available% available key list
+    invalid-setting: "&c✘ Unknown setting &f%input%&c. Try: &7%available%"
+    # invalid-action: %input% user input, only accepts enable/disable
+    invalid-action: "&c✘ Invalid action &f%input%&c. Use &7enable/disable"
+    # list-header: Header line for the settings list.
+    list-header: "&8&m=======&r &dLive Settings &8&m=======&r"
+    # list-entry: %name% name / %path% path / %value% current value
+    list-entry: "&8» &f%name% &8(&7%path%&8) &7» &f%value%"
+    # current: %name% / %path% / %value%
+    current: "&8» &f%name% &8(&7%path%&8) &7» &f%value%"
+    # updated: %name% / %path% / %value%
+    updated: "&a✔ Updated &f%name% &ato %value% &7(%path%)"
+    # already: %name% / %value%
+    already: "&e⋯ &f%name% &eis already %value%"
+    # fail: %reason% failure reason
+    fail: "&c✘ Failed to update setting! &7(%reason%)"
+
+  # delay: Used by /neko delay.
+  delay:
+    description: "Run a command after a delay"
+    usage: "&5✦ Usage: &f/neko delay <seconds> <command>"
+    # invalid: Error shown when the delay value is not a valid integer.
+    invalid: "&c✘ Please enter a whole number!"
+    # message: Confirmation prompt after scheduling the delayed command.
+    message: "&a✦ Command &5%command% &awill run in &e%delay%s"
+
+  # chunks: Used by the chunk information command.
+  chunks:
+    description: "View chunk information"
+    usage: "&5✦ Usage: &f/neko chunks <total/info> <player>"
+    # total: Summary line for total loaded chunks.
+    total: "&5✦ Total currently loaded chunks: &f%total%"
+    # player: Multi-line output for one player's chunk state.
+    player: |-
+      &8&m=======&r &d%player% &7Chunk Info &8&m=======&r
+      &r&5✦ Loaded Chunks: &f%chunks%
+      &8&m============================&r
+
+  # #############################################
+  # Record Command (Record Command)
+  # #############################################
+  # record: Record player combat/movement data for analysis.
+  # Sub-modules: movement / rotate(aim) / scaffold(build) / backtrack / hitselect
+  # Usage: /neko record movement <simple|verbose> <player|all> [enable|disable]
+  #        /neko record <rotate|scaffold|backtrack|hitselect> <player|all> [enable|disable]
+  #        /neko record movement upload <player>
+  record:
+    description: "Record player debug data"
+    # usage: Single-line format, used for both help listing and error prompts.
+    usage: "&5✦ Usage: &f/neko record movement <simple|verbose> <player|all> [enable|disable] &8/ &f/neko record <rotate|scaffold|backtrack|hitselect> <player|all> [enable|disable] &8/ &f/neko record movement upload <player>"
+    # movement sub-module prompts
+    started: "&a✦ Started recording movement data for &e%player%"
+    stopped: "&c✘ Stopped recording movement data for &e%player%"
+    record-not-available: "&c✘ Movement record is not available!"
+    # rotate/scaffold/backtrack/hitselect shared prompts
+    analysis-started: "&a✦ Started recording analysis data for &e%player%"
+    analysis-stopped: "&c✘ Stopped recording analysis data for &e%player%"
+    analysis-not-available: "&c✘ Analysis record is not available!"
+    # upload flow
+    uploading: "&7⋯ Uploading movement record..."
+    uploaded: "&a✔ Uploaded movement record -> &f%url%"
+    upload-failed: "&c✘ Failed to upload movement record"
+    # no-develop: Prompt when a non-developer tries a restricted sub-module.
+    no-develop: "&c✘ This sub-module is for developers only!"
+
+  # setback: Used by /neko setback. default-type is read as the fallback mode name.
+  setback:
+    description: "Set back a player by mode"
+    usage: "&5✦ Usage: &f/neko setback <player>"
+    # message: Success prompt after a setback is applied.
+    message: "&a✦ Set back &e%player% &ausing mode &5%mode%"
+    # cannot: Error shown when the player is exempt from setback.
+    cannot: "&c✘ &f%player% &cis immune to setback!"
+    # no-type: Error shown when the requested setback mode does not exist.
+    no-type: "&c✘ Invalid setback mode!"
+
+  # #############################################
+  # Trust Status Command (SetTrust Command)
+  # #############################################
+  # settrust: Set a player's trust status, affecting detection sensitivity.
+  # Options: untrusted(0.2) / suspicious(0.5) / normal(1.0) / long_time_player(1.6) / trusted(1.9)
+  settrust:
+    description: "Set player trust status"
+    # usage: %player% target player name.
+    usage: "&5✦ Usage: &f/neko settrust <player> <untrusted|suspicious|normal|long_time_player|trusted>"
+    # invalid-status: Prompt when the input status is not in the available list.
+    invalid-status: "&c✘ Invalid trust status!"
+    # message: %player% player name / %status% status name / %factor% trust factor
+    message: "&a✦ Set &e%player%&a's trust status to &5%status% &7(&f%factor%&7)"
+
+  # info: Used by /neko info and then passed through placeholder replacement.
+  info:
+    description: "View plugin and environment information"
+    # usage: Basic syntax hint.
+    usage: "&5✦ Usage: &f/neko info"
+    # message: Multi-line environment and build summary.
+    message: |-
+      &8&m=========&r &dNeko&c! &7Info &8&m=========&r
+      &r&5✦ Version: &f%version%
+      &r&5✦ Build Time: &f%build%
+      &r&5✦ Server Name: &f%server%
+      &r&5✦ Server Version: &f%server_version%
+      &r&5✦ TPS: &f%tps%
+      &r&5✦ MSPT: &f%mspt%
+      &r&5✦ Is Folia: &f%folia%
+      &r&5✦ Adventure Support: &f%support_adventure%
+      &r&5✦ Using Via: &f%via%
+      &r&5✦ Memory Usage: &f%memory%
+      &r&5✦ System: &f%system%
+      &r&5✦ Java Version: &f%java%
+      &r&5✦ PacketEvents Version: &f%packetevents%
+      &8&m========================&r
+
+  # send-alert: Manual alert sending command. Mode is mandatory (normal=with prefix / raw=without prefix).
+  send-alert:
+    # description: Short summary shown in the help list.
+    description: "Send a custom alert message"
+    # usage: Command syntax hint. normal includes prefix, raw does not.
+    usage: "&5✦ Usage: &f/neko sendalert <normal|raw> <message>"
+
+  # alerts: Toggle whether you receive anti-cheat alerts.
+  alerts:
+    description: "Toggle alert reception"
+    usage: "&5✦ Usage: &f/neko alerts"
+
+  # verbose: Toggle verbose debug alerts. Enabling automatically disables normal alerts.
+  verbose:
+    description: "Toggle verbose alert reception"
+    usage: "&5✦ Usage: &f/neko verbose"
+
+  # menu: Open the graphical menu, player only.
+  menu:
+    description: "Open the graphical menu"
+    usage: "&5✦ Usage: &f/neko menu"
+
+  # history: Used for database-backed history browsing and cleanup.
+  history:
+    description: "View or clear player history"
+    usage: "&5✦ Usage: &f/neko history <player> <page>"
+    # header: Header line for the paged history output.
+    header: "&8&m=======&r &d%player% &7History &8(&f%page%&8/&f%maxPages%&8) &8&m=======&r"
+    # entry: One rendered history line.
+    entry: "&8» &5ID: &f%player% &8| &5Type: &f%check_name%%exp% &8| &5VL: &f%vl% &8| &5Time: &f%timeago% &8| &5Server: &f%server%"
+    # clean-all / clean: Success prompts for wiping stored history.
+    clean-all: "&a✔ Cleared all player data!"
+    clean: "&a✔ Cleared data for &e%player%&a!"
+    # querying: Prompt shown while the async lookup is still running.
+    querying: "&7Querying history for &f%player%&7..."
+    # query-timeout: Prompt shown when the lookup takes too long.
+    query-timeout: "&cQuery timed out! History lookup for &f%player% &cexceeded &f%timeout%&c seconds"
+    # query-error: Prompt shown when the lookup fails.
+    query-error: "&cAn error occurred during the query. Check console logs for details"
+    # no-records: Prompt shown when no stored history exists.
+    no-records: "&7Player &e%player% &7has no violation records"
+
+  # debug: Used by live debug toggle commands.
+  debug:
+    description: "Enable debug output"
+    # usage: Syntax hint for player-side debug toggles.
+    usage: "&5✦ Usage: &f/neko debug <type> <player>"
+    # enable / disable: Player-side prompts for toggling a debug channel.
+    enable: "&a✦ &5%type% &fdebug mode &ahas been enabled"
+    # no-develop: Prompt shown when develop mode itself is still disabled.
+    no-develop: "&c✘ Please enable &5Develop &cmode first!"
+    disable: "&c✦ &5%type% &fdebug mode &chas been disabled"
+
+  # spectate: Used by spectate manager prompts.
+  spectate:
+    description: "Spectate a target player"
+    usage: "&5✦ Usage: &f/neko spectate <player>"
+    # return: Clickable return text shown while spectating.
+    return: "\n&e✦ Click to return to your previous location\n"
+    # message / stop: Start and stop prompts for spectate mode.
+    message: "&a✦ Now spectating &e%player%"
+    stop: "&a✦ Spectate mode stopped"
+
+  # stop-spectating: Manually stop spectate mode, player only.
+  stop-spectating:
+    description: "Stop spectate mode"
+    usage: "&5✦ Usage: &f/neko stopspectating [here]"
+
+  # crash: Manual crash-test command prompt.
+  crash:
+    description: "Run a crash test"
+    usage: "&5✦ Usage: &f/neko crash <player> <mode>"
+    # invalid-type: Error shown when the requested crash mode does not exist.
+    invalid-type: "&c✘ Invalid crash mode!"
+    # message: Success prompt after packets are sent.
+    message: "&a✦ Sent crash packets to &e%player%"
+
+  # mitigate: Manual mitigation command and its sub-type prompts.
+  mitigate:
+    description: "Apply a mitigation action"
+    usage: "&5✦ Usage: &f/neko mitigate <player> <mode>"
+    # invalid-type: Error shown when the mitigation mode does not exist.
+    invalid-type: "&c✘ Invalid mitigation type: &e%type%"
+    types:
+      damage:
+        # message: Prompt after enabling damage reduction mitigation.
+        message: "&5✦ Applied damage reduction to &e%player%"
+      reset-item:
+        # message: Prompt after resetting item-use state.
+        message: "&5✦ Reset item state for &e%player%"
+      knock-back:
+        # message: Prompt after applying the knockback branch.
+        message: "&5✦ Applied knockback to &e%player%"
+      rotate:
+        # message: Prompt after randomising the player's view.
+        message: "&5✦ Randomized the view of &e%player%"
+      shuffle:
+        # message: Prompt after shuffling the main-hand slot state.
+        message: "&5✦ Shuffled the main-hand item of &e%player%"
+      food:
+        # message: Prompt after resetting food-related state.
+        message: "&5✦ Reset food level for &e%player%"
+      resync:
+        # message: Prompt after resyncing pose/state presentation.
+        message: "&5✦ Resynced pose state for &e%player%"
+      killaura:
+        # message: Prompt after the target is moved behind the attacked player.
+        message: "&5✦ Teleported &e%player% &5behind &e%target%"
+        # not-target: Error shown when no valid target exists yet.
+        not-target: "&c✘ &e%player% &chas not attacked a player yet"
+        # pull-back: Prompt after returning the player to the original point.
+        pull-back: "&5✦ Pulled &e%player% &5back to the original point"
+        # attacked: Warning text shown when the target branch believes aura-like behaviour is present.
+        attacked: "&c✦ The target may be using &4KillAura&c!"
+      npc:
+        # Message for spawning packet NPC trap mode.
+        message: "&5✦ Generated induced NPC &7 for &e%player% &5 (&f%mode%&7, &f%tick%t&7)"
+        # Message when NPC feature is disabled globally.
+        disabled: "&c✘ NPC mode has been disabled by the master switch"
+        # Message when NPC spawn failed.
+        failed: "&c✘ NPC generation failed. Please try again later"
+        # Message when NPC is manually removed.
+        removed: "&5✦ &e%player% &5 current NPC has been removed"
+
+  # freeze / unfreeze: Freeze workflow prompts for staff and target-side text.
+  freeze:
+    description: "Freeze a player"
+    # usage: Basic syntax hint.
+    usage: "&5✦ Usage: &f/neko freeze <player>"
+    # message: Staff-side success prompt.
+    message: "&5✦ Player &e%player% &5has been frozen"
+    # already-frozen: Error shown if the player is already frozen.
+    already-frozen: "&c✘ &e%player% &cis already frozen!"
+    # target-side: Text sent to the frozen player.
+    target-side: "&c✘ You have been frozen! Please contact staff for review\n&c✘ Do not move or leave the server!"
+
+  unfreeze:
+    description: "Unfreeze a player"
+    # usage: Basic syntax hint.
+    usage: "&5✦ Usage: &f/neko unfreeze <player>"
+    # message: Staff-side success prompt.
+    message: "&a✦ Unfroze &e%player%"
+    # not-freeze: Error shown when the player is not frozen.
+    not-freeze: "&c✘ &e%player% &cis not frozen"
+    # target-side: Text sent to the unfrozen player.
+    target-side: "&a✦ You have been unfrozen!"
+
+  # control / control-check: Runtime check toggles for a player or one specific check.
+  control:
+    description: "Toggle all checks for a player"
+    # usage: Basic syntax hint.
+    usage: "&5✦ Usage: &f/neko control <player>"
+    # enable / disable: Toggle prompts for full-player checking state.
+    enable: "&a✦ Enabled checks for &e%player% &7(run again to disable)"
+    disable: "&c✦ Disabled checks for &e%player% &7(run again to enable)"
+
+  punish:
+    description: "Punish a player immediately"
+    # usage: Basic syntax hint.
+    usage: "&5✦ Usage: &f/neko punish <player>"
+    # message: Prompt after the punish command has been dispatched.
+    message: "&a✦ Sent the punishment command for &e%player%&a!"
+
+  decrypt:
+    description: "Decrypt text"
+    # usage: Basic syntax hint.
+    usage: "&5✦ Usage: &f/neko decrypt <cipher>"
+    # error: Generic decrypt failure prompt.
+    error: "&c✦ An error occurred during decryption. Please check the input or contact the developer!"
+    # message: Success prompt with the final decrypted text.
+    message: "&a✦ Decrypted content: %message%!"
+
+  control-check:
+    description: "Toggle a specific check"
+    # usage: Basic syntax hint.
+    usage: "&5✦ Usage: &f/neko controlcheck <check> <player>"
+    # not-found: Error shown when the check or player cannot be found.
+    not-found: "&c✦ Could not find that check or player!"
+    # enable / disable: Toggle prompts for one named check.
+    enable: "&a✦ Enabled check &e%check_name%"
+    disable: "&c✦ Disabled check &e%check_name%"
+
+  # cloud: Reconnect prompt for cloud service.
+  cloud:
+    description: "Try reconnecting to the cloud service"
+    # usage: No arguments, just attempt reconnection.
+    usage: "&5✦ Usage: &f/neko cloud"
+    # message: Prompt shown when a reconnect attempt starts.
+    message: "&a✦ Attempting to reconnect to the cloud service..."
+    # connected-already: Prompt shown when cloud is already connected.
+    connected-already: "&e✦ Already connected to the cloud service!"
+
+  # checks: Rendered by the check listing command.
+  checks:
+    description: "View registered checks and states"
+    # usage: No arguments, lists all registered checks.
+    usage: "&5✦ Usage: &f/neko checks"
+    # header / footer: Top and bottom lines for the rendered list.
+    header: "&7&m==============&r&d Neko &5Checks &7(&f%total%&7) &7&m=============="
+    # category-title: Category line for each parent group.
+    category-title: "&7» &f%parent% checks:"
+    # separator: Join text between check names.
+    separator: "&7, "
+    # enabled-color / disabled-color: Colors used for state rendering.
+    enabled-color: "&a"
+    disabled-color: "&c"
+    footer: "&7&m--------------------------------------------&r"

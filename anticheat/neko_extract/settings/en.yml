@@ -1,0 +1,917 @@
+# ******************************************************************************************************************************
+#  ███    ██     ███████     ██   ██      ██████      ██
+#  ████   ██     ██          ██  ██      ██    ██     ██
+#  ██ ██  ██     █████       █████       ██    ██     ██
+#  ██  ██ ██     ██          ██  ██      ██    ██
+#  ██   ████     ███████     ██   ██      ██████      ██
+# ******************************************************************************************************************************
+# #############################################
+# Settings Configuration
+# This file controls output, sync, transaction/confirm packets, hooks and mitigation behaviour.
+# The comment detail is intentionally kept close to the Chinese edition so both languages stay aligned.
+# #############################################
+
+# BStats: Sends anonymous usage stats to bStats.
+# This does not change detection behaviour.
+BStats: true
+
+#############################################
+# Output and Presentation
+#############################################
+output:
+  # alerts: Controls alert output destinations.
+  alerts:
+    # console: Whether alerts are shown in console.
+    console: true
+    # enable-on-join: Automatically enable alerts on join for players holding
+    # neko.commands.alerts + neko.commands.alerts.enable-on-join.
+    enable-on-join: true
+    # throttle: Minimum interval (ms) between two alerts from the same player.
+    # Alerts within this window are silently dropped; verbose and debug are unaffected.
+    # Set to 0 to disable.
+    throttle: 500
+
+  # verbose: Controls verbose output destinations.
+  verbose:
+    # console: Whether verbose output is shown in console.
+    console: false
+    # enable-on-join: Automatically enable verbose on join for players holding
+    # neko.commands.verbose + neko.commands.verbose.enable-on-join.
+    enable-on-join: true
+
+  # client-brand: Brand lists used for join display or immediate kick.
+  client-brand:
+    # should-kick: Brands in this list are kicked immediately when matched.
+    # ignores: These brands are ignored in normal brand display and support regex.
+    should-kick:
+      - acdisable
+      - smoke
+      - CB
+      - Lunar-Client
+      - CM-Pack
+      - Blazing-Pack
+      - Crystalware
+      - Vivecraft
+      - Vape-Crack
+      - glide
+    ignores:
+      - "^badlion$"
+      - "^optifine$"
+      - "^vanilla$"
+      - "^fabric$"
+      - "^quilt$"
+      - "^Feather Fabric$"
+      - "(^lunarclient:v\\d+\\.\\d+\\.\\d+-\\d{4},(?:fabric|forge)$)|(^lunarclient:[a-z0-9]{7}/[\\w_/-]{3,32}$)"
+      - "^labymod$"
+
+  # spectators: Presentation options for spectator visibility.
+  spectators:
+    # hide-all: Hides spectator-related presentation when enabled.
+    hide-all: false
+    # allowed-world: Limits spectator presentation to these worlds.
+    allowed-world:
+      - ""
+
+  # proxy-bridge: Forwards alerts / verbose to proxy-side bridge plugins for BungeeCord / Velocity network-wide broadcasting.
+  # Note: requires the matching bridge plugin installed on BungeeCord / Velocity; enabling it on the backend server alone has no effect.
+  # Does not replace local Bukkit-side output.
+  proxy-bridge:
+    # alerts: Forwards alerts when enabled.
+    alerts: false
+    # verbose: Forwards verbose messages when enabled.
+    verbose: false
+
+#############################################
+# Sync Settings
+#############################################
+sync:
+  # enable: Master switch for sync-related handling.
+  enable: true
+  movement:
+    died:
+      # enable: Syncs death-state handling for movement-side logic.
+      enable: true
+      # packet: Uses packet-side sync for this branch.
+      packet: true
+      # bukkit: Uses Bukkit-side sync for this branch.
+      bukkit: false
+
+    wrong-offset:
+      # enable: Repairs some movement-side offset desync.
+      enable: true
+
+    # in-bed: Syncs bed pose state.
+    in-bed: true
+    # interact: Syncs interact state.
+    interact: true
+    # vehicle: Syncs mount state.
+    vehicle: true
+
+  vehicles:
+    died:
+      # enable: Syncs death-state handling for tracked vehicles.
+      enable: true
+      # packet: Uses packet-side sync for this branch.
+      packet: true
+      # bukkit: Uses Bukkit-side sync for this branch.
+      bukkit: false
+
+    # wrong-offset: Repairs some vehicle offset desync.
+    wrong-offset: true
+    # packet: Keeps packet-side vehicle sync enabled.
+    packet: true
+    # in-bed: Keeps special pose sync enabled for this branch.
+    in-bed: true
+
+#############################################
+# Function Settings
+#############################################
+function:
+  # register-paper-end-tick: Whether to register Paper's ServerTickEndEvent to drive per-tick end flushes.
+  # Enabling this lets some checks flush at the server tick boundary, increasing check strength at the cost of extra bandwidth.
+  # Paper-family cores only; keep disabled on heavily modified cores or when injection misbehaves.
+  # Default: false
+  register-paper-end-tick: false
+  transaction:
+    # max-skips-kick: Kicks after too many missed transaction/confirm responses.
+    # This mainly protects the real-time scheduler and latency pipeline from clients that stop acknowledging packets.
+    max-skips-kick: 40
+    # type: Transaction packet ID generation mode.
+    # grim / neko / latency
+    # Default: grim
+    type: grim
+    # netty: Sends transaction packets through an additional async Netty path.
+    # This can reduce some main-thread cost, but may also make early join sync more fragile.
+    # Default: false
+    netty: false
+    kick-high-ping:
+      # enable: Enables kicking based on very high transaction ping.
+      # Default: false
+      enable: false
+      # max-ping: Starts counting once transaction ping reaches this value in ms.
+      # Default: 300
+      max-ping: 300
+      # duration: How long the value must stay above the limit before kick, in seconds.
+      # Default: 8
+      duration: 8
+  # force-complete: Forces the gateway to complete part of the early join packet sequence faster.
+  # This is mainly used to reduce startup stalls and desync on newer protocol stacks.
+  # For mostly 1.8 environments it is often worth testing with this disabled first; newer versions usually keep it enabled.
+  # Default: true
+  force-complete: true
+  # random-seed: Spoofs seed-related data to defeat seed crackers (e.g. SeedcrackerX).
+  random-seed:
+    # Master switch. When false, all sub-options are ignored.
+    enable: false
+    # Fake the hashed seed in Login/Respawn packets.
+    hashed-seed: true
+    # Rewrite end pillar bedrock heights in chunk data to break pillar-seed cracking.
+    end-pillars: true
+    # Rewrite biome palettes in chunk data with a fake seed (climate-category permutation).
+    biomes: false
+    # Rewrite end city magenta glass to panes in chunk data.
+    end-city-glass: true
+    # Overworld structure block substitution (no restore): TNT/tripwire hook/sea lantern/tuff bricks/sandstone slab/cauldron/crafting table.
+    # Breaks pattern matching for DesertPyramid/JunglePyramid/Monument/TrialChambers/DesertWell/SwampHut/Igloo.
+    overworld-structures: true
+    # How aggressively structure feature blocks (e.g. nether bricks, shroomlights) are replaced inside buildings.
+    # Replacing these blocks prevents seed crackers from recognizing structures to derive the world seed.
+    # aggressive: replace all, strongest protection but buildings become hard to recognize
+    # balanced: replace ~1/4, keeps building outlines recognizable while still preventing cracking
+    # light: replace ~1/8, minimal visual impact but weaker protection
+    # balanced (default) is recommended for a good trade-off between protection and gameplay
+    # Default: "balanced"
+    structure-replace-strength: "balanced"
+    # Nether structure block substitution (no restore): shroomlight and nether bricks -> netherrack.
+    # Prevents crackers from deriving the seed by recognizing nether fortresses and huge fungi.
+    nether-structures: true
+    # Emerald ore obfuscation: replaces emerald ore in chunk data with the block specified by emerald-ore-replace.
+    # Restores the original block when the player digs/places/explodes within restore-radius blocks.
+    # Breaks EmeraldOre finder ore scanning.
+    emerald-ore: true
+    # The block name to replace emerald ore with. Must be a valid Minecraft block ID.
+    # Default: STONE
+    emerald-ore-replace: STONE
+    # Proximity restore radius (blocks). Original emerald ore is restored when the player digs/places/explodes within this distance.
+    # Default: 3
+    restore-radius: 3
+    # Stable fake seed for biome/pillar rewriting. 0 = random per server restart.
+    fake-seed: 0
+    # Strictness preset for decorator clue obfuscation.
+    # strict: most aggressive — hides dungeon spawners and end gateway block entities, perturbs buried treasure and desert wells
+    # balanced: recommended — perturbs dungeon floor / buried treasure / desert wells, keeps spawners
+    # lenient: minimal — only perturbs dungeon floor cobblestone count
+    # Default: "balanced"
+    decorator-strictness: "balanced"
+    # Nether bedrock obfuscation: replaces some bedrock with obsidian to break nether bedrock layer pattern scanning.
+    # Default: true
+    nether-bedrock: true
+    # Shadow state firewall: intercepts subsequent block update packets to prevent the client from seeing real block states.
+    # Note: emerald ore is not affected — it uses its own proximity restore mechanism.
+    # Default: true
+    shadow-state-firewall: true
+    # fake-command: registers seedcracker/seed/minecraft:seed commands to override vanilla.
+    # seedcracker silently consumes all input; seed and minecraft:seed show the real seed to players with minecraft.command.seed permission, others get no output.
+    # Default: true
+    fake-command: true
+  # can-reset-player-use-item: Master switch for item-use reset mitigation logic.
+  # Disabling this also affects mitigations used by NoSlow / AutoBlock style handling.
+  # Default: true
+  can-reset-player-use-item: true
+  lag-track:
+    # tick: How long the server must stall before Neko treats it as a lag event, in ms.
+    tick: 1000
+    # math: Enables an extra lag calculation path.
+    math: false
+    # setback: Allows setback even while the server is lagging.
+    setback: false
+    # print-stacktrace: Prints thread stack traces during lag events.
+    print-stacktrace: false
+    # message: Console text used when a flag happens during a lag event.
+    message: "&cDetected abnormal activity from &f%player%&c, but the server is already lagging for &f%time%&7/&f%time2%/&f%time3%&7{%sum%} &cms! &7(%check_name%)"
+  # command-settings: Command default behaviour and pagination settings.
+  # Centralises default types, page sizes and other behaviour parameters for commands.
+  # Kept separate from messages.yml prompt text so translations cannot accidentally change functional values.
+  command-settings:
+    # action: Default click-action command fired from alert messages.
+    action: "neko spectate %player%"
+    # setback: Fallback setback mode when none is supplied.
+    setback:
+      default-type: "normal"
+    # history: Number of entries shown per page by the history command.
+    history:
+      pages: 8
+    # crash: Fallback crash mode when none is supplied.
+    crash:
+      default-type: "explosion"
+    # mitigate: Fallback mitigation mode when none is supplied.
+    mitigate:
+      default-type: "damage"
+      types:
+        killaura:
+          # Ticks to wait before pulling the attacker back after teleporting behind the target.
+          tick: 10
+    # help: Pagination settings for /neko help.
+    help:
+      # page-size: Number of command entries shown per page.
+      page-size: 6
+  # Command alias settings.
+  # Change these to customize the main command trigger word and aliases.
+  # First entry is the primary command name, rest are aliases.
+  command-alias:
+    aliases:
+      - "nekoanticheat"
+      - "neko"
+      - "neko!"
+      - "nyacho"
+      - "nk"
+  command-blocker:
+    # plugin-name: Fake plugin-facing name used in some responses.
+    plugin-name: "KarhuAC"
+    # tab-complete: Intercepts suspicious tab-complete requests.
+    tab-complete: true
+    command:
+      # enable: Master switch for command interception.
+      enable: true
+      blocks:
+        # contains: Blocks commands containing these fragments.
+        contains:
+          - nekoanticheat
+          - anticheat
+          - neko!
+          - nyacho
+          - matrix
+          - vulcan
+          - spiter
+          - polar
+          - grimac
+          - medusa
+          - verus
+          - aac
+        # equals: Blocks commands that exactly match these values.
+        equals:
+          - seed
+          - nyacho
+          - crack
+          - neko
+      # fake-plugins-add: Extra fake names appended to plugin-list style output.
+      fake-plugins-add:
+        - PolarLoader
+        - MagicBlock
+  # silence: Leaves logging/alerts active while disabling most active mitigation behaviour.
+  silence: false
+  violation-reward:
+    # reset-all: Clears stored VL globally after this many seconds.
+    reset-all: 300
+    # reduce-need-time: Minimum delay before natural VL reduction can happen again, in seconds.
+    reduce-need-time: 3
+  config-refresh:
+    # punishments: Includes punishments.yml in config structure refresh when enabled.
+    punishments: false
+  # ignore-exempt-permissions: Ignores all exempt-style permissions.
+  # When enabled, `neko.exempt`, `neko.exempt.modify`, `neko.exempt.setback`, `neko.exempt.cancel`,
+  # `neko.exempt.highpingkick` and related permission-based bypasses stop working.
+  # OP players will also be checked like normal players.
+  # This only disables permission exemptions. Manual commands like `/neko control` still work.
+  ignore-exempt-permissions: false
+  # fix-sprint-desync: Experimental. Helps reduce sprint-state desync in some special server environments.
+  # If your setup uses mixed versions, custom forks, or other non-standard behavior that causes sprint-related inaccuracies, you can try enabling it.
+  # It is recommended to leave this disabled unless you know you need it.
+  fix-sprint-desync: false
+  command-punish:
+    # command: The actual command executed by /neko punish.
+    # Available variables include %random_int%, %random_string%, %anticheat%, %anticheat_color%,
+    # %world%, %transaction_ping%, %keepalive_ping%, %player%, %server%, %neko_placeholder_ban% and %neko_placeholder_kick%.
+    command: "neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%random_string%-LiK108 S=%server%]"
+  # flush-player-permission: Permission refresh interval in seconds.
+  flush-player-permission: 10
+  # kick-broadcast: Broadcasts punish actions when enabled.
+  kick-broadcast: true
+  # kick-strike-lightning-effect: Plays a lightning effect when punish actions trigger.
+  kick-strike-lightning-effect: true
+  # disallow-flags-after-punishment: Stops further flag spam after the player has already been punished.
+  disallow-flags-after-punishment: false
+  # save-violations-on-leave: Saves VL when the player leaves.
+  save-violations-on-leave: false
+  # fix-duplicate-command-punish: Reduces duplicated punish command execution across overlapping checks.
+  fix-duplicate-command-punish: true
+  # ignore-elytra: Makes some simulation branches skip elytra movement handling.
+  ignore-elytra: false
+  # max-attack-slow-pre-process: Caps how many attack-slow samples are pre-processed in one tick.
+  max-attack-slow-pre-process: 2
+
+  # KillAura NPC Trap: Use packet-only fake NPC to capture automated aura attacks.
+  killaura-npc:
+    # New users only need these: enable / profile / default-duration-ticks / auto-spawn.in-combat.
+    # profile options: safe / balanced / aggressive
+    # - safe: more conservative, fewer triggers, higher compatibility
+    # - balanced: recommended default
+    # - aggressive: more aggressive triggers, higher detection efficiency
+    # Default: balanced
+    profile: balanced
+    # Master switch: Enable or disable KillAura NPC trap system.
+    # Default: true
+    enable: true
+    # Default NPC lifetime for command trigger (tick).
+    # Default: 350
+    default-duration-ticks: 350
+    # NPC movement update interval (tick).
+    # Default: 2
+    move-interval-ticks: 2
+    # Default mode: BACK / CIRCLE / DIAGONAL
+    # BACK: keep distance behind; CIRCLE: hover overhead; DIAGONAL: diagonal wave behind
+    # Default: BACK
+    default-mode: BACK
+    # Whether NPC should be invisible.
+    # Default: false
+    invisible: false
+
+    humanize:
+      # Default follow distance in BACK mode (blocks).
+      # Default: 2.15
+      back-distance: 2.15
+      # Wave speed for DIAGONAL mode (angle increment per update).
+      # Default: 0.24
+      circle-speed: 0.24
+      # Y offset for BACK/DIAGONAL modes (blocks).
+      # Default: 2.6
+      base-height: 2.6
+      # Head-top orbit height for CIRCLE mode (blocks).
+      # Default: 3.95
+      circle-height: 3.5
+      # Random XZ jitter for humanization.
+      # Default: 0.09
+      jitter: 0.09
+      # Random Y noise for humanization.
+      # Default: 0.03
+      y-noise: 0.03
+      # Side wave amplitude for DIAGONAL mode (blocks).
+      # Default: 0.55
+      diagonal-wave: 0.55
+      # Minimum safe distance from player (anti face-close).
+      # Default: 1.65
+      min-keep-distance: 1.65
+      # Pull-back distance when bot is in front of player.
+      # Default: 1.9
+      anti-front-distance: 1.9
+      # Anti snap-to-front safe distance on fast turn.
+      # Default: 2.5
+      anti-snap-distance: 2.5
+      # Swing animation chance each movement update (0.0~1.0).
+      # Default: 0.22
+      swing-chance: 0.22
+
+    hit-rise:
+      # Rise duration after being hit (tick).
+      # Default: 40
+      ticks: 40
+      # Recover duration after rise (tick).
+      # Default: 35
+      recover-ticks: 35
+      # Maximum rise height after hit (blocks).
+      # Default: 1.1
+      height: 1.1
+      # Extra lifetime added after a hit (tick).
+      # Default: 90
+      extend-duration-ticks: 90
+
+    auto-spawn:
+      # Whether to randomly trigger NPC during combat.
+      # Default: false
+      in-combat: false
+      # Burst window in milliseconds for combat trigger.
+      # Default: 750
+      burst-window-ms: 750
+      # Minimum attacks in burst window (recommended 3~5).
+      # Default: 3
+      burst-min-attacks: 3
+      # Yaw snap threshold in degrees for unnatural lock switches.
+      # Default: 32.0
+      yaw-snap-threshold: 32.0
+      # Pitch snap threshold in degrees.
+      # Default: 18.0
+      pitch-snap-threshold: 18.0
+      # Trigger chance in percent (1~100).
+      # Default: 12
+      chance-percent: 12
+      # Minimum cooldown between auto spawns (tick).
+      # Default: 60
+      cooldown-ticks: 60
+      # NPC lifetime for auto-spawn (tick).
+      # Default: 120
+      duration-ticks: 120
+      # Auto-spawn mode: BACK / CIRCLE / DIAGONAL.
+      # Default: DIAGONAL
+      mode: BACK
+      # Example medium profile:
+      # in-combat: true
+      # burst-window-ms: 800
+      # burst-min-attacks: 3
+      # yaw-snap-threshold: 28.0
+      # chance-percent: 10
+      # cooldown-ticks: 80
+
+    spoof:
+      # Spoof NPC game mode in TabList.
+      # Options: SURVIVAL/CREATIVE/ADVENTURE/SPECTATOR
+      # Default: SURVIVAL
+      gamemode: SURVIVAL
+      meta:
+        # Enable entity metadata spoof.
+        # Default: true
+        enable: true
+        # Default: true
+        sprinting: true
+      potion:
+        # Send a baseline potion effect as human-like noise.
+        # Default: true
+        enable: true
+      equipment:
+        # Send equipment spoof packets (randomized gear set).
+        # Default: true
+        enable: true
+      team:
+        # Enable team spoof for name tag & collision rules.
+        # Default: true
+        enable: true
+        # Hide NPC name tag.
+        # Default: true
+        hide-name-tag: true
+        # Disable collision between NPC and player.
+        # Default: true
+        no-collision: true
+
+  vector:
+    # simd-boost: Enables vector acceleration when supported.
+    simd-boost: false
+
+  raytrace:
+    # fast-mode: Uses a lighter traversal mode with lower cost.
+    # fast-step-scale: Step distance used by fast mode. Smaller is more precise and more expensive.
+    # lenient-target-box: Slightly expands target boxes to soften edge desync cases.
+    fast-mode: false
+    fast-step-scale: 0.25
+    lenient-target-box: true
+
+  placeholder:
+    # Add any key below; it is auto-registered as %neko_placeholder_<key>%.
+    # Value can be a single string or a list of commands (executed in order).
+    # ban: Default ban command template, exposed internally as %neko_placeholder_ban%.
+    ban: "neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+    # kick: Default kick command template, exposed internally as %neko_placeholder_kick%.
+    kick: "neko delay %random_int% kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+    # Custom example (list form, each command executed in order):
+    # multi-ban:
+    #   - "coc %player% 1=1 do /0/ neko delay 3 ban %player% 30d <#FFACAC>Abnormal behavior &7(%special_random_string% m=%fast_math% S=%server%)"
+    #   - "neko crash %player%"
+
+  knock-back:
+    # x / y / z: Knockback scaling used by the matching mitigation path.
+    x: 0.75
+    y: 0.5
+    z: 0.75
+  freeze:
+    punish:
+      # enable: Allows freeze workflow to dispatch the configured punish command.
+      enable: true
+      # command: Console command used by the freeze punish branch.
+      command: "banip -p %player% &5Karhu&fAC &7> &cRefused verification &7[LastID= %player%]"
+  # experimental: Master switch for experimental paths that some feedback reports must keep enabled.
+  experimental: false
+  flying-check:
+    # abilities: Reads abilities-side flight state.
+    abilities: true
+    # packet: Reads packet-side flight state.
+    packet: true
+  # kick-invalid-forge-player: Kicks the known problematic Forge-side client state on affected versions.
+  kick-invalid-forge-player: true
+  # allowed-cinematic: Adds tolerance for cinematic camera style input.
+  # This is consumed by the cinematic processor and mainly affects rotation-side false positive handling.
+  # Default: false
+  allowed-cinematic: false
+  develop:
+    # enable: Master switch for develop mode.
+    enable: false
+    # send: Output target for develop information.
+    send: "player"
+    # log: Writes develop information into logs.
+    log: false
+    # sync: Includes sync-related develop output.
+    sync: true
+    # raytrace: Includes raytrace-related develop output.
+    raytrace: true
+    # desync: Includes desync-related develop output.
+    # Mainly used for ghost-block / desync investigation.
+    desync: true
+    # cancel: Keeps cancel behaviour active during develop mode.
+    cancel: true
+    # mitigate: Keeps mitigation behaviour active during develop mode.
+    mitigate: true
+    # setback: Keeps setback behaviour active during develop mode.
+    setback: true
+    cancel-trace:
+      # enable: Traces the first handler/update source that turns a packet into cancelled.
+      enable: false
+      # console: Prints cancel traces to console even when no player debug session is watching.
+      console: true
+      # stack: Includes a short Java stack in the hover/details for the first cancel transition.
+      stack: true
+      # stack-depth: Max stack lines kept for each cancel trace. Range: 0-32.
+      stack-depth: 8
+  click-listener:
+    # mode: Click listener mode.
+    # auto   = Automatic: uses bukkit on 1.17+, packet on older versions.
+    # bukkit = Generally safer on 1.17+ servers.
+    # packet = Generally safer on pre-1.17 servers.
+    # Default: auto
+    mode: auto
+  encryption:
+    # method: Encryption method for check names in punishment commands.
+    # xor          = XOR + Base64, longer ciphertext.
+    # substitution = Substitution cipher, ciphertext same length as plaintext.
+    # vigenere     = Vigenere cipher, ciphertext same length as plaintext.
+    # Default: xor
+    method: xor
+  limit:
+    # max-tps: Detection pauses when TPS drops below this value.
+    # max-mspt: Detection pauses when MSPT rises above this value.
+    # transaction-timeout: Maximum wait before transaction/confirm timeout kick, in seconds.
+    # The current code reads limit.transaction-timeout as the effective path.
+    # Default: 19.5
+    # packet: Maximum packet processing amount per cycle.
+    max-tps: 19.5
+    max-mspt: 50.0
+    # transaction-timeout: Lower values kick earlier when confirm replies stop arriving.
+    transaction-timeout: 30
+    # packet: Lower values reduce load sooner, but also tolerate fewer bursty packet periods.
+    packet: 80
+    # xaero-map: Limits some map-mod related behaviour when enabled.
+    xaero-map: false
+    ping:
+      # abilities-change: Allowed ping ceiling during flying-related states.
+      abilities-change: 450
+      # firework-boost: Allowed ping ceiling during firework boost states.
+      firework-boost: 450
+
+#############################################
+# Plugin Hooks
+#############################################
+hooks:
+  # extra-packet: Enables extra latency data support.
+  # This is mostly relevant when your build has the matching external support available.
+  extra-packet: false
+  # craft-engine: CraftEngine compatibility hook.
+  # Custom block and item systems can affect collision, placement and visibility behaviour.
+  # If you use CraftEngine heavily, this is one of the first compatibility options to verify.
+  craft-engine: false
+  # craft-engine-real-block: Compatibility for CraftEngine RealBlock custom blocks.
+  # When on, standing on these blocks is recognised as ground instead of floating.
+  # This is exclusively for the 星梦乡 server.
+  craft-engine-real-block: false
+  # eco: Auxilor eco / EcoItems / EcoEnchants compatibility hook.
+  # Covers any eco-registered custom item, custom block and custom entity (also Oraxen / Nexo / ItemsAdder relayed through eco).
+  # Enable when you run any plugin built on the eco framework.
+  eco: false
+  # gsit: GSit compatibility hook. Current code requires GSit 3.x.
+  # Mainly relevant for sitting, laying and pose-related edge cases.
+  gsit: false
+  # crack-shot: Compatibility option for CrackShot-style weapon behaviour.
+  crack-shot: false
+  # mythicmobs: MythicMobs compatibility hook. Current code supports MythicMobs 5.x.
+  # Custom mobs can change target context, entity types and hitbox expectations.
+  mythicmobs: false
+  # brewery: Compatibility hook for Brewery-related state changes.
+  brewery: false
+  # mypet: Compatibility hook for MyPet pet riding contexts.
+  # MyPet can mount the player onto the pet or a seat chain, and may add custom ride speed/fly behaviour.
+  # When enabled, Neko stops treating these contexts like vanilla rideable prediction/timer semantics.
+  mypet: false
+  # mc-pets: Compatibility hook for MCPets mount contexts.
+  # MCPets uses MythicMobs plus ModelEngine/BetterModel mount systems and may mount through model seats or vanilla passengers.
+  # When enabled, Neko detects active MCPets riding state and avoids forcing vanilla vehicle prediction/timer semantics onto it.
+  mc-pets: false
+  # 7-pay: Compatibility toggle for 7-pay environments.
+  7-pay: false
+  # mbed-wars: Compatibility toggle for MBedWars gameplay flow.
+  mbed-wars: false
+  # apollo: Compatibility toggle for Apollo-side client integration.
+  apollo: false
+  # laby-mod-api: Compatibility toggle for LabyModServerAPI integration.
+  laby-mod-api: false
+  # carpet-place: Compatibility toggle for the Carpet Place custom payload protocol.
+  # When enabled, `carpet:hello` payloads are translated into normal use/place packets before the anti-cheat reads them.
+  carpet-place: false
+  # ultimate-manager: dont touch it
+  ultimate-manager: false
+
+  # server-bridge: Compatibility toggle for the proxy-side Server-Bridge plugin.
+  # When enabled, the anti-cheat listens on the `neko:server_bridge` channel and caches the server name
+  # pushed by BungeeCord/Velocity, so you don't have to configure server-name manually in database.yml.
+  # Requires the matching Server-Bridge / Server-Bridge-Velocity plugin installed on the proxy.
+  server-bridge:
+    enable: false
+
+  geyser:
+    # enable: Master switch for Geyser compatibility.
+    # Bedrock environments should verify this block before tuning movement or interaction checks.
+    enable: false
+    # brand: Uses client brand as an extra Bedrock hint. This is weaker if the client spoofs branding.
+    brand: false
+    # api: Uses Geyser API state when available.
+    api: true
+    # uuid: Keeps Geyser UUID handling enabled.
+    uuid: true
+    # bungee: Keeps proxy-side compatibility enabled for linked environments.
+    bungee: true
+    # check-geyser-player: Whether to additionally check for cheating by Bedrock Edition players during detection
+    check-geyser-player: false
+
+#############################################
+# Mitigation Settings
+#############################################
+mitigates:
+  attack:
+    # reduce-damage: Reduces damage after certain detections.
+    # reduce-type: Damage reduction mode.
+    # dynamic     = Adjusts reduction ratio based on VL.
+    # fixed       = Fixed percentage reduction (controlled by damage below).
+    # attackspeed = Scales reduction by attack speed attribute; higher speed means less reduction.
+    # random      = Random reduction ratio.
+    # strict      = Strict reduction, fixed 80% cut.
+    # Default: Fixed
+    reduce-damage: true
+    reduce-type: Fixed
+    # damage: Percentage used by Fixed mode.
+    damage: 60
+    # use: Also touches use-item state during the same mitigation window.
+    use: true
+
+  no-slow:
+    # enable: Master switch for this mitigation group.
+    enable: true
+    # other: Handles extra reset-like edge cases around use-state flow.
+    other: false
+    # sprint: Handles cases where sprinting and use-state timing should not stay together cleanly.
+    sprint: true
+    # inventory: Handles inventory-open situations.
+    inventory: true
+    # digging: Handles no-slow behaviour while the player is digging.
+    digging: false
+    # slot-change: Handles hotbar slot change timing.
+    slot-change: true
+    # switch-item: Handles no-slow behaviour tied to switching held slots/items.
+    switch-item: false
+    # switch-item-exp: Experimental extra handling after switching items.
+    switch-item-exp: false
+    # drop-item: Handles item-drop timing.
+    drop-item: false
+    # use-item: Resets item use more directly.
+    use-item: false
+    # bad-packets: Handles suspicious packet endings around use-item flow.
+    bad-packets: true
+    # invalid: Handles invalid held-item state behaviour.
+    invalid: false
+    # strict: More aggressive variant. Usually leave disabled unless you need more pressure here.
+    strict: false
+
+  invalid-break:
+    # invalid-break: Extra protection around abnormal block-breaking flow.
+    # The current code reads mitigates.invalid-break.enable as the active path.
+    enable: true
+    # min-delay: Minimum delay allowed between break attempts.
+    # This value is currently kept mainly for config structure compatibility.
+    min-delay: 3
+
+  invalid-pos:
+    # transaction-skip: Handles cases where teleport confirmation transactions are skipped.
+    transaction-skip:
+      # enable: Master switch for this branch.
+      enable: true
+      # max-value: Minimum skipped transaction difference before this branch reacts.
+      # Lower values react earlier.
+      max-value: 3
+
+  elytra:
+    # enable: Master switch for elytra-side protection.
+    enable: true
+    # sprint: Tightens handling for abnormal horizontal gain during sprint-jump style setups.
+    sprint: false
+    # ground: Handles on-ground state issues while elytra logic is involved.
+    ground: true
+
+  ghost-block:
+    # Master switch for placement tracking.
+    place: true
+    # Pulls the player back when a ghost-block is confirmed.
+    mitigate: true
+    # Sends block-state sync when a ghost-block is confirmed.
+    sync: false
+    placement:
+      # Detects blocks that appear placed but do not exist.
+      enable: true
+      # How many hits before pulling back.
+      max-buffer: 2
+      # Decay per tick when not triggered.
+      buffer-decay: 0.05
+    ground-desync:
+      # Syncs player ground state when it disagrees.
+      enable: true
+    placed-foot:
+      # Checks the block under the player after they place one.
+      enable: true
+    liquid:
+      # Checks liquid mismatches around the player.
+      enable: true
+
+  duplicate:
+    # ignore: Ignores duplicate packets to soften noisy repeated sync cases.
+    ignore: true
+    # cancel: Cancels duplicates more aggressively. If compatibility feels too sharp, this is one of the first options to review.
+    cancel: true
+
+  trident:
+    # enable: Master switch for trident-side protection.
+    enable: true
+    limit-use:
+      # enable: Limits repeated trident use patterns.
+      enable: true
+      # buffer: How many repeated abnormal samples are tolerated first. Smaller values intervene earlier.
+      buffer: 1
+      # reset: Reset window for that counter, in ms.
+      reset: 7000
+    # riptiding: Handles abnormal state changes during riptide use.
+    riptiding: true
+
+  velocity:
+    # enable: Master switch for velocity-side mitigation.
+    enable: true
+    # jump: Handles jump-stage follow-up around velocity state.
+    jump: true
+    # invalid: Handles clearly invalid velocity-state cases.
+    invalid: true
+
+  visual:
+    # enable: Master switch for visual interference behaviour.
+    # This mostly changes what clients see, not the server's own base detection state.
+    enable: true
+    # food-saturation: Spoofs saturation display for other players.
+    food-saturation: false
+    scoreboard:
+      # enable: Enables scoreboard-side interference.
+      enable: false
+      # object: Changes scoreboard objective display.
+      object: false
+      # score: Changes visible score values.
+      score: false
+    equipment:
+      # enable: Enables equipment-side visual interference.
+      enable: true
+      # enchantments: Spoofs visible enchantment presentation.
+      enchantments: true
+    meta:
+      # enable: Enables entity metadata interference.
+      enable: true
+      # only-player: Restricts this to players only.
+      only-player: true
+      # health: Spoofs visible health.
+      health: true
+      # absorption: Spoofs visible absorption amount.
+      absorption: true
+
+  # inventory: Handles abnormal inventory-related packet flow.
+  inventory: true
+  # invalid-slot-kick: Whether to kick players accessing invalid slots. When disabled, only logs the error.
+  # Triggers when console warns "Tried to get slot ... in a container with only ... slots".
+  # Normally not an issue, enabled by default, this resolves some no-slow bypasses.
+  invalid-slot-kick: true
+
+  # auto-cw: Handles abnormal crystal placement style behaviour.
+  auto-cw: false
+
+  # stay-unload-chunk: Stops sync and pulls the player back when they move into an unloaded chunk area.
+  stay-unload-chunk: true
+
+  blink:
+    # resend-packet: When the player is lagging, cancel all outgoing server packets. Idea from dw1e (https://github.com/dw1e/Axiom)
+    resend-packet: false
+    # Blink-related mitigation groups.
+    type-a:
+      # enable: Enables this subtype.
+      enable: false
+      # min-allowed-ping-tick: Minimum accepted ping fluctuation. Larger values are more lenient.
+      min-allowed-ping-tick: 1.0
+      # disable-setback: Disables the pullback teleport on a hit.
+      # This check may help some bypasses to occur, e.g. blink antivoid. Due to its very specific nature, the last position we received is the standing position before falling into the void,
+      # which can cause this check to teleport the cheater back after their blink. We are still looking for a fix; if your server runs game modes like BedWars or SkyBlock, please disable this option for now.
+      disable-setback: false
+    type-b:
+      # enable: Enables this subtype.
+      enable: false
+      # wait: Allowed waiting window in ms. Larger values are more lenient.
+      wait: 1000
+      # max-distance: Max allowed travel during that window. Smaller values intervene earlier.
+      max-distance: 0.015
+
+  lag-spoof:
+    # lag-spoof: Handles fake-lag, back-track and delayed-ack style advantage control.
+    # This group is mainly about what Neko does after suspicious network-side behaviour appears, not how a normal check is scored.
+    enable: true
+    # fake-lag: Enables the fake-lag branch.
+    # When enabled, Neko reacts more actively to timing that looks intentionally split apart.
+    fake-lag: false # master switch, experimental, disabled by default
+    fake-lag-settings:
+      attack:
+        # enable: Attack fake-lag sub-switch, requires master switch.
+        enable: true
+        # cancel-window: Attacks cancelled for normal burst detection.
+        cancel-window: 3
+        # cancel-window-severe: Attacks cancelled for severe burst detection.
+        cancel-window-severe: 6
+        # burst-threshold-lo: Delta < this (ms) counts as severe burst.
+        burst-threshold-lo: 3
+        # burst-threshold-hi: Delta < this (ms) counts as normal burst.
+        burst-threshold-hi: 6
+        # burst-min-count: Min burst (hi threshold) in buffer for normal tier.
+        burst-min-count: 3
+        # severe-burst-min-count: Min burst (lo threshold) in buffer for severe tier.
+        severe-burst-min-count: 4
+        # recent-burst-min: Min burst in latest 5 for normal tier.
+        recent-burst-min: 2
+        # recent-burst-severe-min: Min burst in latest 5 for severe tier.
+        recent-burst-severe-min: 3
+        # idle-min: Idle delta avg must be above this to trigger.
+        idle-min: 30
+        # burst-ratio-max: attackAvg/idleAvg ratio limit for normal tier.
+        burst-ratio-max: 0.35
+        # severe-ratio-max: attackAvg/idleAvg ratio limit for severe tier.
+        severe-ratio-max: 0.2
+      placement:
+        # enable: Bridging fake-lag sub-switch, requires master switch.
+        enable: true
+        # cancel-window: Placements cancelled when bridging burst detected.
+        cancel-window: 2
+        # burst-threshold: Bridging delta < this (ms) counts as burst. Lenient vs attack.
+        burst-threshold: 10
+        # burst-min-count: Min burst in full bridging buffer to trigger.
+        burst-min-count: 4
+        # recent-burst-min: Min burst in latest 4 bridging samples to trigger.
+        recent-burst-min: 2
+        # idle-min: Idle delta avg must be above this for bridging trigger.
+        idle-min: 40
+        # ratio-max: Bridging attackAvg/idleAvg ratio limit. Lenient vs attack.
+        ratio-max: 0.45
+      # debug: Write CSV debug data to fakeLag/.
+      debug: false
+    # back-track: Handles back-track style delayed-position advantage.
+    back-track: true
+    # inventory: Handles inventory-walk style delayed-timing behaviour.
+    inventory: true
+    # delay-use-item: Delays use-item handling to pressure some split-timing use patterns.
+    delay-use-item: true
+    # delay-accept-packet: Delays confirm/accept handling more aggressively. Higher compatibility risk than most options here.
+    delay-accept-packet: false
+    # confirm-velocity: Delay threshold in ms for velocity acknowledgement behaviour.
+    # Smaller values react earlier.
+    confirm-velocity: 250
+    # confirm-velocity-pos-update: Freeze threshold in ms for high-ping position updates.
+    confirm-velocity-pos-update: 5000

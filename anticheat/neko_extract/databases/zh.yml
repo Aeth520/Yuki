@@ -1,0 +1,52 @@
+# ******************************************************************************************************************************
+#  ███    ██     ███████     ██   ██      ██████      ██
+#  ████   ██     ██          ██  ██      ██    ██     ██
+#  ██ ██  ██     █████       █████       ██    ██     ██
+#  ██  ██ ██     ██          ██  ██      ██    ██
+#  ██   ████     ███████     ██   ██      ██████      ██
+# ******************************************************************************************************************************
+
+##############################################
+# 数据配置
+# 这里控制违规记录和历史数据要写到哪种数据库。
+# ConfigManager 会读取这里，后续由数据库管理器决定实际连接方式。
+##############################################
+database-manager:
+  # data-type: 数据库类型。
+  # 可选值: sqlite / mysql / mariadb / h2 / mongodb
+  # 小服更常用 sqlite 或 h2；多服或数据量较大时再考虑 mysql/mariadb。
+  data-type: h2
+
+  # server-name: 当前分服名称。
+  # 会参与历史记录、跨服展示和部分 Hook 替换，建议按真实分服名填写。
+  server-name: "ServerName"
+
+  # mysql: MySQL / MariaDB 连接信息。
+  mysql:
+    # host: 数据库主机。
+    host: "localhost"
+    # port: 数据库端口。
+    port: 3306
+    # database: 数据库名。
+    database: "your_database"
+    # username: 登录用户名。
+    username: "your_username"
+    # password: 登录密码。
+    password: "your_password"
+    # ssl: 是否启用 SSL。
+    ssl: false
+
+  # mongodb: MongoDB 连接信息。
+  mongodb:
+    # host: MongoDB 主机。
+    host: localhost
+    # port: MongoDB 端口。
+    port: 27017
+    # database: 业务库名称。
+    database: your_database_name
+    # username: 登录用户名。
+    username: your_username
+    # password: 登录密码。
+    password: your_password
+    # authentication-database: 认证库名称。
+    authentication-database: admin

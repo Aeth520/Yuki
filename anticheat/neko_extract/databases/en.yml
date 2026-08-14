@@ -1,0 +1,50 @@
+# ******************************************************************************************************************************
+#  ███    ██     ███████     ██   ██      ██████      ██
+#  ████   ██     ██          ██  ██      ██    ██     ██
+#  ██ ██  ██     █████       █████       ██    ██     ██
+#  ██  ██ ██     ██          ██  ██      ██    ██
+#  ██   ████     ███████     ██   ██      ██████      ██
+# ******************************************************************************************************************************
+##############################################
+# Database Configuration
+# This file controls where violation logs and history records are stored.
+# ConfigManager reads this file first, then the database manager decides how the selected backend is opened.
+##############################################
+database-manager:
+  # data-type: Database backend type.
+  # Available: sqlite / mysql / mariadb / h2 / mongodb
+  # Smaller servers usually keep sqlite or h2. Multi-server setups often move to mysql or mariadb.
+  data-type: h2
+
+  # server-name: Logical server name used for history, cross-server display and some hook replacements.
+  server-name: "ServerName"
+
+  # mysql: Connection details for MySQL / MariaDB.
+  mysql:
+    # host: Database host.
+    host: "localhost"
+    # port: Database port.
+    port: 3306
+    # database: Database name.
+    database: "your_database"
+    # username: Login username.
+    username: "your_username"
+    # password: Login password.
+    password: "your_password"
+    # ssl: Enables SSL for the connection.
+    ssl: false
+
+  # mongodb: Connection details for MongoDB.
+  mongodb:
+    # host: MongoDB host.
+    host: localhost
+    # port: MongoDB port.
+    port: 27017
+    # database: Primary database name.
+    database: your_database_name
+    # username: Login username.
+    username: your_username
+    # password: Login password.
+    password: your_password
+    # authentication-database: Database used for authentication.
+    authentication-database: admin

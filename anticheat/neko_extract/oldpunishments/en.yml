@@ -1,0 +1,2598 @@
+# ******************************************************************************************************************************
+#  ███    ██     ███████     ██   ██      ██████      ██
+#  ████   ██     ██          ██  ██      ██    ██     ██
+#  ██ ██  ██     █████       █████       ██    ██     ██
+#  ██  ██ ██     ██          ██  ██      ██    ██
+#  ██   ████     ███████     ██   ██      ██████      ██
+# ******************************************************************************************************************************
+##############################################
+# Punishment Configuration
+# This file defines what Neko should do after checks reach certain VL ranges.
+# The layout and detail are intentionally kept aligned with the Chinese edition.
+##############################################
+# %check_name% - Check display name
+# %vl% - Current violations
+# %max_vl% - Display max violations for the check
+# %add% - Violations added by the current flag
+# %verbose% - Extra detail text
+# %player% - Player name
+# %uuid% - Player UUID
+# %description% - Check description
+# %cps% - Current CPS
+# %last_cps% - Previous CPS sample
+# %random_int% - Random integer from 1 to 10
+# %random_string% - Random short string
+# %anticheat% - Random anti-cheat branding name
+# %anticheat_color% - Color code matching the random anti-cheat name
+# %world% - Player world name
+# %mix_ping% - Mixed ping display, usually transaction ping / keepalive ping
+# %transaction_ping% - Transaction ping used by the anti-cheat timing pipeline
+# %keepalive_ping% - Regular keepalive ping
+# %fast_math% - Whether the target appears to use non-vanilla math behaviour
+# %special_random_string% - Encrypted random content tied to the check name
+# %neko_placeholder_ban% - Internal variable loaded from function.placeholder.ban
+# %neko_placeholder_kick% - Internal variable loaded from function.placeholder.kick
+# %neko_placeholder_<key>% - Custom variable loaded from function.placeholder.<key> (string or list)
+# [alert] - Special built-in alert action
+# [save] - Saves VL to the database
+# [setback] - Sets the player back
+# [shuffle] - Shuffles the player's hotbar
+# [reset-use] - Resets the player's current item-use state
+# [close-inventory] - Forces the player's current inventory to close
+#
+# Special prefixes inside `checks`:
+# $ = exact check-name match instead of prefix matching
+# ! = inverse/remove match from the current group
+# * = wildcard-style suffix, usually used at the end to match a whole prefix range
+#
+# Examples:
+# - "KillAura"       -> matches all checks starting with KillAura
+# - "$KillAuraC"     -> matches only the exact check named KillAuraC
+# - "!KillAuraB"     -> removes checks starting with KillAuraB from the current group
+# - "Aim*"           -> matches all checks starting with Aim
+# - "!$AimY"         -> removes only the exact AimY check from the current group
+#
+# Built-in command examples:
+# - "5:1 [alert] &f%player% &5Suspicious Behaviour"
+# - "5:1 [save]"
+# - "10:0 [setback]"
+# - "8:2 [shuffle]"
+# - "6:2 [reset-use]"
+# - "6:2 [close-inventory]"
+#
+# Notes
+#
+# remove-violations-after: time in seconds before this group's stored VL is cleared.
+#
+# Command format:
+# first_number:repeat_number command
+# The first number is the VL required before the command can run.
+# The second number is how many extra VL must be added before the command runs again.
+#
+# Example:
+# 70:20 neko mitigate %player% rotate
+# Meaning:
+# Run `neko mitigate %player% rotate` when VL reaches 70,
+# then run it again every 20 VL after that.
+
+Punishments:
+
+  MovementValidation:
+    remove-violations-after: 150
+    checks:
+      - "MovementValidation"
+    commands:
+      - "20:10 [alert] &f%trust_player% &5Movement Incorrect"
+      - "30:5 [save]"
+      - "60:10 neko mitigate %player% damage"
+      - "90:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  GroundSpoofA:
+    remove-violations-after: 150
+    checks:
+      - "GroundSpoofA"
+    commands:
+      - "5:1 [save]"
+      - "10:5 [alert] &f%trust_player% &5Movement Incorrect"
+      - "40:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  GroundSpoofB:
+    remove-violations-after: 150
+    checks:
+      - "GroundSpoofB"
+    commands:
+      - "15:5 [alert] &f%trust_player% &5Movement Incorrect"
+      - "20:5 [save]"
+      - "80:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  GroundSpoofC:
+    remove-violations-after: 150
+    checks:
+      - "GroundSpoofC"
+    commands:
+      - "8:5 [alert] &f%trust_player% &5Movement Incorrect"
+      - "8:5 [save]"
+      - "35:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  WaterOffsetHandler:
+    remove-violations-after: 150
+    checks:
+      - "JesusA"
+    commands:
+      - "5:5 [alert] &f%trust_player% &5Movement Incorrect"
+      - "5:5 [save]"
+      - "40:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  JumpA:
+    remove-violations-after: 150
+    checks:
+      - "JumpA" # HighJump
+    commands:
+      - "5:5 [alert] &f%trust_player% &5Movement Incorrect"
+      - "5:5 [save]"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  JumpB:
+    remove-violations-after: 150
+    checks:
+      - "JumpB" # LowJump
+    commands:
+      - "5:5 [alert] &f%trust_player% &5Movement Incorrect"
+      - "5:5 [save]"
+      - "18:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  NoSlowA:
+    remove-violations-after: 150
+    checks:
+      - "NoSlowA"
+    commands:
+      - "10:5 [save]"
+      - "20:5 [alert] &f%trust_player% &5Movement Incorrect"
+      - "70:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  NoSlowB:
+    remove-violations-after: 150
+    checks:
+      - "NoSlowB"
+    commands:
+      - "1:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "6:5 neko mitigate %player% rotate"
+      - "10:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  NoSlowC:
+    remove-violations-after: 150
+    checks:
+      - "NoSlowC"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "15:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  NoSlowD:
+    remove-violations-after: 150
+    checks:
+      - "NoSlowD"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "20:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  NoSlowE:
+    remove-violations-after: 150
+    checks:
+      - "NoSlowE"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "15:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  NoSlowF:
+    remove-violations-after: 150
+    checks:
+      - "NoSlowF"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "25:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  NoWebA:
+    remove-violations-after: 150
+    checks:
+      - "NoWebA"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  NoWebB:
+    remove-violations-after: 150
+    checks:
+      - "NoWebB"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "20:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  NoSaddleA:
+    remove-violations-after: 150
+    checks:
+      - "NoSaddleA"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "1:1 [save]"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  NoSaddleB:
+    remove-violations-after: 150
+    checks:
+      - "!NoSaddleB"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 [save]"
+      - "10:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  VehicleFlyA:
+    remove-violations-after: 150
+    checks:
+      - "VehicleFlyA"
+    commands:
+      - "5:3 [alert] &f%trust_player% &5Movement Incorrect"
+      - "5:3 [save]"
+      - "40:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  VehicleFlyB:
+    remove-violations-after: 150
+    checks:
+      - "VehicleFlyB"
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "3:1 [save]"
+      - "15:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  VehicleFlyC:
+    remove-violations-after: 150
+    checks:
+      - "VehicleFlyC"
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "5:1 [save]"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  VehicleFlyD:
+    remove-violations-after: 150
+    checks:
+      - "VehicleFlyD"
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "5:1 [save]"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  VehicleFlyE:
+    remove-violations-after: 150
+    checks:
+      - "VehicleFlyE"
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "5:1 [save]"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ElytraA:
+    remove-violations-after: 150
+    checks:
+      - "ElytraA"
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "3:1 [save]"
+      - "20:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ElytraB:
+    remove-violations-after: 150
+    checks:
+      - "ElytraB" # Offset
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "5:1 [save]"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ElytraC:
+    remove-violations-after: 150
+    checks:
+      - "ElytraC" # flying
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "1:1 [save]"
+      - "2:0 neko delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ElytraD:
+    remove-violations-after: 150
+    checks:
+      - "ElytraD" # Spoof
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "3:1 [save]"
+      - "20:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ElytraE:
+    remove-violations-after: 150
+    checks:
+      - "ElytraE" # Invalid motion change
+    commands:
+      - "10:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "10:1 [save]"
+      - "15:5 [setback]"
+      - "40:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ElytraF:
+    remove-violations-after: 150
+    checks:
+      - "ElytraF" # Down
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "5:1 [save]"
+      - "20:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ElytraG:
+    remove-violations-after: 150
+    checks:
+      - "ElytraG" # Target
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "5:1 [save]"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ElytraH:
+    remove-violations-after: 150
+    checks:
+      - "ElytraH" # Exploit
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "3:1 [save]"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ElytraI:
+    remove-violations-after: 150
+    checks:
+      - "ElytraI"
+    commands:
+      - "4:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "4:1 [save]"
+      - "10:2 [setback]"
+      - "25:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ElytraJ:
+    remove-violations-after: 150
+    checks:
+      - "ElytraJ"
+    commands:
+      - "4:1 [alert] &f%trust_player% &5Movement Incorrect"
+      - "4:1 [save]"
+      - "16:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  PhaseA:
+    remove-violations-after: 150
+    checks:
+      - "PhaseA"
+    commands:
+      - "5:5 [alert] &f%trust_player% &5Movement Incorrect"
+      - "5:5 [save]"
+      - "35:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  SpeedA:
+    remove-violations-after: 150 #原40
+    checks:
+      - "SpeedA"
+    commands:
+      - "5:5 [alert] &f%trust_player% &5Movement Incorrect"
+      - "5:5 [save]"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  SpeedB:
+    remove-violations-after: 150 #原40
+    checks:
+      - "SpeedB"
+    commands:
+      - "8:5 [alert] &f%trust_player% &5Movement Incorrect"
+      - "8:5 [save]"
+      - "45:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  SpeedC:
+    remove-violations-after: 150 #原40
+    checks:
+      - "SpeedC"
+    commands:
+      - "5:5 [alert] &f%trust_player% &5Movement Incorrect"
+      - "5:5 [save]"
+      - "35:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  SpeedD:
+    remove-violations-after: 150 #原40
+    checks:
+      - "SpeedD"
+    commands:
+      - "3:3 [alert] &f%trust_player% &5Movement Incorrect"
+      - "3:3 [save]"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  SpeedE:
+    remove-violations-after: 150
+    checks:
+      - "SpeedE"
+    commands:
+      - "5:5 [alert] &f%trust_player% &5Movement Incorrect"
+      - "5:5 [save]"
+      - "25:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  GravityA:
+    remove-violations-after: 150
+    checks:
+      - "GravityA"
+    commands:
+      - "5:2 [alert] &f%trust_player% &5Movement Incorrect"
+      - "5:2 [save]"
+      - "15:3 [setback]"
+      - "35:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  GravityB:
+    remove-violations-after: 150
+    checks:
+      - "GravityB"
+    commands:
+      - "5:2 [alert] &f%trust_player% &5Movement Incorrect"
+      - "5:2 [save]"
+      - "12:3 [setback]"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  Aim1:
+    remove-violations-after: 150
+    checks:
+      - "Aim1"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "3:2 neko mitigate %player% damage"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  SmoothChange:
+    remove-violations-after: 150
+    checks:
+      - "AimA"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidRotation:
+    remove-violations-after: 150
+    checks:
+      - "AimB"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "8:0 neko mitigate %player% rotate"
+      - "20:0 neko delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AnomalyRotation:
+    remove-violations-after: 150
+    checks:
+      - "AimC"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "8:0 neko mitigate %player% rotate"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  LongTermAnalysis:
+    remove-violations-after: 150
+    checks:
+      - "AimD" # 10 / 10
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "5:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  SnapRotation:
+    remove-violations-after: 150
+    checks:
+      - "AimE"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AimConstantX:
+    remove-violations-after: 150
+    checks:
+      - "AimF"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "20:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AimConstantY:
+    remove-violations-after: 150
+    checks:
+      - "AimG"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "25:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AimOutliers:
+    remove-violations-after: 150
+    checks:
+      - "AimH"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "8:0 neko mitigate %player% rotate"
+      - "15:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  invalidGCD:
+    remove-violations-after: 150
+    checks:
+      - "AimI"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "6:0 neko mitigate %player% rotate"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidDistinctRotation:
+    remove-violations-after: 150
+    checks:
+      - "AimJ"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "8:0 neko mitigate %player% rotate"
+      - "15:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  GenericRotation:
+    remove-violations-after: 150
+    checks:
+      - "AimK"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "15:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidAim:
+    remove-violations-after: 150
+    checks:
+      - "AimL"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "5:1 neko mitigate %player% resetitem"
+      - "10:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidRowChange:
+    remove-violations-after: 150
+    checks:
+      - "AimM"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "5:1 [save]"
+      - "10:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ConsistentRotation:
+    remove-violations-after: 150
+    checks:
+      - "AimN"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  WeirdRotate:
+    remove-violations-after: 150
+    checks:
+      - "AimO"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "2:1 neko mitigate %player% damage"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  BasicAnalysis:
+    remove-violations-after: 150
+    checks:
+      - "AimP"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "10:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  SimpleRotationAnalysis:
+    remove-violations-after: 150
+    checks:
+      - "AimQ"
+    commands:
+      - "8:1 [save]"
+      - "8:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "40:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidSnap:
+    remove-violations-after: 150
+    checks:
+      - "AimR"
+    commands:
+      - "6:1 [save]"
+      - "6:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "20:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  Mechanical:
+    remove-violations-after: 150
+    checks:
+      - "AimS"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "15:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  Inconsistent:
+    remove-violations-after: 150
+    checks:
+      - "AimT"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "10:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidPattern:
+    remove-violations-after: 150
+    checks:
+      - "AimU"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ClientMakeMistake:
+    remove-violations-after: 150
+    checks:
+      - "AimV"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "15:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidDistinct:
+    remove-violations-after: 150
+    checks:
+      - "AimW"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "10:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  PatternAnalysis:
+    remove-violations-after: 150
+    checks:
+      - "AimX"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "8:1 neko mitigate %player% damage"
+      - "37:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ComplexAnalysis:
+    remove-violations-after: 150
+    checks:
+      - "AimY"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "8:2 neko mitigate %player% damage"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AimZ:
+    remove-violations-after: 150
+    checks:
+      - "AimZ"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "8:2 neko mitigate %player% damage"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AutoBlockA:
+    remove-violations-after: 150
+    checks:
+      - "AutoBlockA"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AutoBlockB:
+    remove-violations-after: 150
+    checks:
+      - "AutoBlockB" #Ticks
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "5:5 neko mitigate %player% rotate"
+      - "14:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AutoBlockC:
+    remove-violations-after: 150
+    checks:
+      - "AutoBlockC"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "25:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AutoBlockD:
+    remove-violations-after: 150
+    checks:
+      - "AutoBlockD"
+    commands:
+      - "3:1 [save]"
+      - "3:5 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AutoBlockE:
+    remove-violations-after: 150
+    checks:
+      - "AutoBlockE"
+    commands:
+      - "1:1 [save]"
+      - "1:5 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "12:0 neko delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AutoBlock1:
+    remove-violations-after: 150
+    checks:
+      - "AutoBlock1"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "20:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AutoBlock2:
+    remove-violations-after: 150
+    checks:
+      - "AutoBlock2"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "25:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidGCDChange:
+    remove-violations-after: 150
+    checks:
+      - "KillAuraA"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "8:0 neko mitigate %player% damage"
+
+  KillAuraB:
+    remove-violations-after: 150
+    checks:
+      - "KillAuraB"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AdvancedWallHit:
+    remove-violations-after: 150
+    checks:
+      - "KillAuraC"
+    commands:
+      - "8:5 [save]"
+      - "8:5 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "28:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ProtocolCheck:
+    remove-violations-after: 150
+    checks:
+      - "KillAuraD"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  NoSwing:
+    remove-violations-after: 150
+    checks:
+      - "KillAuraE"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+
+  InvalidAccuracy:
+    remove-violations-after: 150
+    checks:
+      - "KillAuraG"
+    commands:
+      - "2:1 [save]"
+      - "2:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "6:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  LockAura:
+    remove-violations-after: 150
+    checks:
+      - "KillAuraH"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+
+  DelaySummary:
+    remove-violations-after: 150
+    checks:
+      - "KillAuraJ"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "3:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  SimpleBacktrack:
+    remove-violations-after: 150
+    checks:
+      - "KillAuraK"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "28:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  KillAuraNPC:
+    remove-violations-after: 150 #原40
+    checks:
+      - "KillAuraF"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  Reach:
+    remove-violations-after: 150
+    checks:
+      - "ReachA"
+    commands:
+      - "1:1 [save]"
+      - "2:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "3:0 neko mitigate %player% damage"
+      - "6:0 neko mitigate %player% rotate"
+      - "7:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ReachEntity:
+    remove-violations-after: 150
+    checks:
+      - "ReachB"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "5:1 neko mitigate %player% damage"
+      - "15:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  HitBoxPlayer:
+    remove-violations-after: 150
+    checks:
+      - "ReachC"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "5:1 neko mitigate %player% damage"
+      - "23:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  HitBoxEntity:
+    remove-violations-after: 150
+    checks:
+      - "ReachD"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "10:1 neko mitigate %player% damage"
+      - "25:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  VelocityA:
+    remove-violations-after: 150
+    checks:
+      - "VelocityA" # hor/vert
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "5:1 [save]"
+      - "20:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  VelocityB:
+    remove-violations-after: 150
+    checks:
+      - "VelocityB" # false some time
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "15:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  VelocityC:
+    remove-violations-after: 150
+    checks:
+      - "VelocityC" # jump reset mitigate
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+
+  VelocityE:
+    remove-violations-after: 150
+    checks:
+      - "VelocityE"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "6:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  VelocityD:
+    remove-violations-after: 150
+    checks:
+      - "VelocityD"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AnalysisA:
+    remove-violations-after: 150
+    checks:
+      - "AnalysisA"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "7:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AnalysisB:
+    remove-violations-after: 150
+    checks:
+      - "AnalysisB"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "4:1 neko mitigate %player% damage"
+      - "10:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AnalysisC:
+    remove-violations-after: 150
+    checks:
+      - "AnalysisC"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "6:1 neko mitigate %player% damage"
+      - "25:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AnalysisD:
+    remove-violations-after: 150
+    checks:
+      - "AnalysisD"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "25:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AnalysisE:
+    remove-violations-after: 150
+    checks:
+      - "AnalysisE"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "15:1 neko mitigate %player% damage"
+      - "25:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AnalysisF:
+    remove-violations-after: 150
+    checks:
+      - "AnalysisF"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "20:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AnalysisG:
+    remove-violations-after: 150
+    checks:
+      - "AnalysisG"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "18:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AnalysisH:
+    remove-violations-after: 150
+    checks:
+      - "!AnalysisH"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "20:0 neko mitigate %player%"
+
+  Post:
+    remove-violations-after: 150
+    checks:
+      - "Post"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "3:0 neko mitigate %player% rotate"
+      - "5:0 neko mitigate %player% rotate"
+      - "6:0 neko delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  HighCPS:
+    remove-violations-after: 150
+    checks:
+      - "AutoClickerA"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "6:0 kick %player% &5Karhu&fAC &7> &fCPS exceeded: %cps% [ S=%server% ]"
+
+  RepeatedClicks:
+    remove-violations-after: 150
+    checks:
+      - "AutoClickerB"
+    commands:
+      - "2:1 [save]"
+      - "2:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  FeatureClicker:
+    remove-violations-after: 150
+    checks:
+      - "AutoClickerC"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "16:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ImpossibleConsistency:
+    remove-violations-after: 150
+    checks:
+      - "AutoClickerD"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "18:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidKurtosis:
+    remove-violations-after: 150
+    checks:
+      - "AutoClickerE"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ClickPatternSimilarity:
+    remove-violations-after: 150
+    checks:
+      - "AutoClickerF"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "14:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  noRandomization:
+    remove-violations-after: 150
+    checks:
+      - "AutoClickerG" # Skidded From AutoClickerI for karhu anticheat
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "6:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  MangoClicker:
+    remove-violations-after: 150
+    checks:
+      - "AutoClickerH"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "20:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  PoorRandomization:
+    remove-violations-after: 150
+    checks:
+      - "AutoClickerI"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  CPSAvg:
+    remove-violations-after: 150
+    checks:
+      - "AutoClickerJ"
+    commands:
+      - "1:1 [save]"
+      - "8:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+
+  Negatives:
+    remove-violations-after: 150
+    checks:
+      - "AutoClickerK"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "16:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  SQRTFlow:
+    remove-violations-after: 150
+    checks:
+      - "AutoClickerL"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  Consistency:
+    remove-violations-after: 150
+    checks:
+      - "AutoClickerM"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "15:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  BadRandomization:
+    remove-violations-after: 150
+    checks:
+      - "AutoClickerN"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "16:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  Consistency#2:
+    remove-violations-after: 150
+    checks:
+      - "AutoClickerO"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "13:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidOscillation:
+    remove-violations-after: 150
+    checks:
+      - "AutoClickerP"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  RecordedAutoClicker:
+    remove-violations-after: 150
+    checks:
+      - "AutoClickerQ"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  HurClickAnalysis:
+    remove-violations-after: 150
+    checks:
+      - "AutoClickerS"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Fighting Suspiciously"
+      - "15:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidPitchChange:
+    remove-violations-after: 150
+    checks:
+      - "BadPackets1"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "10:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidPosChange:
+    remove-violations-after: 150
+    checks:
+      - "BadPackets2"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "20:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  SentInvalidWindow:
+    remove-violations-after: 150
+    checks:
+      - "BadPackets3"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "5:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidInteract-HitBoxs:
+    remove-violations-after: 150
+    checks:
+      - "BadPackets4"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "10:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidInteract-At:
+    remove-violations-after: 150
+    checks:
+      - "BadPackets5"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidAirStuck:
+    remove-violations-after: 150
+    checks:
+      - "BadPackets6"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "20:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidUseItem:
+    remove-violations-after: 150
+    checks:
+      - "BadPackets7"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidViaPacket:
+    remove-violations-after: 150
+    checks:
+      - "BadPackets8"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "20:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  BadThreshold:
+    remove-violations-after: 150
+    checks:
+      - "BadPackets9"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "5:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  FastSwitch:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsA"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "10:2 neko mitigate %player% shuffle"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  EntityID:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsB"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 neko setback %player%"
+
+  ActionPacketOrder:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsC"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "10:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  HackedClientTAB:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsD"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "5:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidClickAction:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsE"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "15:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  SkippingHandInteract:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsF"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "10:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  MissedInteract:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsG"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "10:0 neko delay %random_int% ban %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[X8AF0L29 &eInvalidInteract&7 S=%server%]"
+
+  BadPacketsH:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsH"
+    commands:
+      - "5:5 [alert] &f%trust_player% &5Invalid Protocol"
+      - "5:1 [save]"
+      - "50:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  BigSwitch:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsI"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 [save]"
+      - "2:1 neko mitigate %player% shuffle"
+      - "3:0 neko delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  JumpBoostSpoofer:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsJ"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "5:0 neko delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  C0FOrder:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsK"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 [save]"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidPosition:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsL"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "6:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidItem:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsM"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "3:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  EntityID#2:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsN"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 neko setback %player%"
+
+  C0FOrder#2:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsO"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "20:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  FlyingDisabler:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsP"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InteractedEntity:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsQ"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "10:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidEntityAction:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsR"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidPacketSent:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsS"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidEntityActionGather:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsT"
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "3:1 [save]"
+      - "15:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  HighVersionPacket:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsU"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "5:1 [save]"
+      - "10:0 [setback]"
+
+  InvalidSwitchItem:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsV"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  PitchChangeDisabler:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsW"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 [save]"
+      - "6:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  HandDrep:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsX"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 [save]"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  BadPacketsY:
+    remove-violations-after: 150
+    checks:
+      - "BadPacketsY"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 [save]"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  BaritoneA:
+    remove-violations-after: 150
+    checks:
+      - "BaritoneA"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "20:0 neko mitigate %player% rotate"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  BaritoneB:
+    remove-violations-after: 150
+    checks:
+      - "BaritoneB"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "5:5 neko mitigate %player% rotate"
+      - "25:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  BaritoneC:
+    remove-violations-after: 150
+    checks:
+      - "BaritoneC"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "5:5 neko mitigate %player% rotate"
+      - "35:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  BaritoneD:
+    remove-violations-after: 150
+    checks:
+      - "BaritoneD"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "5:5 neko mitigate %player% rotate"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  BaritoneE:
+    remove-violations-after: 150
+    checks:
+      - "BaritoneE"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "5:5 neko mitigate %player% rotate"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  BaritoneF:
+    remove-violations-after: 150
+    checks:
+      - "BaritoneF"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "5:5 neko mitigate %player% rotate"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  BaritoneG:
+    remove-violations-after: 150
+    checks:
+      - "BaritoneG"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "5:5 neko mitigate %player% rotate"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ServerCrasher:
+    remove-violations-after: 150
+    checks:
+      - "CrashA"
+      - "CrashB"
+      - "CrashC"
+      - "CrashD"
+      - "CrashE"
+      - "CrashF"
+      - "CrashG"
+      - "CrashH"
+      - "CrashI"
+      - "CrashJ"
+      - "CrashK"
+      - "CrashL"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:0 neko delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ServerExploit:
+    remove-violations-after: 150
+    checks:
+      - "ExploitA"
+      - "ExploitB"
+      - "ExploitC"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:0 neko delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  TridentDupe:
+    remove-violations-after: 150
+    checks:
+      - "ExploitD"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "2:0 neko delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ImpossibleVehicleDisabler:
+    remove-violations-after: 150
+    checks:
+      - "ImpossibleD"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "8:1 [setback]"
+      - "10:0 neko delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  Impossibles:
+    remove-violations-after: 150
+    checks:
+      - "ImpossibleA"
+      - "ImpossibleB"
+      - "ImpossibleC"
+      - "ImpossibleE"
+      - "ImpossibleF"
+      - "ImpossibleG"
+      - "ImpossibleI"
+      - "ImpossibleL"
+      - "ImpossibleM"
+      - "ImpossibleN"
+      - "ImpossibleO"
+      - "ImpossibleJ"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:0 neko delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ImpossibleAction:
+    remove-violations-after: 150
+    checks:
+      - "ImpossibleK"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 [save]"
+      - "10:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ImpossibleKaOrder:
+    remove-violations-after: 150 #原15
+    checks:
+      - "ImpossibleH"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 [save]"
+      - "15:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  PredictionInventoryJump:
+    remove-violations-after: 150
+    checks:
+      - "InventoryA"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "5:1 [save]"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  PredictionInventoryMove:
+    remove-violations-after: 150
+    checks:
+      - "InventoryB"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "5:1 [save]"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InventoryDig:
+    remove-violations-after: 150
+    checks:
+      - "InventoryC"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 [save]"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InventoryPlacement:
+    remove-violations-after: 150
+    checks:
+      - "InventoryD"
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "5:1 [save]"
+      - "10:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InventoryNotOpen:
+    remove-violations-after: 150
+    checks:
+      - "InventoryE"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 [save]"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InventoryAction:
+    remove-violations-after: 150
+    checks:
+      - "InventoryF"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 [save]"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InventoryMove:
+    remove-violations-after: 150
+    checks:
+      - "InventoryG"
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "5:1 [save]"
+      - "6:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InventoryAttack:
+    remove-violations-after: 150
+    checks:
+      - "InventoryH"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 [save]"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  HeadInventoryMove:
+    remove-violations-after: 150
+    checks:
+      - "InventoryI"
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "5:1 [save]"
+      - "8:5 [close-inventory]"
+      - "12:0 [shuffle]"
+      - "16:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidInventoryAction:
+    remove-violations-after: 150
+    checks:
+      - "InventoryJ"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 [save]"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidChangeItemWhileInvOpen:
+    remove-violations-after: 150
+    checks:
+      - "InventoryK"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 [save]"
+      - "6:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InventoryRefillPattern:
+    remove-violations-after: 150
+    checks:
+      - "InventoryL"
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "3:1 [save]"
+      - "16:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ChestStealer:
+    remove-violations-after: 150
+    checks:
+      - "InventoryM"
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "3:1 [save]"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AdvancedChestStealer:
+    remove-violations-after: 150
+    checks:
+      - "InventoryN"
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "3:1 [save]"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  PacketPingSpoof:
+    remove-violations-after: 150
+    checks:
+      - "PingSpoofA"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 [save]"
+      - "3:0 neko delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  MathPingSpoof:
+    remove-violations-after: 150
+    checks:
+      - "PingSpoofB"
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "3:1 [save]"
+
+  DelayHeuristic:
+    remove-violations-after: 150
+    checks:
+      - "LagAssistA"
+    commands:
+      - "5:3 [alert] &f%trust_player% &5Invalid Protocol"
+      - "5:3 [save]"
+      - "15:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidPingDiff:
+    remove-violations-after: 150
+    checks:
+      - "LagAssistB"
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "5:1 [save]"
+      - "6:2 neko mitigate %player% damage"
+
+  InvalidPingChange:
+    remove-violations-after: 150
+    checks:
+      - "LagAssistC"
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "5:1 [save]"
+      - "6:2 neko mitigate %player% damage"
+
+  TransactionBurst:
+    remove-violations-after: 150
+    checks:
+      - "LagAssistD"
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "5:1 [save]"
+      - "7:1 neko mitigate %player% damage"
+
+  QueuePingSpike:
+    remove-violations-after: 150
+    checks:
+      - "LagAssistI"
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "3:1 [save]"
+      - "6:1 neko mitigate %player% damage"
+
+  LagAssistE:
+    remove-violations-after: 150
+    checks:
+      - "LagAssistE"
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "3:1 [save]"
+      - "4:1 neko mitigate %player% damage"
+
+  LagAssistF:
+    remove-violations-after: 150
+    checks:
+      - "LagAssistF"
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "3:1 [save]"
+      - "6:1 neko mitigate %player% damage"
+
+  LagAssistG:
+    remove-violations-after: 150
+    checks:
+      - "LagAssistG"
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "3:1 [save]"
+      - "15:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  LagAssistH:
+    remove-violations-after: 150 #原50
+    checks:
+      - "LagAssistH"
+    commands:
+      - "2:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "2:1 [save]"
+      - "8:1 neko mitigate %player% damage"
+
+  LagAssistJ:
+    remove-violations-after: 150
+    checks:
+      - "LagAssistJ"
+    commands:
+      - "2:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "2:1 [save]"
+      - "6:1 neko mitigate %player% damage"
+
+  FabricatedPlace:
+    remove-violations-after: 150
+    checks:
+      - "Scaffold1"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "20:0 neko delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidExpandPlacement:
+    remove-violations-after: 150
+    checks:
+      - "Scaffold2"
+    commands:
+      - "8:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  Scaffold3:
+    remove-violations-after: 150
+    checks:
+      - "Scaffold3"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "7:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ScaffoldA:
+    remove-violations-after: 150
+    checks:
+      - "ScaffoldA"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "1:1 [save]"
+      - "4:1 neko mitigate %player% rotate"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  BridgeAnalysis:
+    remove-violations-after: 150
+    checks:
+      - "ScaffoldB"
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "5:1 [save]"
+      - "15:5 neko mitigate %player% rotate"
+      - "17:1 neko mitigate %player% damage"
+      - "28:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidSneakPattern:
+    remove-violations-after: 150
+    checks:
+      - "ScaffoldC"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "6:3 neko mitigate %player% rotate"
+      - "9:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  MultiPlace:
+    remove-violations-after: 150
+    checks:
+      - "ScaffoldD"
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "3:1 [save]"
+      - "5:1 neko mitigate %player% rotate"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  FarPlace:
+    remove-violations-after: 150
+    checks:
+      - "ScaffoldE"
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "3:1 [save]"
+      - "6:3 neko mitigate %player% rotate"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  SnapPlace:
+    remove-violations-after: 150
+    checks:
+      - "ScaffoldF"
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "5:1 [save]"
+      - "5:1 neko mitigate %player% rotate"
+      - "10:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidPosPlace:
+    remove-violations-after: 150
+    checks:
+      - "ScaffoldG"
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "3:1 [save]"
+      - "3:1 neko mitigate %player% rotate"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidRotChange:
+    remove-violations-after: 150
+    checks:
+      - "ScaffoldH"
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "3:1 [save]"
+      - "6:3 neko mitigate %player% rotate"
+      - "15:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  BigRotChange:
+    remove-violations-after: 150
+    checks:
+      - "ScaffoldI"
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "3:1 [save]"
+      - "6:3 neko mitigate %player% rotate"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ScaffoldOffsetHandler:
+    remove-violations-after: 150
+    checks:
+      - "ScaffoldJ"
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "3:1 [save]"
+      - "6:1 neko mitigate %player% rotate"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  DownwardScaffold:
+    remove-violations-after: 150
+    checks:
+      - "ScaffoldK"
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "3:1 [save]"
+      - "5:1 neko mitigate %player% rotate"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ScaffoldL:
+    remove-violations-after: 150
+    checks:
+      - "ScaffoldL"
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "5:1 [save]"
+      - "16:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ScaffoldM:
+    remove-violations-after: 150
+    checks:
+      - "ScaffoldM"
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "5:1 [save]"
+      - "16:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ScaffoldN:
+    remove-violations-after: 150 #原40
+    checks:
+      - "ScaffoldN"
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "5:1 [save]"
+      - "15:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ScaffoldO:
+    remove-violations-after: 150 #原40
+    checks:
+      - "ScaffoldO"
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "3:1 [save]"
+      - "25:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ScaffoldP:
+    remove-violations-after: 150 #原40
+    checks:
+      - "ScaffoldP"
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "5:1 [save]"
+      - "25:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ScaffoldQ:
+    remove-violations-after: 150
+    checks:
+      - "ScaffoldQ"
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "5:1 [save]"
+      - "35:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ScaffoldR:
+    remove-violations-after: 150
+    checks:
+      - "ScaffoldR"
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "3:1 [save]"
+      - "20:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ScaffoldS:
+    remove-violations-after: 150
+    checks:
+      - "ScaffoldS"
+    commands:
+      - "3:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "3:1 [save]"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  TimerA:
+    remove-violations-after: 150
+    checks:
+      - "TimerA"
+    commands:
+      - "10:1 [alert] &f%trust_player% &5Game Timer Incorrect"
+      - "20:1 [save]"
+      - "40:20 neko mitigate %player% rotate"
+      - "150:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  TimerBalanceLimit:
+    remove-violations-after: 150
+    checks:
+      - "TimerBalance"
+    commands:
+      - "10:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "20:1 [save]"
+      - "35:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  VehicleTimer:
+    remove-violations-after: 150
+    checks:
+      - "TimerB"
+    commands:
+      - "10:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "15:1 [save]"
+      - "40:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  SlowDownTimer:
+    remove-violations-after: 150
+    checks:
+      - "TimerC"
+    commands:
+      - "10:5 [alert] &f%trust_player% &5Invalid Protocol"
+      - "10:1 [save]"
+      - "100:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  FastBreakA:
+    remove-violations-after: 150
+    checks:
+      - "FastBreakA"
+    commands:
+      - "10:5 [save]"
+      - "10:5 [alert] &f%trust_player% &5Breaking Block Suspiciously"
+      - "60:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  FastBreakB:
+    remove-violations-after: 150
+    checks:
+      - "FastBreakB"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Breaking Block Suspiciously"
+      - "15:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  FastBreakC:
+    remove-violations-after: 150
+    checks:
+      - "FastBreakC"
+    commands:
+      - "5:2 [save]"
+      - "10:3 [alert] &f%trust_player% &5Breaking Block Suspiciously"
+      - "25:5 [setback]"
+      - "50:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  FarBreakA:
+    remove-violations-after: 150
+    checks:
+      - "FarBreakA"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Breaking Block Suspiciously"
+      - "8:1 [setback]"
+      - "10:5 neko mitigate %player% rotate"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  PositionBreakA:
+    remove-violations-after: 150
+    checks:
+      - "PositionBreakA"
+    commands:
+      - "5:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Breaking Block Suspiciously"
+      - "20:5 neko mitigate %player% rotate"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  PositionBreakB:
+    remove-violations-after: 150
+    checks:
+      - "PositionBreakB" # Nuker
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Breaking Block Suspiciously"
+      - "8:0 neko delay %random_int% kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InteractA:
+    remove-violations-after: 150
+    checks:
+      - "InteractA"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Breaking Block Suspiciously"
+      - "25:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InteractB:
+    remove-violations-after: 150
+    checks:
+      - "InteractB"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Breaking Block Suspiciously"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InteractC:
+    remove-violations-after: 150
+    checks:
+      - "InteractC"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Breaking Block Suspiciously"
+      - "5:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InteractD:
+    remove-violations-after: 150
+    checks:
+      - "InteractD"
+    commands:
+      - "1:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "8:5 neko mitigate %player% rotate"
+      - "15:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InteractE:
+    remove-violations-after: 150 #原40
+    checks:
+      - "InteractE"
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "5:1 [save]"
+      - "20:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InteractF:
+    remove-violations-after: 150
+    checks:
+      - "InteractF"
+    commands:
+      - "5:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "5:1 [save]"
+      - "25:5 neko mitigate %player% rotate"
+      - "40:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AbortBreak:
+    remove-violations-after: 150
+    checks:
+      - "WrongBreakA"
+    commands:
+      - "1:1 [save]"
+      - "1:5 [alert] &f%trust_player% &5Breaking Block Suspiciously"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AirBreak:
+    remove-violations-after: 150
+    checks:
+      - "WrongBreakB"
+    commands:
+      - "3:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Breaking Block Suspiciously"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  NoBreakDelay:
+    remove-violations-after: 150
+    checks:
+      - "WrongBreakC"
+    commands:
+      - "1:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Breaking Block Suspiciously"
+      - "3:0 neko delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  ManyActionWithDig:
+    remove-violations-after: 150
+    checks:
+      - "WrongBreakD"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Breaking Block Suspiciously"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  NoSwingBreak:
+    remove-violations-after: 150
+    checks:
+      - "NoSwingBreakA"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Breaking Block Suspiciously"
+      - "25:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidBreak:
+    remove-violations-after: 150
+    checks:
+      - "InvalidBreakA"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Breaking Block Suspiciously"
+      - "1:0 neko delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[X8AF0L1075 S=%server%]"
+
+  MultiBreak:
+    remove-violations-after: 150
+    checks:
+      - "MultiBreakA"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Breaking Block Suspiciously"
+      - "15:0 neko delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[X8AF0L1075 S=%server%]"
+
+  FastPlaceA:
+    remove-violations-after: 150
+    checks:
+      - "FastPlaceA"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  FastPlaceB:
+    remove-violations-after: 150
+    checks:
+      - "FastPlaceB"
+    commands:
+      - "2:1 [save]"
+      - "2:1 [alert] &f%trust_player% &5Placing Block Suspiciously"
+      - "10:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AutoTotemA:
+    remove-violations-after: 150
+    checks:
+      - "AutoTotemA" # limit
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AutoTotemB:
+    remove-violations-after: 150
+    checks:
+      - "AutoTotemB" # dev
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AutoTotemC:
+    remove-violations-after: 150
+    checks:
+      - "AutoTotemC" # Outlier
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AutoTotemD:
+    remove-violations-after: 150
+    checks:
+      - "AutoTotemD" # Invalid
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "10:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AutoTotemE:
+    remove-violations-after: 150
+    checks:
+      - "AutoTotemE" # Heuristic
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "10:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AutoTotemF:
+    remove-violations-after: 150
+    checks:
+      - "AutoTotemF"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AutoTotemG:
+    remove-violations-after: 150
+    checks:
+      - "AutoTotemG"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "8:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AutoTotemH:
+    remove-violations-after: 150
+    checks:
+      - "AutoTotemH"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AutoTotemI:
+    remove-violations-after: 150
+    checks:
+      - "AutoTotemI"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AutoCrystalA:
+    remove-violations-after: 150
+    checks:
+      - "AutoCrystalA"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AutoCrystalB:
+    remove-violations-after: 150
+    checks:
+      - "AutoCrystalB"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AutoCrystalC:
+    remove-violations-after: 150
+    checks:
+      - "AutoCrystalC"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AutoAnchorA:
+    remove-violations-after: 150
+    checks:
+      - "AutoAnchorA"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  AutoAnchorB:
+    remove-violations-after: 150
+    checks:
+      - "AutoAnchorB"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "30:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  HitSelectA:
+    remove-violations-after: 150
+    checks:
+      - "HitSelectA"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "20:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  HitSelectB:
+    remove-violations-after: 150
+    checks:
+      - "HitSelectB"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "12:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  XRayA:
+    remove-violations-after: 150
+    checks:
+      - "XRayA"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 [save]"
+      - "5:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  XRayB:
+    remove-violations-after: 150
+    checks:
+      - "XRayB"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 [save]"
+      - "5:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  XRayC:
+    remove-violations-after: 150
+    checks:
+      - "XRayC"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 [save]"
+      - "5:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  XRayD:
+    remove-violations-after: 150
+    checks:
+      - "XRayD"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 [save]"
+      - "5:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  XRayE:
+    remove-violations-after: 150
+    checks:
+      - "XRayE"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 [save]"
+      - "5:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  XRayF:
+    remove-violations-after: 150
+    checks:
+      - "XRayF"
+    commands:
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:1 [save]"
+      - "5:0 neko delay %random_int% ban %player% 1h %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  InvalidClientBoard:
+    remove-violations-after: 150
+    checks:
+      - "ClientA"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:0 neko delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  SpoofClient:
+    remove-violations-after: 150
+    checks:
+      - "ClientB"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+
+  SpamA:
+    remove-violations-after: 150
+    checks:
+      - "SpamA"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "1:0 neko delay %random_int% ban %player% 7d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  SpamB:
+    remove-violations-after: 150
+    checks:
+      - "SpamB"
+    commands:
+      - "1:1 [save]"
+      - "1:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "8:0 mute %player% 3d %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% S=%server%]"
+
+  BlinkA:
+    remove-violations-after: 150
+    checks:
+      - "BlinkA"
+    commands:
+      - "5:1 [save]"
+      - "5:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "10:0 neko delay %random_int% kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  BlinkB:
+    remove-violations-after: 150
+    checks:
+      - "BlinkB"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "13:0 neko delay %random_int% kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  BlinkC:
+    remove-violations-after: 150
+    checks:
+      - "BlinkC"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "18:0 neko delay %random_int% kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"
+
+  BlinkD:
+    remove-violations-after: 150
+    checks:
+      - "BlinkD"
+    commands:
+      - "3:1 [save]"
+      - "3:1 [alert] &f%trust_player% &5Invalid Protocol"
+      - "25:0 neko delay %random_int% kick %player% %anticheat% &7> %anticheat_color%Unfair Advantage &7[%special_random_string% m=%fast_math% S=%server%]"

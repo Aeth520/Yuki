@@ -1,0 +1,642 @@
+# ******************************************************************************************************************************
+#  ███    ██     ███████     ██   ██      ██████      ██
+#  ████   ██     ██          ██  ██      ██    ██     ██
+#  ██ ██  ██     █████       █████       ██    ██     ██
+#  ██  ██ ██     ██          ██  ██      ██    ██
+#  ██   ████     ███████     ██   ██      ██████      ██
+# ******************************************************************************************************************************
+#                     语言与消息配置
+# 这里定义插件提示、告警、踢出原因、命令说明和界面文字。
+# 大部分内容由插件内部读取,改这里只影响展示内容。
+# 改这里不会改变检测逻辑，只会改变展示内容和部分执行提示。
+# #############################################
+# 消息前缀
+# 这里定义各类消息的显示前缀。
+# main-prefix 是根前缀，其它前缀若包含 %prefix% 占位符则会被替换为 main-prefix 的值。
+# #############################################
+# main-prefix: 所有提示消息和 %prefix% 变量都会读取这个前缀。
+main-prefix: "Neko&c!"
+# core-prefix: 核心系统消息前缀。
+core-prefix: "&d%prefix% &f(CORE) &7> &f"
+# gate-prefix: 入网/门控消息前缀。
+gate-prefix: "&5%prefix% &f(GATE) &7> &f"
+# ext-prefix: 扩展接口消息前缀。
+ext-prefix: "&b%prefix% &f(EX) &7> &f"
+# debug-prefix: 调试消息前缀。
+debug-prefix: "&d%prefix% &f(DEBUGGER) &7> "
+# raytrace-prefix: 射线追踪调试消息前缀。
+raytrace-prefix: "&d%prefix% &f(RAYTRACE) &7> "
+# sync-prefix: 同步消息前缀。
+sync-prefix: "&d%prefix% &f(SYNC) &7> "
+# desync-prefix: 去同步消息前缀。
+desync-prefix: "&d%prefix% &f(DESYNC) &7> "
+# cancel-prefix: 数据包拦截消息前缀。
+cancel-prefix: "&d%prefix% &f(PACKET_CONTROLLER) &7> "
+# mitigate-prefix: 缓解措施消息前缀。
+mitigate-prefix: "&d%prefix% &f(MITIGATION) &7> "
+# setback-prefix: 拉回消息前缀。
+setback-prefix: "&d%prefix% &f(SETBACK) &7> "
+# useitem-reset-prefix: 使用物品重置消息前缀。
+useitem-reset-prefix: "&d%prefix% &f(USEITEM_RESET) &7> "
+
+# #############################################
+# 基础提示
+# 这一段主要给命令框架和状态保护使用。
+# #############################################
+# only-player: 命令仅限玩家执行时,对控制台/命令方块的提示。
+only-player: "&c✘ 只有玩家才能执行这个命令!"
+# no-permission: 权限不足时的提示。
+no-permission: "&c✘ 您的权限不足!"
+# unknown-command: 未知子命令时提示。
+unknown-command: "&c✘ 未知命令!"
+# not-found: 指定玩家不存在。%player% 为输入的玩家名。
+not-found: "&c✘ 玩家 &f%player%&c 不存在"
+# not-data-user: 玩家因权限绕过不被记录或不存在。%player% 为输入的玩家名。
+not-data-user: "&c✘ 玩家 &f%player%&c 因权限绕过不被记录或不存在!"
+# not-my-self: 对自己执行限制命令时的提示。
+not-my-self: "&c✘ 您不能对自己使用此命令!"
+# stop-chat: 服务器过载时拒绝处理的提示。
+stop-chat: "&c✘ 别说了别说了，服务器娘要不行了..."
+# kick-when-plugin-disabled: 插件已禁用时踢出玩家的文本。
+kick-when-plugin-disabled: "&c服务器关闭，请稍后再试!"
+# anticheat-loading: 插件仍在加载时的提示。
+anticheat-loading: "&c服务器加载中，请稍后再试!"
+# #############################################
+# 输出格式
+# 这一段定义告警、档案等输出格式。
+# #############################################
+output:
+  # client-brand: 玩家进服时的客户端品牌提示格式。
+  # 对应品牌与通道占位符由消息替换系统提供。
+  client-brand:
+    format: "&f✦ 玩家 &5%player% &f使用 &5%brand% &f进入游戏 &7(&5%channel%&7)"
+
+  # alerts: 普通告警输出格式。
+  # 对应 /neko alerts 命令开关的告警通道。
+  alerts:
+    # enable: 开启 alerts 后的提示文本。
+    enable: "&f%poem%                                                        &a&lAll CHECKS HAVE BEEN ENABLED"
+
+    # disable: 关闭 alerts 后的提示文本。
+    disable: "&e停止查看警报..."
+
+    # exp-symbol: 实验性检测的额外标记。
+    exp-symbol: "&c⚠&f"
+
+    # alert-format: 普通告警主格式。
+    alert-format: "&5ID: &f%player% | &5Type: &f%check_name%%exp% &f| &5VL: %vlbar% &f| &5Ping: &f%mix_ping% &f| &5cps: &f%cps%"
+
+    # vl-bar: 告警里 VL 进度条的颜色和长度。
+    vl-bar:
+      # after: 已命中的部分颜色。
+      after: "&5"
+
+      # before: 未命中的部分颜色。
+      before: "&f"
+
+      # length: 进度条字符长度。
+      length: 10
+
+  # verbose: 详细告警提示。
+  # 对应 /neko verbose 命令开关的详细数据通道。
+  verbose:
+    # enable: 开启 verbose 时的提示文本。
+    enable: "&f%poem%                                                       &a&lVERBOSE HAVE BEEN ENABLED"
+    # disable: 关闭 verbose 时的提示文本。
+    disable: "&a停止查看详细信息!"
+    # hover: 告警消息的悬浮提示文本。
+    # 管理员收到告警后,鼠标在verbose上会看到这段详细信息。
+    # 包含延迟/TPS/版本/检测描述/详细数据,最后一行是点击传送。
+    # 对管理员有 hover 权限时,这段文本会挂到告警上。
+    hover: |-
+      &5Ping: &f%mix_ping% &7(&fLag= &c%lagging% &7| &c%move_lagging%&7)&f | &5TPS: &f%tps% | &5Version: &f%brand% %version%
+      &f
+      &5description:
+      &f%description%
+      &f
+      &5detail:
+      &f%verbose%
+      &f
+      &5Click to teleport &f%player% &c!
+
+  # debug: 调试输出格式。
+  # 开启 /neko debug 后,各类调试信息按此格式输出。
+  # format 是聊天栏单行格式,detail-line 是 hover 内每行格式,hover 是完整 hover 文本。
+  debug:
+    format: "&5%type% &8| &f%player% &8| &7%reason% &8(&f%summary%&8)"
+    detail-line: "&5%key%: &f%value%"
+    hover: |-
+      &5Neko Debug
+      &f
+      &5Player: &f%player%
+      &5Type: &f%type%
+      &5Reason: &f%reason%
+      &5World: &f%world%
+      &f
+      &5detail:
+      &f%details%
+# #############################################
+# 广播与踢出原因
+# broadcast 会在处罚广播时使用；kick.* 会在不同断开场景下被读取。
+# #############################################
+# broadcast: 处罚广播文本。
+# 可用变量: %player% (被处罚玩家名)。
+broadcast: |-
+  &7&m--------------------------------------------------&r
+  &r&c&l✗ &5&lKARHU CHEAT DETECTION
+  &r&fKarhu &7has removed a player from the network due to cheating
+  &7&m--------------------------------------------------&r
+kick:
+  # invalid-forge: Forge 已知兼容问题时的踢出文本。
+  invalid-forge: "&c✘ 客户端异常 &7(FORGE:github.com/MinecraftForge/MinecraftForge/issues/9309)"
+  # packet: 数据包异常断开文本。
+  packet: "&c✘ 数据包异常"
+  # 以下文本用作伪装断开原因,返回给客户端以隐藏真实踢出理由。
+  # timed-out: 玩家长期不回复反作弊数据包时的踢出原因。
+  # default: 反作弊缓解措施触发踢出时的默认原因,控制台会补充具体信息。
+  timed-out: "Internal Exception: io.netty.channel.unix.Errors$NativeIoException: readAddress(..) failed: Connection reset by peer (T)"
+  default: "Internal Exception: io.netty.channel.unix.Errors$NativeIoException: readAddress(..) failed: Connection reset by peer (D)"
+  # invalid-client: 黑名单客户端品牌踢出文本。
+  invalid-client: "&c您的客户端不被允许加入此服务器,这些客户端打着优化名义各种修改,最终导致其不再'合法' &7(%brand%)"
+  # high-ping: 玩家延迟过高时的踢出文本。
+  # 可用变量: %duration% (持续时长), %ping% (延迟值)。
+  high-ping: "&c您的延迟异常的高,并且持续了 &f%duration% &7(%ping%)"
+  # skip-transaction: 玩家跳过反作弊事务校验时的踢出原因。
+  skip-transaction: "Internal Exception: io.netty.channel.unix.Errors$NativeIoException: readAddress(..) failed: Connection reset by peer (S)"
+  # invalid-slot: 访问无效槽位时的踢出文本。支持 minimessage 颜色代码。
+  invalid-slot: "&c✘ 槽位解析失败，有问题请找管理员!"
+
+commands:
+  # #############################################
+  # 帮助命令 (Help Command)
+  # #############################################
+  # help: 查看可用命令列表,支持分页。
+  # 用法: /neko help [页码]
+  help:
+    description: "查看可用命令列表"
+    # 用法: 参数错误或无权限时提示。
+    usage: "&5✦ 用法: &f/neko help [页码]"
+    # 列表表头
+    header: "&8&m=========&r &d%prefix% &7帮助 &8&m========="
+    # 列表条目: %usage% 用法 / %description% 描述 / %aliases_suffix% 别名后缀
+    entry: "&8» &f%usage% &7%description%%aliases_suffix%"
+    # 别名后缀: %aliases% 别名列表
+    aliases: " &8(&7%aliases%&8)"
+    # 空列表
+    empty: "&7当前没有你可用的命令"
+    # 分页信息: %page% 当前页 / %total_pages% 总页数
+    page-info: "&8» &7第 &f%page% &7/ &f%total_pages% &7页"
+    # 翻页导航 (可点击, 带 hover 提示; 边界时显示禁用样式不可点击)
+    page-nav:
+      # prev: 上一页按钮文本 (可点击时)
+      prev: "&8[&a上一页&8]"
+      # prev-disabled: 上一页禁用样式 (第一页时)
+      prev-disabled: "&8[&7上一页&8]"
+      # next: 下一页按钮文本 (可点击时)
+      next: "&8[&a下一页&8]"
+      # next-disabled: 下一页禁用样式 (末页时)
+      next-disabled: "&8[&7下一页&8]"
+      # 分隔符
+      separator: " &7| "
+      # 悬停提示: %page% 目标页码
+      hover: "&f点击翻到第 %page% 页"
+    # 列表页脚
+    footer: "&8&m============================="
+  # #############################################
+  # 玩家档案命令 (Player Profile Command)
+  # #############################################
+  profile:
+    description: "查看玩家档案信息"
+    # 使用说明：用于查看玩家档案信息的命令格式。
+    usage: "&5✦ 用法: &f/neko profile <玩家>"
+    # 档案消息: 每行一个信息点,避免叠加。
+    # 可用占位符: %player% %mix_ping% %lagging% %move_lagging% %cps% %last_cps% %teleporting% %riding% %version% %brand% %h_sensitivity% %v_sensitivity% %wrapper_sensitivity% %fast_math% %chunks% %jump_reset_prob% %jump_reset_avg% %jump_reset_std%
+    message: |-
+      &8&m=======&r &d%player% &7档案 &8&m=======&r
+      &r&5✦ 延迟: &f%mix_ping%
+      &r&5✦ 卡顿: &fLag=%lagging% | MoveLag=%move_lagging%
+      &r&5✦ 点击: &f%cps%/%last_cps%
+      &r&5✦ 传送: &f%teleporting%
+      &r&5✦ 乘骑: &f%riding%
+      &r&5✦ 版本: &f%version%
+      &r&5✦ 客户端: &f%brand%
+      &r&5✦ 灵敏度: &f水平 %h_sensitivity%% | 垂直 %v_sensitivity%%
+      &r&5✦ 综合灵敏度: &f%wrapper_sensitivity%
+      &r&5✦ 快速运算: &f%fast_math%
+      &r&5✦ 玩家加载区块: &f%chunks%
+      &r&5✦ 跳跃重置: &f概率 %jump_reset_prob% | avg %jump_reset_avg%t | std %jump_reset_std%t
+      &8&m========================&r
+  # #############################################
+  # 重载命令 (Reload Command)
+  # #############################################
+  reload:
+    description: "重载插件配置"
+    # 用法: 无参数,直接执行重载。
+    usage: "&5✦ 用法: &f/neko reload"
+    # 重载失败提示：当配置重载失败时显示的错误信息。
+    fail: "&c✘ 重载失败! &7(%reason%)"
+    # 重载成功提示：配置重载成功后的提示信息。
+    success: "&a✔ 配置重载完成"
+
+  # #############################################
+  # 策略设置命令 (Settings Command)
+  # #############################################
+  # settings: 查看或修改策略面板的开关项。
+  # 用法: /neko settings [设置项] [enable|disable]
+  # 不带参数列出全部,带设置项查询当前值,带 action 修改(显式 enable/disable,不支持 toggle)。
+  settings:
+    description: "查看或修改策略面板设置"
+    # 用法: 参数错误或无权限时提示。
+    usage: "&5✦ 用法: &f/neko settings [设置项] [enable|disable]"
+    # 未知设置项: %input% 用户输入 / %available% 可用键列表
+    invalid-setting: "&c✘ 未知设置项 &f%input%&c，可尝试: &7%available%"
+    # 无效操作: %input% 用户输入,只接受 enable/disable
+    invalid-action: "&c✘ 无效操作 &f%input%&c，请使用 &7enable/disable"
+    # 列表表头
+    list-header: "&8&m=======&r &d策略设置 &8&m=======&r"
+    # 列表条目: %name% 名称 / %path% 路径 / %value% 当前值
+    list-entry: "&8» &f%name% &8(&7%path%&8) &7» &f%value%"
+    # 当前值查询: %name% / %path% / %value%
+    current: "&8» &f%name% &8(&7%path%&8) &7» &f%value%"
+    # 更新成功: %name% / %path% / %value%
+    updated: "&a✔ 已将 &f%name% &a设置为 %value% &7(%path%)"
+    # 值未变化: %name% / %value%
+    already: "&e⋯ &f%name% &e当前已经是 %value%"
+    # 更新失败: %reason% 失败原因
+    fail: "&c✘ 设置更新失败! &7(%reason%)"
+
+  # #############################################
+  # 延迟命令 (Delay Command)
+  # #############################################
+  delay:
+    description: "延迟执行命令"
+    # 使用说明：定义延迟执行命令的格式，需指定延迟秒数和要执行的命令。
+    usage: "&5✦ 用法: &f/neko delay <秒数> <命令>"
+    # 无效数字提示：当输入非整数时的错误提示信息。
+    invalid: "&c✘ 请输入整数!"
+    # 命令延迟提示：提示用户指定的命令将在延迟后执行。
+    message: "&a✦ 命令 &5%command% &a将在 &e%delay%s &a后执行"
+
+  # #############################################
+  # 区块信息命令 (Chunks Info Command)
+  # #############################################
+  # 用于查看当前服务器总区块或玩家加载的区块信息。
+  chunks:
+    description: "查看区块数据"
+    # 使用说明：查看区块信息命令格式。
+    usage: "&5✦ 用法: &f/neko chunks <total/info> <玩家>"
+
+    # 总区块信息：显示服务器当前加载的区块总数。
+    total: "&5✦ 当前加载的总区块: &f%total%"
+
+    # 玩家区块信息：显示指定玩家当前加载的区块数量。
+    player: |-
+      &8&m=======&r &d%player% &7区块信息 &8&m=======&r
+      &r&5✦ 已加载区块: &f%chunks%
+      &8&m============================&r
+
+  # #############################################
+  # 录制命令 (Record Command)
+  # #############################################
+  # record: 录制玩家战斗/移动数据用于分析。
+  # 子模块: movement(移动) / rotate(瞄准) / scaffold(搭桥) / backtrack(回溯) / hitselect(命中选择)
+  # 用法: /neko record movement <simple|verbose> <玩家|all> [enable|disable]
+  #       /neko record <rotate|scaffold|backtrack|hitselect> <玩家|all> [enable|disable]
+  #       /neko record movement upload <玩家>
+  record:
+    description: "记录玩家调试数据"
+    # 用法: 单行格式,同时用于 help 列表展示和参数错误提示。
+    usage: "&5✦ 用法: &f/neko record movement <simple|verbose> <玩家|all> [enable|disable] &8/ &f/neko record <rotate|scaffold|backtrack|hitselect> <玩家|all> [enable|disable] &8/ &f/neko record movement upload <玩家>"
+    # movement 子模块提示
+    started: "&a✦ 已开始录制 &e%player% &a的移动数据"
+    stopped: "&c✘ 已停止录制 &e%player% &c的移动数据"
+    record-not-available: "&c✘ Movement record 不可用!"
+    # rotate/scaffold/backtrack/hitselect 子模块共用提示
+    analysis-started: "&a✦ 已开始录制 &e%player% &a的分析数据"
+    analysis-stopped: "&c✘ 已停止录制 &e%player% &c的分析数据"
+    analysis-not-available: "&c✘ 分析录制不可用!"
+    # upload 子流程
+    uploading: "&7⋯ 正在上传 movement record..."
+    uploaded: "&a✔ 已上传 movement record -> &f%url%"
+    upload-failed: "&c✘ 上传 movement record 失败"
+    # 开发者权限不足: 非开发者尝试执行受限子模块时提示。
+    no-develop: "&c✘ 该子模块仅限开发者使用!"
+
+  # #############################################
+  # 拉回命令 (Setback Command)
+  # #############################################
+  setback:
+    description: "按模式拉回玩家"
+    # 使用说明：用于将玩家拉回至某一位置的命令格式。
+    usage: "&5✦ 用法: &f/neko setback <玩家>"
+    # 拉回成功提示：显示成功拉回玩家后的信息，包含所用模式。
+    message: "&a✦ 已使用 &5%mode% &a模式拉回 &e%player%"
+    # 玩家免疫提示：当目标玩家无法被拉回时的提示信息。
+    cannot: "&c✘ &f%player% &c对拉回免疫!"
+    # 无效拉回模式提示：输入的拉回模式不存在时的错误提示。
+    no-type: "&c✘ 无效的拉回模式!"
+
+  # #############################################
+  # 信任状态命令 (SetTrust Command)
+  # #############################################
+  # settrust: 设置玩家的信任状态,影响检测敏感度。
+  # 状态可选: untrusted(0.2) / suspicious(0.5) / normal(1.0) / long_time_player(1.6) / trusted(1.9)
+  settrust:
+    description: "设置玩家信任状态"
+    # 用法: %player% 目标玩家名。
+    usage: "&5✦ 用法: &f/neko settrust <玩家> <untrusted|suspicious|normal|long_time_player|trusted>"
+    # 无效的信任状态: 输入的状态名不在可选列表时提示。
+    invalid-status: "&c✘ 无效的信任状态!"
+    # 设置成功: %player% 玩家名 / %status% 状态名 / %factor% 信任系数
+    message: "&a✦ 已将 &e%player% &a的信任状态设置为 &5%status% &7(&f%factor%&7)"
+
+  # #############################################
+  # 版本命令 (Version Command)
+  # #############################################
+  info:
+    description: "查看插件与环境信息"
+    # 使用说明：查看插件版本信息的命令格式。
+    usage: "&5✦ 用法: &f/neko info"
+    # 版本信息消息：显示插件版本、构建时间、服务器信息、数据包事件统计等详细信息。
+    message: |-
+      &8&m=========&r &dNeko&c! &7信息 &8&m=========&r
+      &r&5✦ 版本: &f%version%
+      &r&5✦ 构建时间: &f%build%
+      &r&5✦ 服务器名: &f%server%
+      &r&5✦ 服务器版本: &f%server_version%
+      &r&5✦ TPS: &f%tps%
+      &r&5✦ MSPT: &f%mspt%
+      &r&5✦ 是否是Folia: &f%folia%
+      &r&5✦ 是否支持高级API: &f%support_adventure%
+      &r&5✦ 是否使用via &f%via%
+      &r&5✦ 内存使用: &f%memory%
+      &r&5✦ 服务器系统: &f%system%
+      &r&5✦ 使用JAVA版本: &f%java%
+      &r&5✦ 数据包事件版本: &f%packetevents%
+      &8&m========================&r
+  # #############################################
+  # 警报发送命令 (Send Alert Command)
+  # #############################################
+  # 用于手动发送警报消息,必须指定模式 (normal 带前缀 / raw 不带前缀)。
+  send-alert:
+    # description: 命令在帮助列表中的简要说明。
+    description: "发送自定义警报消息"
+    # usage: 命令格式提示。normal 带前缀, raw 不带前缀。
+    usage: "&5✦ 用法: &f/neko sendalert <normal|raw> <消息>"
+  # #############################################
+  # 警报开关命令 (Alerts Command)
+  # #############################################
+  # 用于切换是否接收反作弊告警。
+  alerts:
+    description: "开关警报接收"
+    usage: "&5✦ 用法: &f/neko alerts"
+  # #############################################
+  # 详细警报开关命令 (Verbose Command)
+  # #############################################
+  # 用于切换是否接收详细调试告警,开启后会自动关闭普通警报。
+  verbose:
+    description: "开关详细警报接收"
+    usage: "&5✦ 用法: &f/neko verbose"
+  # #############################################
+  # 菜单命令 (Menu Command)
+  # #############################################
+  # 用于打开图形化菜单,仅玩家可用。
+  menu:
+    description: "打开图形化菜单"
+    usage: "&5✦ 用法: &f/neko menu"
+  # #############################################
+  # 历史记录命令 (History Command)
+  # #############################################
+  history:
+    description: "查看或清空玩家历史记录"
+    # 使用说明：用于查看玩家过往检测记录的命令格式。
+    usage: "&5✦ 用法: &f/neko history <玩家> <页数>"
+    # 分页头部显示格式：用于展示分页信息的标题行。
+    header: "&8&m=======&r &d%player% &7历史记录 &8(&f%page%&8/&f%maxPages%&8) &8&m======="
+    # 单条历史记录格式：定义每条记录显示时的文本格式。
+    entry: "&8» &5ID: &f%player% &8| &5类型: &r&f%check_name% %exp% &8| &5VL: &f%vl% &8| &5时间: &f%timeago% &8| &5服务器: &f%server%"
+    # 删除全部历史记录提示：删除所有玩家历史数据时的提示信息。
+    clean-all: "&a✔ 已清除所有玩家数据!"
+    # 删除指定玩家历史记录提示：删除某玩家数据时显示的提示信息。
+    clean: "&a✔ 已清除 &e%player% &a的数据!"
+    # 查询中的提示：开始查询玩家历史记录时显示的提示信息。
+    querying: "&7正在查询玩家 &f%player% &7的历史记录..."
+    # 查询超时提示：查询时间超过设定时间时的提示信息。
+    query-timeout: "&c查询超时！玩家 &f%player% &c的历史记录查询超过 &f%timeout%&c 秒"
+    # 查询错误提示：查询过程中发生错误时的提示信息。
+    query-error: "&c查询过程中发生错误，请查看控制台日志"
+    # 无记录提示：玩家没有任何违规记录时的提示信息。
+    no-records: "&7玩家 &e%player% &7没有任何违规记录"
+
+  # #############################################
+  # 调试命令 (Debug Command)
+  # #############################################
+  debug:
+    description: "开启调试输出"
+    # 使用说明：用于开启或关闭预测调试模式的命令格式。
+    usage: "&5✦ 用法: &f/neko debug <类型> <玩家>"
+    # 启用调试提示：当开启预测调试模式时显示的提示信息。
+    enable: "&a✦ &5%type% &f调试模式 &a已开启"
+    # 禁用调试：当开发模式关闭时则不生效
+    no-develop: "&c✘ 请先开启 &5Develop &c模式!"
+    # 关闭调试提示：当关闭预测调试模式时显示的提示信息。
+    disable: "&c✦ &5%type% &f调试模式 &c已关闭"
+
+  # #############################################
+  # 观察命令 (Spectate Command)
+  # #############################################
+  spectate:
+    description: "观察指定玩家"
+    # 使用说明：启动观察指定玩家的命令格式。
+    usage: "&5✦ 用法: &f/neko spectate <玩家>"
+    # 返回提示：提供返回观察前位置的提示信息（多行文本）。
+    # return: 观察期间显示的可点击返回文本。
+    return: "\n&e✦ 点击返回观察前位置\n"
+    # 观察成功提示：显示开始观察指定玩家时的成功消息。
+    message: "&a✦ 开始观察 &e%player%"
+    # 停止观察提示：显示停止观察模式时的提示信息。
+    stop: "&a✦ 观察模式已停止"
+
+  # #############################################
+  # 停止观察命令 (StopSpectate Command)
+  # #############################################
+  # 用于手动停止观察模式,仅玩家可用。
+  stop-spectating:
+    description: "停止观察模式"
+    usage: "&5✦ 用法: &f/neko stopspectating [here]"
+
+  # #############################################
+  # 崩溃命令 (Crash Command)
+  # #############################################
+  crash:
+    description: "执行崩溃测试"
+    # 使用说明：用于向指定玩家发送崩溃数据包的命令格式。
+    usage: "&5✦ 用法: &f/neko crash <玩家> <模式>"
+    # 无效崩溃模式提示：当指定的崩溃模式不存在时的错误提示信息。
+    invalid-type: "&c✘ 无效崩溃模式!"
+    # 崩溃成功提示：显示成功发送崩溃数据包给指定玩家时的消息。
+    message: "&a✦ 已向 &e%player% &a发送崩溃数据包"
+
+  # #############################################
+  # 处罚命令 (Mitigate Command)
+  # #############################################
+  mitigate:
+    description: "执行缓解动作"
+    # 使用说明：用于对指定玩家执行处罚操作的命令格式。
+    usage: "&5✦ 用法: &f/neko mitigate <玩家> <模式>"
+    # 无效处罚类型提示：当指定处罚模式不存在时的错误信息。
+    invalid-type: "&c✘ 无效处罚类型: &e%type%"
+    types:
+      damage:
+        # 当处罚模式为伤害减免时的提示信息。
+        message: "&5✦ 已对 &e%player% &5启用伤害减免"
+      reset-item:
+        # 当处罚模式为重置物品使用状态时的提示信息。
+        message: "&5✦ 已重置 &e%player% &5物品状态"
+      knock-back:
+        # 当处罚模式为击退时的提示信息。
+        message: "&5✦ 已对 &e%player% &5执行击退"
+      rotate:
+        # 当处罚模式为随机旋转视角时的提示信息。
+        message: "&5✦ 已随机化 &e%player% &5视角"
+      shuffle:
+        # 当处罚模式为随机切换主手物品栏时的提示信息。
+        message: "&5✦ 已切换 &e%player% &5主手物品"
+      food:
+        # 当处罚模式为重置饱食度时的提示信息。
+        message: "&5✦ 已重置 &e%player% &5饱食度"
+      resync:
+        # 当处罚模式为重新同步玩家姿势时的提示信息。
+        message: "&5✦ 已同步 &e%player% &5姿势"
+      killaura:
+        # 当处罚模式为传送攻击者到目标玩家身后时的提示信息。
+        message: "&5✦ 已传送 &e%player% &5至 &e%target% &5身后"
+        # 当玩家尚未攻击其他玩家时的提示信息。
+        not-target: "&c✘ &e%player% &c尚未攻击玩家"
+        # 当玩家被传送回原点时的提示信息。
+        pull-back: "&5✦ 已将 &e%player% &5传回原点"
+        # 当目标玩家疑似使用 KillAura 时的提示信息。
+        attacked: "&c✦ 目标疑似使用 &4KillAura&c!"
+      npc:
+        # 当处罚模式为 NPC 诱导检测时的提示信息。
+        message: "&5✦ 已为 &e%player% &5生成诱导NPC &7(&f%mode%&7, &f%tick%t&7)"
+        # 当 NPC 功能被总开关关闭时的提示信息。
+        disabled: "&c✘ NPC 模式已被总开关关闭"
+        # 当 NPC 生成失败时的提示信息。
+        failed: "&c✘ NPC 生成失败，请稍后重试"
+        # 手动移除 NPC 时的提示信息。
+        removed: "&5✦ 已移除 &e%player% &5当前NPC"
+
+  # #############################################
+  # 冻结命令 (Freeze Command)
+  # #############################################
+  freeze:
+    description: "冻结玩家"
+    # 使用说明：用于冻结指定玩家，使其无法移动的命令格式。
+    usage: "&5✦ 用法: &f/neko freeze <玩家>"
+    # 冻结成功提示：显示玩家被冻结后的提示信息。
+    message: "&5✦ 已冻结玩家 &e%player%"
+    # 玩家已冻结提示：如果目标玩家已经被冻结时显示的错误信息。
+    already-frozen: "&c✘ &e%player% &c已被冻结!"
+    # 被冻结后提示：当玩家自己被冻结时显示的提示信息，通常包含申诉方式等说明。
+    target-side: "&c✘ 您已被冻结！请加客服申诉\n&c✘ 请勿移动或退出游戏！"
+
+  # #############################################
+  # 解除冻结命令 (Unfreeze Command)
+  # #############################################
+  unfreeze:
+    description: "解除玩家冻结"
+    # 使用说明：用于解除指定玩家冻结状态的命令格式。
+    usage: "&5✦ 用法: &f/neko unfreeze <玩家>"
+    # 解除冻结成功提示：显示解除冻结后成功的提示信息。
+    message: "&a✦ 已解除 &e%player% &a冻结"
+    # 未冻结提示：当尝试解除冻结但目标玩家未被冻结时显示的错误信息。
+    not-freeze: "&c✘ &e%player% &c未被冻结"
+    # 被解除冻结提示：当玩家被解除冻结后显示的提示信息。
+    target-side: "&a✦ 您已被解冻！"
+
+  # #############################################
+  # 检测控制命令 (Control Command)
+  # #############################################
+  control:
+    description: "切换玩家检测状态"
+    # 使用说明：用于开启或关闭指定玩家检测的命令格式。
+    usage: "&5✦ 用法: &f/neko control <玩家>"
+    # 开启检测提示：显示为指定玩家开启检测时的提示信息，重复执行则切换状态。
+    enable: "&a✦ 已为 &e%player% &a开启检测 &7(再次执行关闭)"
+    # 关闭检测提示：显示为指定玩家关闭检测时的提示信息，重复执行则切换状态。
+    disable: "&c✦ 已为 &e%player% &c关闭检测 &7(再次执行开启)"
+
+  # #############################################
+  # 处罚玩家命令 (Punish Command)
+  # #############################################
+  punish:
+    description: "立即处罚玩家"
+    # 使用说明：用于处罚玩家的命令格式。
+    usage: "&5✦ 用法: &f/neko punish <玩家>"
+    # 发送处罚命令: 向目标玩家发送处罚命令
+    message: "&a✦ 已向 &e%player% &a发送处罚命令!"
+
+  # #############################################
+  # 解密命令 (Decrypt Command)
+  # #############################################
+  decrypt:
+    description: "解密文本"
+    # 使用说明：用于解密加密文本
+    usage: "&5✦ 用法: &f/neko decrypt <加密文>"
+    # 解密过程中发生错误的提示
+    error: "&c✦ 解密过程中发生错误，请检查密文格式或联系开发！"
+    # 发送最终解密消息: 向执行者展示解密后的结果
+    message: "&a✦ 解密的内容是 %message% !"
+
+  # #############################################
+  # 检测开关控制命令 (Control-Check Command)
+  # #############################################
+  control-check:
+    description: "切换指定检测开关"
+    # 使用说明：用于开启或关闭指定玩家检测的命令格式。
+    usage: "&5✦ 用法: &f/neko controlcheck <检测名> <玩家>"
+    # 找不到该检测：找不到对应的检测
+    not-found: "&c✦ 并没有找到该检测/玩家!"
+    # 开启特定检测提示：开启对应检测
+    enable: "&a✦ 已经 &c开启 &a了检测 &e%check_name%"
+    # 关闭特定检测提示：关闭对应检测
+    disable: "&c✦ 已经 关闭 &c了检测 &e%check_name%"
+
+  # #############################################
+  # AI控制命令 (Cloud Command)
+  # #############################################
+  cloud:
+    description: "尝试重连云端服务"
+    # 用法: 无参数,直接尝试重连。
+    usage: "&5✦ 用法: &f/neko cloud"
+    # 开启连接服务器：用于来连接云服务器的
+    message: "&a✦ 开始尝试重连服务器...."
+    # 已经连接上服务器了: 用于检测是否已经连接上服务器了
+    connected-already: "&e✦ 已经连接上服务器了!"
+
+  # #############################################
+  # 检测列表命令 (Checks Command)
+  # #############################################
+  # 用于列出所有已注册的检测项及其开关状态
+  checks:
+    description: "查看检测列表与状态"
+    # 用法: 无参数,列出全部检测项。
+    usage: "&5✦ 用法: &f/neko checks"
+    # 顶部标题：展示在列表最上方，%total% 会替换为过滤掉 DEFAULT 后的有效检测总数
+    header: "&7&m==============&r&d Neko &5Checks &7(&f%total%&7) &7&m=============="
+
+    # 类别标题：每个大类的分类标识，%parent% 会被替换为 Movement, Combat, Player, Misc
+    category-title: "&7» &f%parent% checks:"
+
+    # 分隔符：用于在密集排列的 configName 之间进行分隔
+    separator: "&7, "
+
+    # 启用状态颜色：当该检测项在后端为开启状态时显示的颜色
+    enabled-color: "&a"
+
+    # 禁用状态颜色：当该检测项被关闭时显示的颜色
+    disabled-color: "&c"
+
+    # 底部横线：用于收尾列表，保持视觉对齐
+    footer: "&7&m--------------------------------------------&r"
