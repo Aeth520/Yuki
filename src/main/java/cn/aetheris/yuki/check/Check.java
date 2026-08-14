@@ -97,6 +97,7 @@ public class Check implements AbstractCheck {
     }
 
     private int getMaxVLFromConfig(String name) {
+        if (name == null) return 0;
         if (maxVLCache.containsKey(name)) {
             return maxVLCache.get(name);
         }
@@ -210,6 +211,7 @@ public class Check implements AbstractCheck {
     public void reload() {
         updateExempted();
         Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
+            if (configName == null) return;
             decay = getConfig().getDoubleElse(configName + ".decay", decay);
             setbackVL = getConfig().getDoubleElse(configName + ".setback-vl", setbackVL);
             description = getConfig().getStringElse(configName + ".description", description);
