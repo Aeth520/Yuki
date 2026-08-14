@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.listener.bukkit;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.check.impl.player.autototem.AutoTotemA;
 import cn.aetheris.yuki.listener.bukkit.abstracts.AbstractListener;
@@ -28,7 +29,7 @@ public class PlayerInventoryListener extends AbstractListener {
         PlayerTotemState state = getOrCreateState(player);
         EntityEquipment equipment = player.getEquipment();
 
-        MHDFScheduler.getGlobalRegionScheduler().runTaskLater(Yuki.getInstance(), () ->
+        Bukkit.getScheduler().runTaskLater(Yuki.getInstance(), () ->
                 checkTotemConsumption(player, state, equipment), 3L);
     }
 
@@ -59,7 +60,7 @@ public class PlayerInventoryListener extends AbstractListener {
     }
 
     private void triggerDetection(Player player) {
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             PlayerData data = getData(player);
             if (data == null) return;
 

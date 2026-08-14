@@ -1,7 +1,6 @@
 package cn.aetheris.yuki.player;
 
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.api.AbstractCheck;
@@ -107,12 +106,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Getter
 @Setter
 public class PlayerData implements PlayerAPI {
+
+    // ~~~ Identity ~~~
     public final UUID uuid;
     public final User user;
     
     
     
     public final Queue<Pair<Short, Long>> transactionsSent = new ConcurrentLinkedQueue<>();
+    // ~~~ Session resources ~~~
     public final CheckManager checkManager;
     public final PunishmentManager punishmentManager;
     public final MovementCheckRunner movementCheckRunner;
@@ -149,6 +151,7 @@ public class PlayerData implements PlayerAPI {
     
     
     public ExemptProcessor exemptProcessor;
+    // ~~~ Movement & physics state ~~~
     public long lastTransSent = 0;
     public long lastTransReceived = 0;
     public double lastWasClimbing = 0;
@@ -735,9 +738,9 @@ public class PlayerData implements PlayerAPI {
             Yuki.getInstance().getLogger().warning("Failed to send disconnect packet to disconnect " + user.getProfile().getName() + "! Disconnecting anyways.");
         }
         user.closeConnection();
-        MHDFScheduler.getEntityScheduler().runTask(Yuki.getInstance(), bukkitPlayer, () -> {
+        Bukkit.getScheduler().runTask(Yuki.getInstance(), () -> {
             player.kickPlayer(textReason);
-        }, null);
+        });
         PluginLoader.INSTANCE.getPlayerDataManager().onDisconnect(user);
     }
 
@@ -806,7 +809,7 @@ public class PlayerData implements PlayerAPI {
         this.noModifyPacketPermission = bukkitPlayer.hasPermission("yuki.exempt.modifypacket");
         this.noSetbackPermission = bukkitPlayer.hasPermission("yuki.exempt.setback");
 
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             for (AbstractCheck check : getCheckManager().allChecks.values()) {
                 if (check instanceof Check) {
                     ((Check) check).updateExempted();

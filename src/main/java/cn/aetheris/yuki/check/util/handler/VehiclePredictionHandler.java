@@ -1,11 +1,13 @@
 package cn.aetheris.yuki.check.util.handler;
 
 import cn.aetheris.yuki.check.Check;
+import cn.aetheris.yuki.check.CheckData;
 import cn.aetheris.yuki.check.type.VehicleCheck;
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.util.update.PositionUpdate;
 import cn.aetheris.yuki.util.update.VehiclePositionUpdate;
 
+@CheckData(utilityClass = true)
 public final class VehiclePredictionHandler extends Check implements VehicleCheck {
     public VehiclePredictionHandler(PlayerData playerData) {
         super(playerData);

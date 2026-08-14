@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.listener.bukkit;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.check.impl.combat.killaura.KillAuraD;
@@ -51,7 +52,7 @@ public final class PlayerAttackListener extends AbstractListener {
     }
 
     private void wallHack(Player damager, Entity target) {
-        MHDFScheduler.getRegionScheduler().runTask(Yuki.getInstance(), damager.getWorld(), damager.getChunk().getX(), damager.getChunk().getZ(), () -> {
+        Bukkit.getScheduler().runTask(Yuki.getInstance(), () -> {
             boolean isVisible = RayTraceUtil.isEntityVisible(damager.getWorld(),
                     damager.getEyeLocation(),
                     target.getBoundingBox(),
@@ -63,14 +64,14 @@ public final class PlayerAttackListener extends AbstractListener {
             );
 
             if (!isVisible) {
-                MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+                Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
                     PlayerData data = getData(damager);
                     ReachE check = data.getCheckManager().getCheck(ReachE.class);
                     if (check != null) {
                         if (check.flagAndAlert("target= " + target.getName() + "\nloc= " + damager.getEyeLocation().clone())) {
                             data.mitigateDamage();
                             
-                            MHDFScheduler.getAsyncScheduler().runTaskLater(Yuki.getInstance(), data::mitigateDamage, 40L);
+                            Bukkit.getScheduler().runTaskLaterAsynchronously(Yuki.getInstance(), (Runnable) data::mitigateDamage, 40L);
                         }
                     }
                 });
@@ -79,7 +80,7 @@ public final class PlayerAttackListener extends AbstractListener {
     }
 
     private void postCheck(PlayerData data) {
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             if (data != null) {
                 KillAuraD check2 = data.getCheckManager().getCheck(KillAuraD.class);
                 if (check2 != null) {

@@ -1,6 +1,5 @@
 package cn.aetheris.yuki.functionality;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.core.plugin.interfaces.Init;
@@ -77,7 +76,7 @@ public final class SpectateManager implements Init {
         final Player player = Bukkit.getPlayer(uuid);
         if (player == null) return;
 
-        MHDFScheduler.getRegionScheduler().runTask(Yuki.getInstance(), previousState.location, () -> {
+        Bukkit.getScheduler().runTask(Yuki.getInstance(), () -> {
             PaperUtils.teleport(player, previousState.location);
             player.setGameMode(previousState.gameMode);
         });

@@ -86,9 +86,7 @@ dependencies {
     compileOnly("org.geysermc.floodgate:api:2.2.4-SNAPSHOT")
     compileOnly("io.netty:netty-all:4.1.85.Final")
     compileOnly(files("ViaVersion-5.10.1-SNAPSHOT.jar"))
-    // 原始: compileOnly("io.lumine:Mythic-Dist:5.6.1")
-    // mvn.lumine.io 仓库因 TLS 握手问题无法访问，使用本地 stub jar 满足编译期 API 要求
-    compileOnly(files("Mythic-Dist-stub.jar"))
+    compileOnly("io.lumine:Mythic-Dist:5.6.1")
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
 
     // Manifold 编译期处理器
@@ -172,7 +170,6 @@ tasks.shadowJar {
     relocate("com.mysql", "cn.aetheris.libs.com.mysql")
     relocate("org.h2", "cn.aetheris.libs.org.h2")
     relocate("org.xerial", "cn.aetheris.libs.org.xerial")
-    relocate("cn.aetheris.mhdfscheduler", "cn.aetheris.libs.cn.aetheris.mhdfscheduler")
     relocate("com.ql.util", "cn.aetheris.libs.com.ql.util")
     mergeServiceFiles()
     exclude("assets/mappings") // Exclude new PE mappings folder

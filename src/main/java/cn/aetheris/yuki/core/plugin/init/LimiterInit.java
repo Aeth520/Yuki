@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.core.plugin.init;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.core.plugin.interfaces.Init;
@@ -11,7 +12,7 @@ public final class LimiterInit implements Init {
     @Override
     public void init() {
         LogUtils.consolePrefixed("&aPacketLimiter Initialized!");
-        MHDFScheduler.getAsyncScheduler().runTaskTimer(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskTimerAsynchronously(Yuki.getInstance(), () -> {
             for (PlayerData player : PluginLoader.INSTANCE.getPlayerDataManager().getEntries()) {
                 player.cancelledPackets.set(0);
             }

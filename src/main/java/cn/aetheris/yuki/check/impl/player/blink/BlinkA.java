@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.check.impl.player.blink;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.api.enums.CheckType;
 import cn.aetheris.yuki.check.Check;
@@ -63,7 +64,7 @@ public final class BlinkA extends Check implements PacketCheck {
     public void onPacketReceive(PacketReceiveEvent event) {
         if (isTransaction(event.getPacketType())) {
             updateBlinkTimestamps();
-            MHDFScheduler.getAsyncScheduler().runTaskLater(Yuki.getInstance(), () -> loc = player.getLocationData(), 5L);
+            Bukkit.getScheduler().runTaskLaterAsynchronously(Yuki.getInstance(), () -> loc = player.getLocationData(), 5L);
             return;
         }
 

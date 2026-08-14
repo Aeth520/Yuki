@@ -2,6 +2,7 @@ package cn.aetheris.yuki.check.util.handler;
 
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.check.Check;
+import cn.aetheris.yuki.check.CheckData;
 import cn.aetheris.yuki.check.type.PacketCheck;
 import cn.aetheris.yuki.check.util.exempts.types.ExemptType;
 import cn.aetheris.yuki.player.PlayerData;
@@ -11,6 +12,7 @@ import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.util.Vector3d;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerFlying;
 
+@CheckData(utilityClass = true)
 public final class CancelHandler extends Check implements PacketCheck {
 
     private final boolean hasPrem;

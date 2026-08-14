@@ -2,12 +2,14 @@ package cn.aetheris.yuki.predictionengine;
 
 
 import cn.aetheris.yuki.check.Check;
+import cn.aetheris.yuki.check.CheckData;
 import cn.aetheris.yuki.check.type.PostPredictionCheck;
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.util.ghostblock.GhostBlockUtil;
 import cn.aetheris.yuki.util.message.LogUtils;
 import cn.aetheris.yuki.util.update.PredictionComplete;
 
+@CheckData(utilityClass = true)
 public final class GhostBlockDetector extends Check implements PostPredictionCheck {
     boolean ghostSync;
 

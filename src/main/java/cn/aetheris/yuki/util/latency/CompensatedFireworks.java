@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.util.latency;
 
 import cn.aetheris.yuki.check.Check;
+import cn.aetheris.yuki.check.CheckData;
 import cn.aetheris.yuki.check.type.PostPredictionCheck;
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.util.update.PredictionComplete;
@@ -9,6 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
+@CheckData(utilityClass = true)
 public final class CompensatedFireworks extends Check implements PostPredictionCheck {
 
     

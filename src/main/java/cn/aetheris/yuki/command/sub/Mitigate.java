@@ -1,6 +1,5 @@
 package cn.aetheris.yuki.command.sub;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.check.impl.combat.killaura.KillAuraG;
@@ -81,7 +80,7 @@ public final class Mitigate extends AbstractCommand {
         types.put("food", (data, sender, target, args) -> {
             int original = target.getFoodLevel();
             target.setFoodLevel(0);
-            MHDFScheduler.getAsyncScheduler().runTaskLater(Yuki.getInstance(), () -> {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(Yuki.getInstance(), () -> {
                 if (target.isOnline()) {
                     target.setFoodLevel(original);
                 }
@@ -120,13 +119,13 @@ public final class Mitigate extends AbstractCommand {
             teleport_entity.add(targetPlayer);
             sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(targetPlayer, "commands.mitigate.types.killaura.message").replace("%target%", target.getName()));
 
-            MHDFScheduler.getGlobalRegionScheduler().runTaskLater(Yuki.getInstance(), () -> {
+            Bukkit.getScheduler().runTaskLater(Yuki.getInstance(), () -> {
                 if (teleport_entity.contains(targetPlayer)) {
                     PaperUtils.teleport(targetPlayer, originalLoc);
                     sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(targetPlayer, "commands.mitigate.types.killaura.pull-back").replace("%target%", target.getName()));
                     teleport_entity.remove(targetPlayer);
                     if (violationMap.contains(targetPlayer)) {
-                        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+                        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
                             if (data.getCheckManager().getCheck(KillAuraG.class) != null) {
                                 data.getCheckManager().getCheck(KillAuraG.class).flagAndAlert("impossible attack?");
                                 violationMap.remove(targetPlayer);

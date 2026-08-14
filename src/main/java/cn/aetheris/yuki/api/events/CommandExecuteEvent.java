@@ -3,30 +3,20 @@ package cn.aetheris.yuki.api.events;
 import cn.aetheris.yuki.api.AbstractCheck;
 import cn.aetheris.yuki.api.PlayerAPI;
 import lombok.Getter;
-import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 
+/**
+ * Fired when a punishment command is about to be executed.
+ * Refactored to extend {@link YukiCancellableEvent} directly.
+ */
 @Getter
-public class CommandExecuteEvent extends FlagEvent {
-    private static final HandlerList handlers = new HandlerList();
-
+public class CommandExecuteEvent extends YukiCancellableEvent {
+    private final PlayerAPI player;
     private final AbstractCheck check;
     private final String command;
 
     public CommandExecuteEvent(PlayerAPI player, AbstractCheck check, String command) {
-        super(player, check); 
+        this.player = player;
         this.check = check;
         this.command = command;
     }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
-    @NotNull
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
 }

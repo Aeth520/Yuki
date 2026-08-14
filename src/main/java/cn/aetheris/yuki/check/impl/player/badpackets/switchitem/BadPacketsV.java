@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.check.impl.player.badpackets.switchitem;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.api.enums.CheckType;
 import cn.aetheris.yuki.check.Check;
@@ -46,7 +47,7 @@ public final class BadPacketsV extends Check implements PostPredictionCheck {
                     if (player.canSkipTicksPreVia() && flags.add(verbose) && flagAndAlert(verbose)) {
                         if (player.packetActionProcessor.isRightClicking()) {
                             setback = true;
-                            MHDFScheduler.getAsyncScheduler().runTaskLater(Yuki.getInstance(), () -> {
+                            Bukkit.getScheduler().runTaskLaterAsynchronously(Yuki.getInstance(), () -> {
                                 resetPlayerUseItem(player.bukkitPlayer);
                                 player.mitigateDamage();
                             }, 5L);

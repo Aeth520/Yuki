@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.core.plugin.hooks;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.check.impl.misc.visual.manager.MetaDataManager;
 import cn.aetheris.yuki.functionality.AbstractHook;
@@ -30,7 +31,7 @@ public final class RegistryHook extends AbstractHook {
         VanillaMath.register();
         PaperUtils.register();
         MenuType.register();
-        MHDFScheduler.getAsyncScheduler().runTaskLater(Yuki.getInstance(), NMSUtils::register, 10L);
+        Bukkit.getScheduler().runTaskLaterAsynchronously(Yuki.getInstance(), NMSUtils::register, 10L);
         super.enabled = true;
     }
 

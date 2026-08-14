@@ -1,6 +1,5 @@
 package cn.aetheris.yuki.functionality.code;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.check.Check;
 import cn.aetheris.yuki.player.PlayerData;
@@ -23,7 +22,7 @@ public class ExpressAPI {
         String randomKey = FakeAntiCheatUtils.getRandomName();
         String colorCode = FakeAntiCheatUtils.getColorCode(randomKey);
         String antiCheatName = FakeAntiCheatUtils.getName(randomKey);
-        MHDFScheduler.getGlobalRegionScheduler().runTask(Yuki.getInstance(), () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd
+        Bukkit.getScheduler().runTask(Yuki.getInstance(), () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd
                 .replace("%anticheat_color%", colorCode)
                 .replace("%anticheat%", antiCheatName))
         );

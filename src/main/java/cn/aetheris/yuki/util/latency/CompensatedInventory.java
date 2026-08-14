@@ -2,6 +2,7 @@ package cn.aetheris.yuki.util.latency;
 
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.check.Check;
+import cn.aetheris.yuki.check.CheckData;
 import cn.aetheris.yuki.check.type.PacketCheck;
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.util.inventory.EquipmentType;
@@ -35,6 +36,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
+@CheckData(utilityClass = true)
 public final class CompensatedInventory extends Check implements PacketCheck {
     private static final int PLAYER_INVENTORY_CASE = -1;
     private static final int UNSUPPORTED_INVENTORY_CASE = -2;

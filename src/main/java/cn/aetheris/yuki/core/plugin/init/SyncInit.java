@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.core.plugin.init;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.core.plugin.interfaces.Init;
@@ -12,9 +13,9 @@ public class SyncInit implements Init {
             return;
         }
 
-        MHDFScheduler.getAsyncScheduler().runTaskTimer(Yuki.getInstance(),
+        Bukkit.getScheduler().runTaskTimerAsynchronously(Yuki.getInstance(),
                 () -> PluginLoader.INSTANCE.getTickManager().tickSync(), 0, 1);
-        MHDFScheduler.getAsyncScheduler().runTaskTimer(Yuki.getInstance(),
+        Bukkit.getScheduler().runTaskTimerAsynchronously(Yuki.getInstance(),
                 () -> PluginLoader.INSTANCE.getTickManager().tickAsync(), 0, 1);
     }
 }

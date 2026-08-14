@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.listener.bukkit;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.check.impl.misc.spam.SpamB;
@@ -117,7 +118,7 @@ public final class PlayerChatListener extends AbstractListener {
     }
 
     private void flagAndCancel(AsyncPlayerChatEvent event, SpamB check, String type) {
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             if (check.flagAndAlert("type= " + type)) {
                 if (check.getViolations() >= check.cancelVL && check.cancelEnabled) {
                     event.setCancelled(true);

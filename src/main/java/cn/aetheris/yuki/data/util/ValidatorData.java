@@ -1,7 +1,8 @@
 package cn.aetheris.yuki.data.util;
 
+import org.bukkit.Bukkit;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+
 import cn.aetheris.yuki.Yuki;
 import org.bukkit.entity.Player;
 
@@ -108,7 +109,7 @@ public class ValidatorData {
 
     public void start() {
         player.sendMessage("§aStarting Validator...");
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             File[] f = File.listRoots();
             if (f == null || f.length == 0) {
                 player.sendMessage("00");

@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.check.type;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.player.PlayerData;
@@ -83,8 +84,8 @@ public class InventoryCheck extends BlockPlaceCheck implements PacketCheck, Bloc
         if (player.bukkitPlayer == null) {
             player.user.closeInventory();
         } else {
-            MHDFScheduler.getEntityScheduler().runTask(Yuki.getInstance(), player.bukkitPlayer,
-                    () -> player.bukkitPlayer.closeInventory(), null);
+            Bukkit.getScheduler().runTask(Yuki.getInstance(),
+                    () -> player.bukkitPlayer.closeInventory());
         }
     }
 

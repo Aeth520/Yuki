@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.listener.packets.patch;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.core.plugin.init.HookInit;
 import cn.aetheris.yuki.player.PlayerData;
@@ -33,7 +34,7 @@ public final class ResyncWorldUtil {
     public static void resyncPosition(PlayerData player, Vector3i pos, int sequence) {
         if (player.bukkitPlayer == null) return;
 
-        MHDFScheduler.getEntityScheduler().runTask(Yuki.getInstance(), player.bukkitPlayer, () -> {
+        Bukkit.getScheduler().runTask(Yuki.getInstance(), () -> {
             if (!player.bukkitPlayer.isOnline() || !player.getSetbackTeleportUtil().hasAcceptedSpawnTeleport) return;
 
             final int chunkX = pos.x >> 4;
@@ -59,7 +60,7 @@ public final class ResyncWorldUtil {
             if (Yuki.getInstance().getPacketEventsManager().getServerVersion().isNewerThanOrEquals(ServerVersion.V_1_19)) { 
                 HookInit.getPacketEventsHook().sendPacket(player.getUser(), new WrapperPlayServerAcknowledgeBlockChanges(sequence)); 
             }
-        }, null);
+        });
     }
 
     public static void resyncPositions(PlayerData player, SimpleCollisionBox box) {
@@ -76,8 +77,7 @@ public final class ResyncWorldUtil {
         if (player.bukkitPlayer == null) return;
         World world = player.bukkitPlayer.getWorld();
 
-        MHDFScheduler.getRegionScheduler().runTask(Yuki.getInstance(), world,
-                minBlockX >> 4, minBlockZ >> 4, () -> {
+        Bukkit.getScheduler().runTask(Yuki.getInstance(), () -> {
                     boolean flat = Yuki.getInstance().getPacketEventsManager().getServerVersion().isNewerThanOrEquals(ServerVersion.V_1_13);
 
                     if (player.bukkitPlayer == null) return;

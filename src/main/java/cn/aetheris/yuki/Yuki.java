@@ -1,6 +1,5 @@
 package cn.aetheris.yuki;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.listener.bukkit.PluginLoadListener;
 import cn.aetheris.yuki.listener.bukkit.ViaVersionCompatListener;
 import cn.aetheris.yuki.functionality.PacketEventsManager;
@@ -57,7 +56,7 @@ public final class Yuki extends JavaPlugin {
         packetEventsManager.init();
 
         if (!platform.checkJavaVersion()) {
-            MHDFScheduler.getGlobalRegionScheduler().runTaskLater(this, () -> {
+            Bukkit.getScheduler().runTaskLater(this, () -> {
                 Bukkit.getServer().getPluginManager().disablePlugin(this);
             }, 60L);
             return;

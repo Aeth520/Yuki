@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.check.impl.movement.noslow;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.api.enums.CheckType;
 import cn.aetheris.yuki.check.Check;
@@ -82,7 +83,7 @@ public class NoSlowG extends Check implements PositionCheck, PacketCheck {
         Location bukkitLocation = new Location(player.getBukkitPlayer().getWorld(), update.getFrom().getX(), update.getFrom().getY(), update.getFrom().getZ());
         Block a = bukkitLocation.getBlock();
         Block b = bukkitLocation.getBlock().getRelative(BlockFace.UP);
-        MHDFScheduler.getRegionScheduler().runTask(Yuki.getInstance(), bukkitLocation, () -> {
+        Bukkit.getScheduler().runTask(Yuki.getInstance(), () -> {
             if (a.getType() == Material.AIR && a.getRelative(BlockFace.DOWN).getType() == webMaterial) {
                 boolean ground = player.isOnGround();
                 Block down = bukkitLocation.getBlock().getRelative(BlockFace.DOWN);

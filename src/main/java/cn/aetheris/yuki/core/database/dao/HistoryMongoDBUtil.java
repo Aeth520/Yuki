@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.core.database.dao;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.core.database.entity.CheckInfo;
@@ -23,7 +24,7 @@ public final class HistoryMongoDBUtil implements CheckInfoManager {
 
     @Override
     public void logAlertSync(OfflinePlayer offlinePlayer, boolean exp, String verbose, String checkName, int violations, String description, String ping, boolean lagging, boolean moveLagging, String tps, String brand, String version) {
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             try {
                 Document document = new Document()
                         .append("server", HookInit.getPlaceholderAPIHook().setPlaceholders(offlinePlayer, PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("database-manager.server-name")))
@@ -99,7 +100,7 @@ public final class HistoryMongoDBUtil implements CheckInfoManager {
 
     @Override
     public void clearLogs(OfflinePlayer player) {
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             try {
                 Document document = new Document()
                         .append("uuid", player.getUniqueId());
@@ -113,7 +114,7 @@ public final class HistoryMongoDBUtil implements CheckInfoManager {
 
     @Override
     public void clearAllLogs() {
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             try {
                 violationsCollection.deleteMany(new Document());
             } catch (Exception ex) {

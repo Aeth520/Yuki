@@ -1,9 +1,8 @@
 package cn.aetheris.yuki.check.impl.misc.ghostblock;
 
-import cn.aetheris.mhdfscheduler.runnable.MHDFRunnable;
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
+import cn.aetheris.yuki.check.CheckData;
 import cn.aetheris.yuki.check.type.BlockPlaceCheck;
 import cn.aetheris.yuki.check.util.exempts.types.ExemptType;
 import cn.aetheris.yuki.player.PlayerData;
@@ -20,6 +19,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+@CheckData(utilityClass = true)
 public final class GhostBlockMitigation extends BlockPlaceCheck {
     private boolean enable, alertEnable, shouldCancel, shouldSync;
     private double maxBuffer;
@@ -54,13 +54,10 @@ public final class GhostBlockMitigation extends BlockPlaceCheck {
                 (int) Math.floor(player.bukkitPlayer.getLocation().getZ())
         );
 
-        new MHDFRunnable() {
-            @Override
-            public void run() {
-                MHDFScheduler.getRegionScheduler().runTask(Yuki.getInstance(), world, pos.getX(), pos.getZ(), () -> {
-                    if (!world.isChunkLoaded(pos.getX() >> 4, pos.getZ() >> 4)) {
-                        return;
-                    }
+        Bukkit.getScheduler().runTask(Yuki.getInstance(), () -> {
+            if (!world.isChunkLoaded(pos.getX() >> 4, pos.getZ() >> 4)) {
+                return;
+            }
 
                     boolean foundNonAir = false;
                     int x = pos.getX();
@@ -127,9 +124,7 @@ public final class GhostBlockMitigation extends BlockPlaceCheck {
                             rewardBufferAndVL();
                         }
                     }
-                });
-            }
-        }.runTask(Yuki.getInstance());
+            });
     }
 
     @Override

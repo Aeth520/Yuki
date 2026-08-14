@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.check.impl.player.interact;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.api.enums.CheckType;
 import cn.aetheris.yuki.check.Check;
@@ -47,7 +48,7 @@ public final class InteractB extends Check implements BlockBreakCheck {
 
             final Location blockLoc = new Location(bukkitPlayer.getWorld(), x, y, z);
 
-            MHDFScheduler.getRegionScheduler().runTask(Yuki.getInstance(), blockLoc, () -> {
+            Bukkit.getScheduler().runTask(Yuki.getInstance(), () -> {
                 BlockFace direction = getDirection(blockLoc);
                 if (direction == null) return;
 

@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.listener.bukkit.abstracts;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.player.PlayerData;
@@ -21,7 +22,7 @@ public abstract class AbstractListener implements Listener {
     @EventHandler
     public void handlePlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        MHDFScheduler.getAsyncScheduler().runTaskLater(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(Yuki.getInstance(), () -> {
             PlayerData data = PluginLoader.INSTANCE.getPlayerDataManager().getPlayer(player);
             if (data == null) {
                 return;

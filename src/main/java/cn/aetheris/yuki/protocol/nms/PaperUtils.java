@@ -1,6 +1,5 @@
 package cn.aetheris.yuki.protocol.nms;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.util.message.LogUtils;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
@@ -95,7 +94,7 @@ public final class PaperUtils {
         CompletableFuture<Double> future = new CompletableFuture<>();
 
         if (isFolia) {
-            MHDFScheduler.getRegionScheduler().runTask(Yuki.getInstance(), loc, () -> {
+            Bukkit.getScheduler().runTask(Yuki.getInstance(), () -> {
                 try {
                     Method getTPSMethod = Bukkit.getServer().getClass().getMethod(
                             Yuki.getInstance().getPacketEventsManager().getServerVersion().isNewerThan(ServerVersion.V_1_21_1)

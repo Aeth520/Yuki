@@ -1,6 +1,5 @@
 package cn.aetheris.yuki.command.sub;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.command.AbstractCommand;
@@ -62,7 +61,7 @@ public class Punish extends AbstractCommand {
                         .replace("%anticheat_color%", colorCode),
                 false);
 
-        MHDFScheduler.getGlobalRegionScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTask(Yuki.getInstance(), () -> {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
             sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.punish.message"));
             target.getWorld().strikeLightningEffect(target.getLocation().clone());

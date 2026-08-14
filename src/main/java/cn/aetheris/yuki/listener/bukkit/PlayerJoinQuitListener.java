@@ -1,6 +1,5 @@
 package cn.aetheris.yuki.listener.bukkit;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.api.AbstractCheck;
@@ -42,7 +41,7 @@ public final class PlayerJoinQuitListener extends AbstractListener {
             }
         }
 
-        MHDFScheduler.getAsyncScheduler().runTaskLater(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(Yuki.getInstance(), () -> {
 
             if (player.hasPermission("yuki.commands.alerts") && player.hasPermission("yuki.commands.alerts.enable-on-join")) {
                 PluginLoader.INSTANCE.getAlertManager().toggleAlerts(player.getUniqueId());
@@ -79,7 +78,7 @@ public final class PlayerJoinQuitListener extends AbstractListener {
 
     private void executeXearoMapCommand(String playerName) {
         String command = String.format("tellraw %s [{\"text\":\"§f§a§i§r§x§a§e§r§o\"}]", playerName);
-        MHDFScheduler.getGlobalRegionScheduler().runTaskLater(Yuki.getInstance(), () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command), 20L);
+        Bukkit.getScheduler().runTaskLater(Yuki.getInstance(), () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command), 20L);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -93,7 +92,7 @@ public final class PlayerJoinQuitListener extends AbstractListener {
             player.recalculatePermissions();
         }
 
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             final PlayerData data = getData(event.getPlayer());
 
             final Map<String, Double> violations = new HashMap<>();

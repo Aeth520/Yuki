@@ -1,9 +1,11 @@
 package cn.aetheris.yuki.functionality;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.check.Check;
+import cn.aetheris.yuki.check.CheckData;
 import cn.aetheris.yuki.check.impl.player.badpackets.packetorder.BadPacketsH;
 import cn.aetheris.yuki.check.type.PostPredictionCheck;
 import cn.aetheris.yuki.check.util.exempts.types.ExemptType;
@@ -49,6 +51,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+@CheckData(utilityClass = true)
 public final class SetbackTeleportUtil extends Check implements PostPredictionCheck {
     
     public final ConcurrentLinkedQueue<TeleportData> pendingTeleports = new ConcurrentLinkedQueue<>();
@@ -299,12 +302,12 @@ public final class SetbackTeleportUtil extends Check implements PostPredictionCh
                     player.getSetbackTeleportUtil().cheatVehicleInterpolationDelay = Integer.MAX_VALUE; 
                     
                     if (player.bukkitPlayer != null) {
-                        MHDFScheduler.getEntityScheduler().runTask(Yuki.getInstance(), player.bukkitPlayer, () -> {
+                        Bukkit.getScheduler().runTask(Yuki.getInstance(), () -> {
                             Entity vehicle = player.bukkitPlayer.getVehicle();
                             if (vehicle != null) {
                                 vehicle.eject();
                             }
-                        }, null);
+                        });
                     }
                 }
             }

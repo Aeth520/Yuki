@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.core.database.dao;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.core.database.entity.Violation;
@@ -45,7 +46,7 @@ public class ViolationOrmLiteUtil implements ViolationManager {
                 createOrUpdateViolation(violation);
             });
         } else {
-            MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+            Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
                 deleteExistingViolations(uuidStr);
 
                 violations.forEach((checkName, severity) -> {

@@ -1,8 +1,9 @@
 package cn.aetheris.yuki.functionality;
 
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import com.google.gson.JsonObject;
 
 import java.io.OutputStream;
@@ -46,7 +47,7 @@ public final class DiscordWebhookManager {
             payload.addProperty("avatar_url", avatarUrl);
         }
 
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             HttpURLConnection connection = null;
             try {
                 URL url = new URL(webhookUrl);

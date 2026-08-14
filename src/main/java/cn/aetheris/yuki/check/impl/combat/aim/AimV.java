@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.check.impl.combat.aim;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.api.enums.CheckType;
 import cn.aetheris.yuki.check.Check;
@@ -88,7 +89,7 @@ public final class AimV extends Check implements RotationCheck {
                                     pitchSamples.clear();
                                     player.mitigateDamage();
                                     buffer -= 5;
-                                    MHDFScheduler.getAsyncScheduler().runTaskLater(Yuki.getInstance(), player::mitigateDamage, 40L);
+                                    Bukkit.getScheduler().runTaskLaterAsynchronously(Yuki.getInstance(), (Runnable) player::mitigateDamage, 40L);
                                 }
                             } else {
                                 rewardBufferAndVL();

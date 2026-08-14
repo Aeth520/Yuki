@@ -4,6 +4,7 @@ package cn.aetheris.yuki.check.util.handler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.check.Check;
+import cn.aetheris.yuki.check.CheckData;
 import cn.aetheris.yuki.check.impl.player.exploit.ExploitA;
 import cn.aetheris.yuki.check.type.PacketCheck;
 import cn.aetheris.yuki.listener.bukkit.misc.PlayerAsyncChatListener;
@@ -22,6 +23,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
+@CheckData(utilityClass = true)
 public final class PayloadHandler extends Check implements PacketCheck {
 
     public static final String clientChannel = Yuki.getInstance().getPacketEventsManager().getServerVersion().isNewerThanOrEquals(ServerVersion.V_1_13) ? "minecraft:brand" : "MC|Brand";

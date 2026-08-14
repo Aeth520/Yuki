@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.check.util.handler;
 
 import cn.aetheris.yuki.check.Check;
+import cn.aetheris.yuki.check.CheckData;
 import cn.aetheris.yuki.check.type.PacketCheck;
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.util.message.LogUtils;
@@ -13,6 +14,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPl
 
 
 
+@CheckData(utilityClass = true)
 public final class AbilitiesHandler extends Check implements PacketCheck {
 
     private boolean lastSentPlayerCanFly = false;

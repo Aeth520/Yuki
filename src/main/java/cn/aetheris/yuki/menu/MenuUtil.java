@@ -1,6 +1,5 @@
 package cn.aetheris.yuki.menu;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.api.enums.CheckType;
@@ -121,7 +120,7 @@ public class MenuUtil {
                             ItemBuilder builder = new ItemBuilder(item).type(item.getType() == Material.ENCHANTED_BOOK ? Material.BOOK : Material.ENCHANTED_BOOK).name(item.getItemMeta().getDisplayName()).lore(lore);
                             this.setItem(event.getSlot(), builder.build());
                             String configName = ColorUtils.stripColor(item.getItemMeta().getDisplayName()).split(" ")[0];
-                            MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> MenuUtil.changeCheck(configName));
+                            Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> MenuUtil.changeCheck(configName));
                         }
                     }
                 };

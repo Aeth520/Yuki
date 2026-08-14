@@ -1,6 +1,5 @@
 package cn.aetheris.yuki.api;
 
-import cn.aetheris.yuki.api.event.EventBus;
 import org.bukkit.entity.Player;
 
 import java.util.function.Function;
@@ -28,8 +27,6 @@ public interface AbstractAPI {
     void reloadAsync();
 
     boolean hasStarted();
-
-    EventBus getEventBus();
 
     AlertManager getAlertManager();
 }

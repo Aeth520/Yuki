@@ -1,6 +1,5 @@
 package cn.aetheris.yuki.core.plugin.init;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.core.plugin.interfaces.Init;
@@ -14,7 +13,7 @@ public final class ExemptInit implements Init {
 
     @Override
     public void init() {
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             if (Bukkit.getOnlinePlayers().isEmpty()) {
                 return;
             }

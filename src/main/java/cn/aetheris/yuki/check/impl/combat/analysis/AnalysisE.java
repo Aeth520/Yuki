@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.check.impl.combat.analysis;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.api.enums.CheckType;
 import cn.aetheris.yuki.check.Check;
@@ -252,7 +253,7 @@ public final class AnalysisE extends Check implements RotationCheck {
                 if (bufferSpikesRule > 7.0) {
                     if (alert("(Spike Rule) \nstdDevX=" + (int) stdDevX)) {
                         player.mitigateDamage();
-                        MHDFScheduler.getAsyncScheduler().runTaskLater(Yuki.getInstance(), player::mitigateDamage, 20L);
+                        Bukkit.getScheduler().runTaskLaterAsynchronously(Yuki.getInstance(), (Runnable) player::mitigateDamage, 20L);
                     }
                 }
             }

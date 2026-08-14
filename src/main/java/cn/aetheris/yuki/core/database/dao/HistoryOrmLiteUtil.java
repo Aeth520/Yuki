@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.core.database.dao;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.core.database.entity.CheckInfo;
@@ -56,7 +57,7 @@ public final class HistoryOrmLiteUtil implements CheckInfoManager {
                 throw new RuntimeException("ORMLite 插入 CheckInfo 失败", ex);
             }
         } else {
-            MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+            Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
                 try {
                     this.dao.createOrUpdate(entity);
                 } catch (Exception ex) {
@@ -98,7 +99,7 @@ public final class HistoryOrmLiteUtil implements CheckInfoManager {
 
     @Override
     public void clearLogs(OfflinePlayer player) {
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             try {
                 DeleteBuilder<CheckInfo, Integer> db = this.dao.deleteBuilder();
                 db.where().eq("uuid", player.getUniqueId());
@@ -111,7 +112,7 @@ public final class HistoryOrmLiteUtil implements CheckInfoManager {
 
     @Override
     public void clearAllLogs() {
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             try {
                 this.dao.deleteBuilder().delete();
             } catch (Exception ex) {

@@ -1,6 +1,5 @@
 package cn.aetheris.yuki.command.sub;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.command.AbstractCommand;
@@ -67,7 +66,7 @@ public final class History extends AbstractCommand {
 
         int page = args.length > 1 ? parsePage(args[1]) : 1;
 
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             CheckInfoManager checkInfoManager = PluginLoader.INSTANCE.getDatabaseManager().getCheckInfoManager();
             long logCount = checkInfoManager.getLogCount(target);
 
@@ -137,7 +136,7 @@ public final class History extends AbstractCommand {
     }
 
     private void clearAllHistory(@NotNull CommandSender sender) {
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             CheckInfoManager checkInfoManager = PluginLoader.INSTANCE.getDatabaseManager().getCheckInfoManager();
             checkInfoManager.clearAllLogs();
             sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.history.clean-all"));
@@ -145,7 +144,7 @@ public final class History extends AbstractCommand {
     }
 
     private void clearPlayerHistory(@NotNull CommandSender sender, OfflinePlayer target) {
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             CheckInfoManager checkInfoManager = PluginLoader.INSTANCE.getDatabaseManager().getCheckInfoManager();
             checkInfoManager.clearLogs(target);
             sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.history.clean"));

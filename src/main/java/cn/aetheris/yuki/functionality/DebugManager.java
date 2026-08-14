@@ -2,6 +2,7 @@ package cn.aetheris.yuki.functionality;
 
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.check.Check;
+import cn.aetheris.yuki.check.CheckData;
 import cn.aetheris.yuki.check.type.PostPredictionCheck;
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.data.movement.VectorData;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@CheckData(utilityClass = true)
 public final class DebugManager extends Check implements PostPredictionCheck {
     public static final Map<Integer, StringBuilder> flags = new ConcurrentHashMap<>();
     private static final String TITLE_COLOR = "§6§l";

@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.listener.bukkit;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.check.impl.player.exploit.ExploitE;
@@ -122,7 +123,7 @@ public class PlayerUseTridentListener extends AbstractListener {
 
         event.setCancelled(true);
         useTridentSet.remove(player.getName());
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             if (check.shouldModifyPackets()) {
                 check.failed("type= " + event.getSlotType().name(), "SWAP");
             }

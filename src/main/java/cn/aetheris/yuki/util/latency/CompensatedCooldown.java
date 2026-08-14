@@ -2,6 +2,7 @@ package cn.aetheris.yuki.util.latency;
 
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.check.Check;
+import cn.aetheris.yuki.check.CheckData;
 import cn.aetheris.yuki.check.type.PositionCheck;
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.data.player.CooldownData;
@@ -22,6 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 
+@CheckData(utilityClass = true)
 public final class CompensatedCooldown extends Check implements PositionCheck {
     private final ConcurrentHashMap<ResourceLocation, CooldownData> itemCooldownMap = new ConcurrentHashMap<>();
 

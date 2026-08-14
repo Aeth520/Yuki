@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.check.impl.movement.vehicle.nosaddle;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.api.enums.CheckType;
 import cn.aetheris.yuki.check.Check;
@@ -47,7 +48,7 @@ public final class NoSaddleA extends Check implements PacketCheck {
                         if (flagAndAlert("t= " + player.vehicleTicks
                                 + "\ndxz= " + player.vehicleDeltaXZ)) {
                             event.setCancelled(true);
-                            MHDFScheduler.getGlobalRegionScheduler().runTask(Yuki.getInstance(),
+                            Bukkit.getScheduler().runTask(Yuki.getInstance(),
                                     () -> {
                                         if (player.bukkitPlayer != null) {
                                             player.bukkitPlayer.leaveVehicle();

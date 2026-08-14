@@ -1,13 +1,14 @@
 package cn.aetheris.yuki;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 
 public final class Main {
 
     public static void start() {
-        MHDFScheduler.getGlobalRegionScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTask(Yuki.getInstance(), () -> {
             PluginLoader.INSTANCE.start();
-            MHDFScheduler.getGlobalRegionScheduler().runTaskLater(Yuki.getInstance(), () ->
+            Bukkit.getScheduler().runTaskLater(Yuki.getInstance(), () ->
                     Yuki.setEnablePlugin(true), 20L);
         });
     }

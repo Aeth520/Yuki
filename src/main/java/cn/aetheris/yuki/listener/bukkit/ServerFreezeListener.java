@@ -1,6 +1,5 @@
 package cn.aetheris.yuki.listener.bukkit;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.listener.bukkit.abstracts.AbstractListener;
@@ -163,7 +162,7 @@ public final class ServerFreezeListener extends AbstractListener {
         if (FreezeData.isFrozen(player)) {
             FreezeData.setFrozen(player, false);
             if (enable) {
-                MHDFScheduler.getGlobalRegionScheduler().runTask(Yuki.getInstance(), () ->
+                Bukkit.getScheduler().runTask(Yuki.getInstance(), () ->
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("%player%", player.getName())));
             }
         }

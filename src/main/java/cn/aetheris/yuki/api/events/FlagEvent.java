@@ -4,41 +4,19 @@ import cn.aetheris.yuki.api.AbstractCheck;
 import cn.aetheris.yuki.api.PlayerAPI;
 import cn.aetheris.yuki.api.enums.CheckType;
 import lombok.Getter;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 
-
+/**
+ * Fired when a check flags a violation.
+ * Inherits {@link Reaction} from {@link YukiCancellableEvent} for granular control.
+ */
 @Getter
-public class FlagEvent extends Event implements Cancellable {
-    private static final HandlerList handlers = new HandlerList();
-    private final PlayerAPI playerAPI;
+public class FlagEvent extends YukiCancellableEvent {
+    private final PlayerAPI player;
     private final AbstractCheck check;
-    private boolean cancelled;
 
-    public FlagEvent(PlayerAPI playerAPI, AbstractCheck check) {
-        super(true);
-        this.playerAPI = playerAPI;
+    public FlagEvent(PlayerAPI player, AbstractCheck check) {
+        this.player = player;
         this.check = check;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    @Override
-    public void setCancelled(boolean cancel) {
-        cancelled = cancel;
-    }
-
-    public PlayerAPI getPlayer() {
-        return playerAPI;
     }
 
     public double getViolations() {
@@ -49,15 +27,7 @@ public class FlagEvent extends Event implements Cancellable {
         return check.getCheckType();
     }
 
-    @NotNull
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-
     public boolean isSetback() {
         return check.getViolations() > check.getSetbackVL();
     }
-
 }

@@ -3,6 +3,7 @@ package cn.aetheris.yuki.listener.packets;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.check.Check;
+import cn.aetheris.yuki.check.CheckData;
 import cn.aetheris.yuki.check.type.PacketCheck;
 import cn.aetheris.yuki.core.plugin.init.HookInit;
 import cn.aetheris.yuki.player.PlayerData;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@CheckData(utilityClass = true)
 public class PacketEntityReplication extends Check implements PacketCheck {
 
     private final AtomicBoolean hasSentPreWavePacket = new AtomicBoolean(true);

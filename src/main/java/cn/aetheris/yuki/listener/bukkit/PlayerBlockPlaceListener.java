@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.listener.bukkit;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.check.impl.combat.killaura.KillAuraD;
 import cn.aetheris.yuki.check.impl.player.airplace.AirPlaceA;
@@ -22,7 +23,7 @@ public class PlayerBlockPlaceListener extends AbstractListener {
         final PlayerData data = getData(player);
         if (data == null) return;
         if (event.isCancelled()) {
-            MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+            Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
                 data.cancelledBlockTicks = System.currentTimeMillis();
                 final AirPlaceA placeA = data.getCheckManager().getCheck(AirPlaceA.class);
                 final ScaffoldF scaffoldF = data.getCheckManager().getCheck(ScaffoldF.class);

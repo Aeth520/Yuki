@@ -1,6 +1,5 @@
 package cn.aetheris.yuki.core.plugin.init;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.listener.bukkit.*;

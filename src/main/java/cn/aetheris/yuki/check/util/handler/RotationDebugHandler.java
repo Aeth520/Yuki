@@ -2,6 +2,7 @@ package cn.aetheris.yuki.check.util.handler;
 
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.check.Check;
+import cn.aetheris.yuki.check.CheckData;
 import cn.aetheris.yuki.check.type.RotationCheck;
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.util.lists.EvictingQueue;
@@ -13,6 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+@CheckData(utilityClass = true)
 public class RotationDebugHandler extends Check implements RotationCheck {
 
     private static final String GOLD = "§6";

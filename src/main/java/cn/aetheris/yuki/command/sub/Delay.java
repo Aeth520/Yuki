@@ -1,13 +1,12 @@
 package cn.aetheris.yuki.command.sub;
 
-import cn.aetheris.mhdfscheduler.runnable.MHDFRunnable;
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.command.AbstractCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 public final class Delay extends AbstractCommand {
@@ -43,7 +42,7 @@ public final class Delay extends AbstractCommand {
     }
 
     private void startStopRunnable(CommandSender sender, String command, int delay) {
-        new MHDFRunnable() {
+        Bukkit.getScheduler().runTaskTimerAsynchronously(Yuki.getInstance(), new BukkitRunnable() {
             private boolean canRun = false;
 
             @Override
@@ -52,14 +51,12 @@ public final class Delay extends AbstractCommand {
                     this.cancel();
 
                     if (sender instanceof Entity entity) {
-                        MHDFScheduler.getEntityScheduler().runTask(
+                        Bukkit.getScheduler().runTask(
                                 Yuki.getInstance(),
-                                entity,
-                                () -> Bukkit.dispatchCommand(sender, command),
-                                null
+                                () -> Bukkit.dispatchCommand(sender, command)
                         );
                     } else {
-                        MHDFScheduler.getGlobalRegionScheduler().runTask(
+                        Bukkit.getScheduler().runTask(
                                 Yuki.getInstance(),
                                 () -> Bukkit.dispatchCommand(sender, command)
                         );
@@ -68,6 +65,6 @@ public final class Delay extends AbstractCommand {
                 }
                 canRun = true;
             }
-        }.runTaskTimerAsynchronously(Yuki.getInstance(), 0L, delay * 20L);
+        }, 0L, delay * 20L);
     }
 }

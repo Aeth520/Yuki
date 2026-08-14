@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.listener.bukkit;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.check.impl.combat.killaura.KillAuraD;
 import cn.aetheris.yuki.listener.bukkit.abstracts.AbstractListener;
@@ -18,7 +19,7 @@ public class PlayerConsumeListener extends AbstractListener {
 
         if (data == null) return;
 
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             final KillAuraD check = data.getCheckManager().getCheck(KillAuraD.class);
             if (check == null) {
                 return;

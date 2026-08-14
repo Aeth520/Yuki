@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.predictionengine;
 
 import cn.aetheris.yuki.check.Check;
+import cn.aetheris.yuki.check.CheckData;
 import cn.aetheris.yuki.check.type.PostPredictionCheck;
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.block.collision.datatypes.SimpleCollisionBox;
@@ -13,6 +14,7 @@ import java.util.List;
 
 
 
+@CheckData(utilityClass = true)
 public final class SneakingEstimator extends Check implements PostPredictionCheck {
     @Getter
     SimpleCollisionBox sneakingPotentialHiddenVelocity = new SimpleCollisionBox();

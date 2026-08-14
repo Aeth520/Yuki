@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.command.sub;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.command.AbstractCommand;
@@ -51,7 +52,7 @@ public final class Log extends AbstractCommand {
         String logContent = flagData.toString();
         sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.prediciton-logs.uploading"));
 
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             String url = uploadPaste(logContent);
             if (url != null) {
                 sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n("commands.prediciton-logs.uploadded")

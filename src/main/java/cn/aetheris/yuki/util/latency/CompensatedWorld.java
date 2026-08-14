@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.util.latency;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.player.PlayerData;
@@ -211,7 +212,7 @@ public class CompensatedWorld {
             
             
             
-            MHDFScheduler.getGlobalRegionScheduler().runTask(Yuki.getInstance(), () -> {
+            Bukkit.getScheduler().runTask(Yuki.getInstance(), () -> {
                 
                 ChannelHelper.runInEventLoop(player.user.getChannel(), () -> applyBlockChanges(toApplyBlocks));
             });

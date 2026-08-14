@@ -1,7 +1,6 @@
 package cn.aetheris.yuki.functionality.moderation;
 
 import cn.aetheris.yuki.Yuki;
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -17,7 +16,7 @@ public final class ModerationManager {
 
     public void kick(Player player, String reason) {
         if (player == null) return;
-        MHDFScheduler.getEntityScheduler().runTask(Yuki.getInstance(), player, () ->
+        Bukkit.getScheduler().runTask(Yuki.getInstance(), () ->
                 player.kickPlayer(reason)
         );
     }
@@ -33,7 +32,7 @@ public final class ModerationManager {
 
     public void banIp(String ipAddress, String reason, String duration) {
         Date expiry = parseDuration(duration);
-        MHDFScheduler.getGlobalRegionScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTask(Yuki.getInstance(), () -> {
             Bukkit.getBanList(BanList.Type.IP).addBan(ipAddress, reason, expiry, "Yuki");
             for (Player online : Bukkit.getOnlinePlayers()) {
                 if (online.getAddress() != null && ipAddress.equals(online.getAddress().getAddress().getHostAddress())) {
@@ -49,13 +48,13 @@ public final class ModerationManager {
     }
 
     public void unban(String playerName) {
-        MHDFScheduler.getGlobalRegionScheduler().runTask(Yuki.getInstance(), () ->
+        Bukkit.getScheduler().runTask(Yuki.getInstance(), () ->
                 Bukkit.getBanList(BanList.Type.NAME).pardon(playerName)
         );
     }
 
     public void unbanIp(String ipAddress) {
-        MHDFScheduler.getGlobalRegionScheduler().runTask(Yuki.getInstance(), () ->
+        Bukkit.getScheduler().runTask(Yuki.getInstance(), () ->
                 Bukkit.getBanList(BanList.Type.IP).pardon(ipAddress)
         );
     }

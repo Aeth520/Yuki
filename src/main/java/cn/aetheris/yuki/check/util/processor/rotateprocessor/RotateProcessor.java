@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.check.util.processor.rotateprocessor;
 
 import cn.aetheris.yuki.check.Check;
+import cn.aetheris.yuki.check.CheckData;
 import cn.aetheris.yuki.check.type.RotationCheck;
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.data.util.Pair;
@@ -19,6 +20,7 @@ import java.util.List;
 
 
 @Getter
+@CheckData(utilityClass = true)
 public final class RotateProcessor extends Check implements RotationCheck {
 
     private static final int SIGNIFICANT_SAMPLES_THRESHOLD = 15;

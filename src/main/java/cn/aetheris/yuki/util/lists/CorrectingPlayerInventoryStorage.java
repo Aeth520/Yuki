@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.util.lists;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.core.plugin.init.HookInit;
@@ -88,13 +89,13 @@ public class CorrectingPlayerInventoryStorage extends InventoryStorage {
 
     private void handleInventoryRefresh() {
         if (player.getInventory().requiresRefresh) {
-            MHDFScheduler.getEntityScheduler().runTask(Yuki.getInstance(), player.bukkitPlayer, () -> {
+            Bukkit.getScheduler().runTask(Yuki.getInstance(), () -> {
                 if (!player.getInventory().requiresRefresh) return;
                 if (isSupportedInventory()) {
                     player.getInventory().requiresRefresh = false;
                     player.bukkitPlayer.updateInventory();
                 }
-            }, null);
+            });
         }
     }
 
@@ -124,7 +125,7 @@ public class CorrectingPlayerInventoryStorage extends InventoryStorage {
 
         int convertedSlot = player.getInventory().getBukkitSlot(slot);
         if (convertedSlot != -1) {
-            MHDFScheduler.getEntityScheduler().runTask(Yuki.getInstance(), player.bukkitPlayer, () -> {
+            Bukkit.getScheduler().runTask(Yuki.getInstance(), () -> {
                 org.bukkit.inventory.ItemStack bukkitItem = player.bukkitPlayer.getInventory().getItem(convertedSlot);
                 ItemStack current = getItem(slot);
                 ItemStack converted = SpigotConversionUtil.fromBukkitItemStack(bukkitItem);
@@ -133,7 +134,7 @@ public class CorrectingPlayerInventoryStorage extends InventoryStorage {
                     setItem(slot, converted);
                     player.bukkitPlayer.updateInventory();
                 }
-            }, null);
+            });
         }
     }
 

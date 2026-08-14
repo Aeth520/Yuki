@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.command.sub;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.command.AbstractCommand;
 import cn.aetheris.yuki.functionality.PerformanceMonitor;
@@ -38,7 +39,7 @@ public class Perf extends AbstractCommand {
             return;
         }
 
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             PerformanceMonitor monitor = PerformanceMonitor.getInstance();
             TickStats tickStats = monitor.getTickStats();
             double tps = monitor.getTPS();

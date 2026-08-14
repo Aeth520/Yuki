@@ -2,6 +2,7 @@ package cn.aetheris.yuki.check.util.handler;
 
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.check.Check;
+import cn.aetheris.yuki.check.CheckData;
 import cn.aetheris.yuki.check.type.PostPredictionCheck;
 import cn.aetheris.yuki.functionality.DebugManager;
 import cn.aetheris.yuki.player.PlayerData;
@@ -16,6 +17,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+@CheckData(utilityClass = true)
 public final class PredictionDebugHandler extends Check implements PostPredictionCheck {
 
     private static final String GRAY = "§7";

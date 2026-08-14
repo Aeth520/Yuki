@@ -3,40 +3,20 @@ package cn.aetheris.yuki.api.events;
 import cn.aetheris.yuki.api.AbstractCheck;
 import cn.aetheris.yuki.api.PlayerAPI;
 import lombok.Getter;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 
-public class PredictionEvent extends FlagEvent implements Cancellable {
-
-    private static final HandlerList handlers = new HandlerList();
-    @Getter
+/**
+ * Fired when a movement prediction offset is calculated.
+ * Refactored to extend {@link YukiCancellableEvent} directly.
+ */
+@Getter
+public class PredictionEvent extends YukiCancellableEvent {
+    private final PlayerAPI player;
+    private final AbstractCheck check;
     private final double offset;
-    private boolean cancelled;
 
-    public PredictionEvent(PlayerAPI playerAPI, AbstractCheck check, double offset) {
-        super(playerAPI, check);
+    public PredictionEvent(PlayerAPI player, AbstractCheck check, double offset) {
+        this.player = player;
+        this.check = check;
         this.offset = offset;
     }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
-    @NotNull
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    @Override
-    public void setCancelled(boolean cancel) {
-        cancelled = cancel;
-    }
-
 }

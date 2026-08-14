@@ -1,6 +1,5 @@
 package cn.aetheris.yuki.listener.packets;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.check.impl.combat.analysis.AnalysisA;
@@ -30,7 +29,7 @@ public final class PacketPlayerJoinQuit extends AbstractPacketListener {
             LogUtils.consolePrefixed("&aRegistering user &b" + user.getName() +
                     " &7(" + user.getClientVersion().getReleaseName() + ") &awith uuid " + user.getUUID());
             event.getTasksAfterSend().add(() -> PluginLoader.INSTANCE.getPlayerDataManager().addUser(user));
-            MHDFScheduler.getAsyncScheduler().runTaskLater(Yuki.getInstance(), () -> {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(Yuki.getInstance(), () -> {
                 PlayerData data = PluginLoader.INSTANCE.getPlayerDataManager().getPlayer(user);
                 if (data != null) {
                     final Player player = event.getPlayer();
@@ -62,7 +61,7 @@ public final class PacketPlayerJoinQuit extends AbstractPacketListener {
     @Override
     public void onUserDisconnect(UserDisconnectEvent event) {
         User user = event.getUser();
-        MHDFScheduler.getAsyncScheduler().runTaskLater(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(Yuki.getInstance(), () -> {
 
             PlayerDataManager playerDataManager = PluginLoader.INSTANCE.getPlayerDataManager();
             playerDataManager.remove(user);

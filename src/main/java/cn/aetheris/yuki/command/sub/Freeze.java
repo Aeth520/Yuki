@@ -1,6 +1,5 @@
 package cn.aetheris.yuki.command.sub;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.command.AbstractCommand;
@@ -44,9 +43,9 @@ public final class Freeze extends AbstractCommand {
 
         FreezeData.setFrozen(target, true);
 
-        MHDFScheduler.getEntityScheduler().runTask(Yuki.getInstance(), target, () -> {
+        Bukkit.getScheduler().runTask(Yuki.getInstance(), () -> {
             if (target.getVehicle() != null) target.leaveVehicle();
-        }, null);
+        });
 
         sender.sendMessage(PluginLoader.INSTANCE.getLangManager().i18n(target, "commands.freeze.message"));
         target.sendMessage(PluginLoader.INSTANCE.getLangManager().i18nWithoutPrefix("commands.freeze.target-side"));

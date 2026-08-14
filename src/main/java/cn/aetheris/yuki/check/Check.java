@@ -1,11 +1,14 @@
 package cn.aetheris.yuki.check;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.api.AbstractCheck;
 import cn.aetheris.yuki.api.enums.CheckType;
+import cn.aetheris.yuki.api.enums.MitigationStrategy;
 import cn.aetheris.yuki.api.events.FlagEvent;
+import cn.aetheris.yuki.api.events.MitigateEvent;
+import cn.aetheris.yuki.api.events.Reaction;
+import cn.aetheris.yuki.api.events.SetbackEvent;
 import cn.aetheris.yuki.check.util.exempts.types.ExemptType;
 import cn.aetheris.yuki.functionality.ConfigManager;
 import cn.aetheris.yuki.player.PlayerData;
@@ -60,6 +63,11 @@ public class Check implements AbstractCheck {
     private String description;
     private boolean experimental;
     private @Setter boolean isEnabled;
+    private boolean utilityClass;
+    private double maxTps;
+    private double maxMspt;
+    private MitigationStrategy mitigationStrategy = MitigationStrategy.CAREFUL;
+    private Reaction lastFlagReaction = Reaction.INTERRUPT_AND_REPORT;
 
     @Getter
     private boolean exempted;
@@ -79,7 +87,11 @@ public class Check implements AbstractCheck {
             this.experimental = checkData.experimental();
             this.description = checkData.description();
             this.checkType = checkData.type();
+            this.utilityClass = checkData.utilityClass();
+            this.mitigationStrategy = checkData.mitigation();
         }
+
+        this.maxTps = getConfig().getDouble("function.limit.max-tps");
 
         reload();
     }
@@ -113,7 +125,7 @@ public class Check implements AbstractCheck {
     }
 
     public boolean shouldModifyPackets() {
-        return isEnabled && !player.bypass && !player.noModifyPacketPermission && !exempted;
+        return player.exemptProcessor.canProcess(this) && !exempted;
     }
 
     public void updateExempted() {
@@ -121,13 +133,12 @@ public class Check implements AbstractCheck {
             return;
         }
 
-        MHDFScheduler.getEntityScheduler().runTask(Yuki.getInstance(), player.bukkitPlayer,
+        Bukkit.getScheduler().runTask(Yuki.getInstance(),
                 () -> {
                     boolean hasPermission = player.bukkitPlayer.hasPermission("yuki.exempt." + configName.toLowerCase());
                     if (hasPermission != exempted) {
                         exempted = hasPermission;
                     }
-                }, () -> {
                 });
     }
 
@@ -150,14 +161,17 @@ public class Check implements AbstractCheck {
 
         FlagEvent event = new FlagEvent(player, this);
         Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
+        lastFlagReaction = event.getReaction();
+        if (lastFlagReaction.shouldSkipVL()) {
             return false;
         }
 
         lastViolations = violations;
         violations++;
 
-        player.punishmentManager.handleViolation(this);
+        if (!lastFlagReaction.shouldSkipPunish()) {
+            player.punishmentManager.handleViolation(this);
+        }
         return true;
     }
 
@@ -195,33 +209,39 @@ public class Check implements AbstractCheck {
 
     public void reload() {
         updateExempted();
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             decay = getConfig().getDoubleElse(configName + ".decay", decay);
             setbackVL = getConfig().getDoubleElse(configName + ".setback-vl", setbackVL);
             description = getConfig().getStringElse(configName + ".description", description);
             if (setbackVL == -1) setbackVL = Double.MAX_VALUE;
             maxVL = getMaxVLFromConfig(configName);
+            maxTps = getConfig().getDoubleElse(configName + ".max-tps",
+                    getConfig().getDouble("function.limit.max-tps"));
+            maxMspt = getConfig().getDoubleElse(configName + ".max-mspt", 0);
+            String mitigationStr = getConfig().getStringElse(configName + ".mitigation", null);
+            if (mitigationStr != null) {
+                try {
+                    mitigationStrategy = MitigationStrategy.valueOf(mitigationStr.toUpperCase());
+                } catch (IllegalArgumentException ignored) {
+                }
+            }
         });
     }
 
     public boolean alert(String verbose) {
         if (!canFlagOrAlert()) return false;
 
+        if (lastFlagReaction.shouldSkipAlert()) return false;
+
         return player.punishmentManager.handleAlert(player, verbose, this);
     }
 
     private boolean canFlagOrAlert() {
-        if (player.bypass) return false;
-
-        if (!shouldModifyPackets()) return false;
-
-        if (experimental && !PluginLoader.INSTANCE.getConfigManager().isExperimentalChecks()) return false;
+        if (!player.exemptProcessor.canFlag(this)) return false;
 
         if (exempted) return false;
 
-        boolean isLowerTPS = player.getTPS() < getConfig().getDouble("function.limit.max-tps");
-
-        if (isLowerTPS) return false;
+        if (experimental && !PluginLoader.INSTANCE.getConfigManager().isExperimentalChecks()) return false;
 
         if (PluginLoader.INSTANCE.getLagManager().isLagging()) {
             String message = PluginLoader.INSTANCE.getLangManager().i18n("function.lag-track.message")
@@ -252,11 +272,26 @@ public class Check implements AbstractCheck {
         if (!PluginLoader.INSTANCE.getConfigManager().isMitigateUseItem()) {
             return;
         }
+        if (!mitigationStrategy.allowsResetUseItem()) return;
+
+        MitigateEvent mitigateEvent = new MitigateEvent(player, this);
+        Bukkit.getPluginManager().callEvent(mitigateEvent);
+        if (mitigateEvent.isCancelled()) {
+            return;
+        }
         NMSUtils.resetItemUsage(bukkitPlayer);
         LogUtils.mitigate("&b" + player.getName() + "&7 has been reset useitem &7(&b" + (getCheckName() != null ? getCheckName() : "Nulled") + "&7)");
     }
 
     public void shuffleHotbar() {
+        if (!mitigationStrategy.allowsShuffle()) return;
+
+        MitigateEvent mitigateEvent = new MitigateEvent(player, this);
+        Bukkit.getPluginManager().callEvent(mitigateEvent);
+        if (mitigateEvent.isCancelled()) {
+            return;
+        }
+
         int randomSlot = ThreadLocalRandom.current().nextInt(9);
 
         WrapperPlayServerHeldItemChange slotPacket = new WrapperPlayServerHeldItemChange(randomSlot);
@@ -280,7 +315,13 @@ public class Check implements AbstractCheck {
     }
 
     public boolean setbackIfAboveSetbackVL() {
+        if (!mitigationStrategy.allowsSetback()) return false;
         if (isAboveSetbackVl()) {
+            SetbackEvent setbackEvent = new SetbackEvent(player, this);
+            Bukkit.getPluginManager().callEvent(setbackEvent);
+            if (setbackEvent.isCancelled()) {
+                return false;
+            }
             return player.getSetbackTeleportUtil().executeViolationSetback();
         }
         return false;
@@ -368,6 +409,41 @@ public class Check implements AbstractCheck {
 
     protected boolean isExempt(final ExemptType... exemptTypes) {
         return player.exemptProcessor.isExempt(exemptTypes);
+    }
+
+    @Override
+    public double getMaxTps() {
+        return maxTps;
+    }
+
+    @Override
+    public void setMaxTps(double maxTps) {
+        this.maxTps = maxTps;
+    }
+
+    @Override
+    public double getMaxMspt() {
+        return maxMspt;
+    }
+
+    @Override
+    public void setMaxMspt(double maxMspt) {
+        this.maxMspt = maxMspt;
+    }
+
+    @Override
+    public boolean isUtilityClass() {
+        return utilityClass;
+    }
+
+    @Override
+    public MitigationStrategy getMitigationStrategy() {
+        return mitigationStrategy;
+    }
+
+    @Override
+    public void setMitigationStrategy(MitigationStrategy strategy) {
+        this.mitigationStrategy = strategy;
     }
 
 

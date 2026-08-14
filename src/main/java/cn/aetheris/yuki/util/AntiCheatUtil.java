@@ -1,12 +1,13 @@
 package cn.aetheris.yuki.util;
 
+import org.bukkit.Bukkit;
+
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.api.AbstractAPI;
 import cn.aetheris.yuki.api.AbstractCheck;
 import cn.aetheris.yuki.api.AlertManager;
 import cn.aetheris.yuki.api.PlayerAPI;
-import cn.aetheris.yuki.api.event.EventBus;
 import cn.aetheris.yuki.check.Check;
 import cn.aetheris.yuki.core.plugin.init.HookInit;
 import cn.aetheris.yuki.core.plugin.interfaces.Init;
@@ -14,7 +15,6 @@ import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.config.file.YamlConfiguration;
 import cn.aetheris.yuki.util.fake.FakeAntiCheatUtils;
 import cn.aetheris.yuki.util.message.ColorUtils;
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import com.github.retrooper.packetevents.netty.channel.ChannelHelper;
 import lombok.Getter;
 import org.bukkit.entity.Player;
@@ -31,12 +31,10 @@ public final class AntiCheatUtil implements AbstractAPI, Init {
 
     private final Map<String, Function<PlayerAPI, String>> variableReplacements;
     private final Map<String, String> staticReplacements;
-    private final EventBus eventBus;
 
     public AntiCheatUtil() {
         variableReplacements = new ConcurrentHashMap<>();
         staticReplacements = new ConcurrentHashMap<>();
-        eventBus = new EventBus();
     }
 
     
@@ -161,7 +159,7 @@ public final class AntiCheatUtil implements AbstractAPI, Init {
 
     @Override
     public void reloadAsync() {
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), this::reload);
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), this::reload);
     }
 
     @Override

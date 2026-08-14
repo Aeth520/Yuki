@@ -1,6 +1,5 @@
 package cn.aetheris.yuki.core.plugin.init;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.functionality.PerformanceMonitor;
@@ -32,7 +31,7 @@ public final class TickInit implements Init, Listener {
             return;
         }
 
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(), () -> {
             long startNanos = System.nanoTime();
             for (PlayerData player : PluginLoader.INSTANCE.getPlayerDataManager().getEntries()) {
                 if (!player.bypass) {
@@ -65,7 +64,7 @@ public final class TickInit implements Init, Listener {
     }
 
     private void tickAllPlayers() {
-        MHDFScheduler.getAsyncScheduler().runTask(Yuki.getInstance(),
+        Bukkit.getScheduler().runTaskAsynchronously(Yuki.getInstance(),
                 () -> {
                     long startNanos = System.nanoTime();
                     for (PlayerData player : PluginLoader.INSTANCE.getPlayerDataManager().getEntries()) {

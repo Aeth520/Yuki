@@ -1,12 +1,12 @@
 package cn.aetheris.yuki.functionality;
 
-import cn.aetheris.mhdfscheduler.runnable.MHDFRunnable;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import lombok.Getter;
+import org.bukkit.scheduler.BukkitRunnable;
 
 @Getter
-public class LagManager extends MHDFRunnable {
+public class LagManager extends BukkitRunnable {
     private long lastTick;
     private long tick;
 

@@ -1,6 +1,7 @@
 package cn.aetheris.yuki.check;
 
 import cn.aetheris.yuki.api.enums.CheckType;
+import cn.aetheris.yuki.api.enums.MitigationStrategy;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -26,4 +27,17 @@ public @interface CheckData {
 
     boolean experimental() default false;
 
+    CheckPipeline pipeline() default CheckPipeline.DEFAULT;
+
+    /**
+     * Marks this check as a utility / infrastructure class rather than a real detection.
+     * Utility classes are excluded from permission registration, GUI listings, and violation tracking.
+     */
+    boolean utilityClass() default false;
+
+    /**
+     * Per-check mitigation strategy. Controls how aggressively this check responds to violations.
+     * @see MitigationStrategy
+     */
+    MitigationStrategy mitigation() default MitigationStrategy.CAREFUL;
 }

@@ -1,6 +1,5 @@
 package cn.aetheris.yuki.core.plugin.hooks;
 
-import cn.aetheris.mhdfscheduler.scheduler.MHDFScheduler;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.core.plugin.init.HookInit;
 import cn.aetheris.yuki.util.message.LogUtils;
@@ -46,7 +45,7 @@ public final class ViaPipelineEnforcer {
         if (!HookInit.getViaPluginHook().isEnabled()) return;
         if (player == null || !player.isOnline()) return;
 
-        MHDFScheduler.getAsyncScheduler().runTaskLater(Yuki.getInstance(), () -> enforce(player), delayTicks);
+        Bukkit.getScheduler().runTaskLaterAsynchronously(Yuki.getInstance(), () -> enforce(player), delayTicks);
     }
 
     private static void enforce0(Channel channel, String playerName, int attempt, boolean silent) {
@@ -72,7 +71,7 @@ public final class ViaPipelineEnforcer {
         }
 
         if (attempt < MAX_RETRIES && !isOrderCorrect(channel)) {
-            MHDFScheduler.getAsyncScheduler().runTaskLater(Yuki.getInstance(), () -> {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(Yuki.getInstance(), () -> {
                 if (channel.isActive()) {
                     enforce0(channel, playerName, attempt + 1, silent);
                 }
