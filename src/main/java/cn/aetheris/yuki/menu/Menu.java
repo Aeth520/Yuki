@@ -3,6 +3,7 @@ package cn.aetheris.yuki.menu;
 import cn.aetheris.yuki.Yuki;
 import cn.aetheris.yuki.PluginLoader;
 import cn.aetheris.yuki.functionality.CheckManager;
+import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.util.message.ColorUtils;
 import fr.mrmicky.fastinv.FastInv;
 import fr.mrmicky.fastinv.ItemBuilder;
@@ -26,11 +27,16 @@ public class Menu extends FastInv {
     }
 
     private ItemStack getCheck(Player player) {
+        int checkCount = 0;
+        PlayerData playerData = PluginLoader.INSTANCE.getPlayerDataManager().getPlayer(player);
+        if (playerData != null) {
+            checkCount = new CheckManager(playerData).allChecks.values().size();
+        }
         return new ItemBuilder(Material.BEACON)
                 .name(ColorUtils.color("&bChecks"))
                 .lore(new String[]{ColorUtils.color("&7&m&l------------------------"),
                         ColorUtils.color("&7Manage checks stats"),
-                        ColorUtils.color("&7Available Checks: " + new CheckManager(PluginLoader.INSTANCE.getPlayerDataManager().getPlayer(player)).allChecks.values().size()),
+                        ColorUtils.color("&7Available Checks: " + checkCount),
                         ColorUtils.color("&7&m&l------------------------")})
                 .build();
     }
