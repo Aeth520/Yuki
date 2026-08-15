@@ -5,21 +5,29 @@ import cn.aetheris.yuki.check.Check;
 import cn.aetheris.yuki.check.CheckData;
 import cn.aetheris.yuki.check.type.RotationCheck;
 import cn.aetheris.yuki.check.util.exempts.types.ExemptType;
+import cn.aetheris.yuki.check.util.processor.rotateprocessor.RotateProcessor;
 import cn.aetheris.yuki.player.PlayerData;
 import cn.aetheris.yuki.math.MathUtil;
-import cn.aetheris.yuki.protocol.nms.vec.Vec2f;
 import cn.aetheris.yuki.util.update.RotationUpdate;
-import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-
+/**
+ * Absolute sensitivity-grid rotation validation (Karhu-style).
+ *
+ * <p>Vanilla mouse rotation deltas are always integer multiples of the
+ * sensitivity quantum: {@code step = ((s * 0.6 + 0.2)^3 * 8) * 0.15} degrees,
+ * because the same fixed camera offset cancels out in deltas. Once the
+ * player's sensitivity has been reverse-engineered by RotateProcessor, every
+ * mouse-driven rotation delta must lie on that grid.</p>
+ *
+ * <p>Unlike AimI (relative GCD between consecutive deltas), this validates
+ * against the <b>absolute</b> grid, catching aimbots whose rotations are
+ * internally consistent but never multiples of any real sensitivity quantum
+ * (e.g. smooth/interpolated aimbots).</p>
+ */
 @CheckData(
         name = "AimW",
-        description = "Self-adaptive detection of mechanical aim rotation",
+        description = "Rotation delta not aligned to the reverse-engineered sensitivity grid",
         configName = "AimW",
         type = CheckType.AIM,
         decay = 0.82,
@@ -27,102 +35,93 @@ import java.util.concurrent.CopyOnWriteArrayList;
 )
 public final class AimW extends Check implements RotationCheck {
 
-    private final List<Vec2f> rawRotations = new CopyOnWriteArrayList<>();
-    private final List<Vec2f> rotations = new CopyOnWriteArrayList<>();
-    private double lastAverageX = 0.0;
-    private double lastAverageY = 0.0;
+    private double buffer;
+    private double lastSensitivityMcp = -1;
 
     public AimW(PlayerData player) {
         super(player);
     }
 
     @Override
-
     public void process(@NotNull RotationUpdate u) {
-        if (!player.hasAttackedSince(1000)) {
-            rawRotations.clear();
-            rotations.clear();
+        final RotateProcessor processor = u.getProcessor();
+
+        // Sensitivity must be reverse-engineered with confidence
+        final double sensitivityMcp = processor.totalSensitivity;
+        if (sensitivityMcp <= 0) {
+            buffer = Math.max(0, buffer - 0.5);
             return;
         }
-        if (player.getTarget() == null || player.getTarget().getType() != EntityTypes.PLAYER) {
-            rawRotations.clear();
-            rotations.clear();
+        // Grid re-learned: reset evidence built against the old grid
+        if (lastSensitivityMcp > 0 && Math.abs(sensitivityMcp - lastSensitivityMcp) > 1e-6) {
+            buffer = 0;
+        }
+        lastSensitivityMcp = sensitivityMcp;
+
+        // Gates identical to the other rotation checks
+        if (updateIsInvalid(u)) {
+            buffer = Math.max(0, buffer - 0.25);
             return;
         }
 
-        if (player.getTarget() != player.getLastTarget()) {
-            rawRotations.clear();
-            rotations.clear();
+        final float deltaPitch = Math.abs(processor.deltaPitch);
+        final float deltaYaw = Math.abs(processor.deltaYaw % 360F);
+
+        // One mouse-count rotation quantum for this sensitivity
+        final double step = MathUtil.getGCDValue(sensitivityMcp);
+        // Below one quantum the grid carries no information
+        final double minDelta = Math.max(step, MathUtil.MINIMUM_DIVISOR);
+        if (deltaPitch < minDelta && deltaYaw < minDelta) {
             return;
         }
 
-        if (Math.abs(u.getTo().getPitch()) >= 89.9F) return;
-        if (!player.isMoving()) return;
-        if (player.getTarget().getPossibleLocationBoxes().distance(player.getBoundingBox()) <= 0.5) return;
-        if (isExempt(ExemptType.TELEPORT, ExemptType.SERVER_SENT_PULLBACK, ExemptType.ELYTRA_FLYING)) return;
+        // Tolerances: float yaw storage + rounding of the strict sample matching
+        final double eps = Math.max(1.0E-3, step * 0.02);
 
-        final float pitchAccel = u.getProcessor().pitchAccel;
-        final float yawAccel = u.getProcessor().yawAccel;
-        rawRotations.add(new Vec2f(pitchAccel, yawAccel));
-        rotations.add(new Vec2f(u.getTo().getPitch(), u.getTo().getYaw()));
+        boolean pitchOff = false;
+        boolean yawOff = false;
+        if (deltaPitch >= minDelta) {
+            pitchOff = !isOnGrid(deltaPitch, step, eps);
+        }
+        if (deltaYaw >= minDelta) {
+            yawOff = !isOnGrid(deltaYaw, step, eps);
+        }
 
-        if (rawRotations.size() > 15 && rotations.size() > 20) {
-            checkRaw(u);
+        if (pitchOff && yawOff) {
+            buffer += 1;
+            if (buffer > 8) {
+                if (flagAndAlert(String.format(
+                        "step= %.5f dYaw= %.4f dPitch= %.4f sens= %.4f",
+                        step, deltaYaw, deltaPitch, sensitivityMcp))) {
+                    player.mitigateDamage();
+                    buffer = 5; // keep some pressure after a flag
+                }
+            }
+        } else {
+            rewardBufferAndVL();
+            buffer = Math.max(0, buffer - 0.75);
         }
     }
 
-    private void checkRaw(RotationUpdate update) {
-        if (update.isCinematic2()) {
-            rawRotations.clear();
-            rotations.clear();
-            return;
-        }
-        List<Float> xList = new ArrayList<>();
-        List<Float> yList = new ArrayList<>();
-        for (Vec2f rot : rotations) {
-            xList.add(rot.getX());
-            yList.add(rot.getY());
-        }
-
-        List<Float> xAccelList = new ArrayList<>();
-        List<Float> yAccelList = new ArrayList<>();
-        for (Vec2f vec : rawRotations) {
-            xAccelList.add(vec.getX());
-            yAccelList.add(vec.getY());
-        }
-
-        final double avgYaw = MathUtil.getAverage(xList);
-        final double avgPitch = MathUtil.getAverage(yList);
-        final double longAvgYaw = update.getProcessor().getAvgYaw();
-        final double longAvgPitch = update.getProcessor().getAvgPitch();
-
-        final int sens = player.calculateSensitivity();
-        final int sensTemp = update.getProcessor().totalSensitivityClient;
-        final double averageX = MathUtil.getAverage(xAccelList);
-        final double averageY = MathUtil.getAverage(yAccelList);
-        final double entropyX = MathUtil.calculateEntropy(xList, 5);
-        final double entropyY = MathUtil.calculateEntropy(yList, 8);
-        final double nEntropyX = MathUtil.calculateNEntropy(xList);
-        final double nEntropyY = MathUtil.calculateNEntropy(yList);
-        final double varianceX = MathUtil.getVariance(xAccelList);
-        final double varianceY = MathUtil.getVariance(yAccelList);
-        final double consistencyX = MathUtil.calculatePatternConsistency(xAccelList);
-        final double consistencyY = MathUtil.calculatePatternConsistency(yAccelList);
-        final double magnitude = Math.sqrt(averageX * averageX + averageY * averageY);
-        final double deltaX = Math.abs(averageX - lastAverageX);
-        final double deltaY = Math.abs(averageY - lastAverageY);
-        if (sens > 50) {
-
-        }
-        lastAverageX = averageX;
-        lastAverageY = averageY;
+    /**
+     * A vanilla mouse delta must satisfy {@code |delta - round(delta / step) * step| < eps}
+     * (near 0 or near step after modulo).
+     */
+    private static boolean isOnGrid(double delta, double step, double eps) {
+        final double remainder = delta % step;
+        return remainder < eps || (step - remainder) < eps;
     }
 
-    private double modifyBuffer(double buffer, double amount) {
-        return Math.max(0, buffer + amount);
-    }
-
-    private double decayBuffer(double buffer, double decay, double min) {
-        return Math.max(min, buffer * decay);
+    private boolean updateIsInvalid(RotationUpdate u) {
+        if (u.isCinematic2()) return true;
+        if (Math.abs(u.getTo().getPitch()) >= 89.9F) return true;
+        if (!player.hasAttackedSince(1000L)) return true;
+        if (!player.isMoving()) return true;
+        return isExempt(
+                ExemptType.TELEPORT,
+                ExemptType.SERVER_SENT_PULLBACK,
+                ExemptType.SERVER_SENT_ROTATE,
+                ExemptType.ELYTRA_FLYING,
+                ExemptType.VEHICLE);
     }
 }

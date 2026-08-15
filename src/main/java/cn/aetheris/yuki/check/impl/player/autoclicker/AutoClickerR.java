@@ -1,135 +1,101 @@
 package cn.aetheris.yuki.check.impl.player.autoclicker;
 
+import cn.aetheris.yuki.api.enums.CheckType;
 import cn.aetheris.yuki.check.Check;
+import cn.aetheris.yuki.check.CheckData;
 import cn.aetheris.yuki.check.type.PacketCheck;
+import cn.aetheris.yuki.check.util.exempts.types.ExemptType;
+import cn.aetheris.yuki.math.stats.ChiSquare;
 import cn.aetheris.yuki.player.PlayerData;
-import org.jetbrains.annotations.NotNull;
+import com.github.retrooper.packetevents.event.PacketReceiveEvent;
+import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 
-import java.util.HashMap;
-import java.util.Map;
+/**
+ * Chi-square click pattern analysis.
+ *
+ * <p>Builds a contingency table of consecutive click-interval pairs:
+ * rows = previous interval bucket, columns = current interval bucket.
+ * Human clicking shows strong autocorrelation (previous interval predicts the
+ * next). Legal clients and autoclickers break this independence structure
+ * differently — a very low chi-square p-value means the observed transition
+ * pattern is statistically implausible for human input.</p>
+ */
+@CheckData(name = "AutoClickerR (ChiSquare)", description = "Click interval transitions are statistically implausible", type = CheckType.AUTOCLICKER, configName = "AutoClickerR", decay = 0.25, experimental = true)
+public final class AutoClickerR extends Check implements PacketCheck {
 
-public class AutoClickerR extends Check implements PacketCheck {
-    public AutoClickerR(@NotNull PlayerData player) {
+    // click interval buckets in ms: <50, 50-80, 80-120, 120-200, >200
+    private static final int BUCKETS = 5;
+    private static final int[] INTERVAL_BOUNDS = {50, 80, 120, 200};
+
+    private final ChiSquare transitions = new ChiSquare(BUCKETS, BUCKETS);
+    private long lastSwing = -1;
+    private int prevBucket = -1;
+    private int sampleCount;
+
+    private int minSamples;
+    private double maxPValue;
+
+    public AutoClickerR(PlayerData player) {
         super(player);
     }
 
-    private static class PatternBuffer {
-        private final double[] values;
-        private final int size;
-        private int index = 0;
-        private boolean filled = false;
-
-        private double sum = 0;
-        private double sumSquares = 0;
-        private double min = Double.MAX_VALUE;
-        private double max = Double.MIN_VALUE;
-        private int count = 0;
-
-        public PatternBuffer(int size) {
-            this.size = size;
-            this.values = new double[size];
+    @Override
+    public void onPacketReceive(PacketReceiveEvent event) {
+        if (event.getPacketType() != PacketType.Play.Client.ANIMATION) {
+            return;
         }
 
-        public void add(double value) {
-            if (filled) {
-                double oldValue = values[index];
-                sum -= oldValue;
-                sumSquares -= oldValue * oldValue;
-            }
-
-            values[index] = value;
-            sum += value;
-            sumSquares += value * value;
-
-            if (value < min) min = value;
-            if (value > max) max = value;
-
-            index = (index + 1) % size;
-            if (!filled && index == 0) filled = true;
-
-            count = filled ? size : index;
+        if (isExempt(ExemptType.LAGGING)) {
+            return;
         }
 
-        public double mean() {
-            return count > 0 ? sum / count : 0;
-        }
+        long now = time();
+        if (lastSwing > 0) {
+            long interval = now - lastSwing;
 
-        public double deviation() {
-            if (count < 2) return 0;
-            double mean = mean();
-            return Math.sqrt((sumSquares / count) - (mean * mean));
-        }
+            if (interval > 0 && interval < 1000) {
+                int bucket = bucketOf(interval);
 
-        public double variationCoefficient() {
-            double mean = mean();
-            return mean > 0 ? deviation() / mean : 0;
-        }
+                if (prevBucket >= 0) {
+                    transitions.increment(prevBucket, bucket);
+                    sampleCount++;
 
-        public double entropy() {
-            if (count < 2) return 0;
-
-            Map<Integer, Integer> frequency = new HashMap<>();
-            for (int i = 0; i < count; i++) {
-                int bin = (int) (values[i] / 10);
-                frequency.put(bin, frequency.getOrDefault(bin, 0) + 1);
-            }
-
-            double entropy = 0;
-            for (int count : frequency.values()) {
-                double probability = (double) count / this.count;
-                entropy -= probability * (Math.log(probability) / Math.log(2));
-            }
-
-            return entropy;
-        }
-
-        public int detectPattern(int minLength, int maxLength) {
-            if (count < maxLength * 2) return 0;
-
-            int maxRepetitions = 0;
-            for (int len = minLength; len <= maxLength; len++) {
-                Map<String, Integer> patternCount = new HashMap<>();
-
-                for (int start = 0; start <= count - len; start++) {
-                    StringBuilder pattern = new StringBuilder();
-                    for (int i = 0; i < len; i++) {
-                        pattern.append((int) (values[(index - count + start + i) % size] / 5));
-                    }
-
-                    String patternStr = pattern.toString();
-                    int newCount = patternCount.getOrDefault(patternStr, 0) + 1;
-                    patternCount.put(patternStr, newCount);
-
-                    if (newCount > maxRepetitions) {
-                        maxRepetitions = newCount;
+                    if (sampleCount >= minSamples && sampleCount % 20 == 0) {
+                        double p = transitions.pValue();
+                        // p-value very low => pattern implausible under independence
+                        if (p > 0 && p < maxPValue) {
+                            if (flagAndAlert("p= " + String.format("%.2E", p)
+                                    + " samples= " + sampleCount
+                                    + " chi2= " + String.format("%.1f", transitions.chi2()))) {
+                                // rebuild table after a flag to avoid re-flagging identical data
+                                transitions.clear();
+                                sampleCount = 0;
+                            }
+                        }
                     }
                 }
+                prevBucket = bucket;
+            } else {
+                // too long gap: reset the transition chain
+                prevBucket = -1;
             }
-
-            return maxRepetitions;
         }
+        lastSwing = now;
+    }
 
-        public int countConsecutiveIdentical(int threshold) {
-            if (count < 2) return 0;
-
-            int maxConsecutive = 0;
-            int currentConsecutive = 0;
-            double lastValue = values[(index - count) % size];
-
-            for (int i = 1; i < count; i++) {
-                double current = values[(index - count + i) % size];
-                if (Math.abs(current - lastValue) < 5) {
-                    currentConsecutive++;
-                    if (currentConsecutive > maxConsecutive) {
-                        maxConsecutive = currentConsecutive;
-                    }
-                } else {
-                    currentConsecutive = 0;
-                }
-                lastValue = current;
+    private static int bucketOf(long intervalMs) {
+        for (int i = 0; i < INTERVAL_BOUNDS.length; i++) {
+            if (intervalMs < INTERVAL_BOUNDS[i]) {
+                return i;
             }
-
-            return maxConsecutive >= threshold ? maxConsecutive : 0;
         }
+        return INTERVAL_BOUNDS.length;
+    }
+
+    @Override
+    public void reload() {
+        super.reload();
+        minSamples = getConfig().getIntElse(getConfigName() + ".min-samples", 100);
+        maxPValue = getConfig().getDoubleElse(getConfigName() + ".max-p-value", 1.0E-4);
     }
 }

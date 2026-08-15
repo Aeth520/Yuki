@@ -69,6 +69,12 @@ public class Check implements AbstractCheck {
     private MitigationStrategy mitigationStrategy = MitigationStrategy.CAREFUL;
     private Reaction lastFlagReaction = Reaction.INTERRUPT_AND_REPORT;
 
+    // --- Intave-style anti-false-positive setback guard ---
+    private static final double SMALL_DEVIATION = 0.25;
+    private static final double HARD_SETBACK_VL = 100;
+    private final cn.aetheris.yuki.check.util.buffer.ViolationBuffer violationBuffer =
+            new cn.aetheris.yuki.check.util.buffer.ViolationBuffer(8, 8000, 3600_000);
+
     @Getter
     private boolean exempted;
 
@@ -156,7 +162,11 @@ public class Check implements AbstractCheck {
     }
 
     public final boolean flag() {
+        final cn.aetheris.yuki.check.CheckStatistics stats = cn.aetheris.yuki.check.CheckStatistics.forCheck(configName);
+        if (stats != null) stats.increaseTotal();
+
         if (!canFlagOrAlert()) {
+            if (stats != null) stats.increaseFails();
             return false;
         }
 
@@ -164,11 +174,14 @@ public class Check implements AbstractCheck {
         Bukkit.getPluginManager().callEvent(event);
         lastFlagReaction = event.getReaction();
         if (lastFlagReaction.shouldSkipVL()) {
+            if (stats != null) stats.increaseFails();
             return false;
         }
 
         lastViolations = violations;
         violations++;
+
+        if (stats != null) stats.increaseViolations();
 
         if (!lastFlagReaction.shouldSkipPunish()) {
             player.punishmentManager.handleViolation(this);
@@ -197,6 +210,8 @@ public class Check implements AbstractCheck {
     }
 
     public final void rewardVL() {
+        final cn.aetheris.yuki.check.CheckStatistics stats = cn.aetheris.yuki.check.CheckStatistics.forCheck(configName);
+        if (stats != null) stats.increasePasses();
         violations = Math.max(0, violations - decay);
     }
 
@@ -327,6 +342,31 @@ public class Check implements AbstractCheck {
             return player.getSetbackTeleportUtil().executeViolationSetback();
         }
         return false;
+    }
+
+    /**
+     * Setback with anti-false-positive burst guard (Intave-style point budget).
+     * Small isolated deviations absorb a buffer point instead of setting back;
+     * sustained cheating exhausts the budget quickly and setbacks resume.
+     */
+    public boolean setbackIfAboveSetbackVLGuarded(double deviation) {
+        if (!mitigationStrategy.allowsSetback()) return false;
+        if (!isAboveSetbackVl()) return false;
+
+        long now = System.currentTimeMillis();
+        violationBuffer.checkReset(now);
+        if (deviation > 0 && deviation < SMALL_DEVIATION && violations < HARD_SETBACK_VL) {
+            if (violationBuffer.trySpendPoint(now, 1)) {
+                return false; // absorbed by buffer
+            }
+        }
+
+        SetbackEvent setbackEvent = new SetbackEvent(player, this);
+        Bukkit.getPluginManager().callEvent(setbackEvent);
+        if (setbackEvent.isCancelled()) {
+            return false;
+        }
+        return player.getSetbackTeleportUtil().executeViolationSetback();
     }
 
     public void shuffleAboveSetbackVL() {

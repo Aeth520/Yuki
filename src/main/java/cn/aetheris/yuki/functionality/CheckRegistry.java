@@ -120,7 +120,7 @@ public final class CheckRegistry {
         AutoClickerE.class, AutoClickerF.class, AutoClickerG.class, AutoClickerH.class,
         AutoClickerI.class, AutoClickerJ.class, AutoClickerK.class, AutoClickerL.class,
         AutoClickerM.class, AutoClickerN.class, AutoClickerO.class, AutoClickerP.class,
-        AutoClickerQ.class,
+        AutoClickerQ.class, AutoClickerR.class,
         // KillAura
         KillAuraA.class, KillAuraB.class, KillAuraC.class, KillAuraD.class,
         KillAuraE.class, KillAuraF.class, KillAuraG.class, KillAuraH.class,
@@ -175,7 +175,7 @@ public final class CheckRegistry {
         AimG.class, AimH.class, AimI.class, AimJ.class, AimK.class,
         AimL.class, AimM.class, AimN.class, AimO.class, AimP.class,
         AimQ.class, AimR.class, AimS.class, AimT.class, AimU.class,
-        AimV.class,
+        AimV.class, AimW.class,
         AnalysisA.class, AnalysisB.class, AnalysisD.class, AnalysisE.class,
         AnalysisF.class, AnalysisC.class, AnalysisH.class,
         BaritoneA.class,

@@ -35,6 +35,7 @@ public class Perf extends AbstractCommand {
     public void execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
         if (args.length > 0 && args[0].equalsIgnoreCase("reset")) {
             PerformanceMonitor.getInstance().reset();
+            cn.aetheris.yuki.check.CheckStatistics.resetAll();
             sender.sendMessage(ColorUtils.color(COLOR_ACCENT + "Yuki " + "&8» " + COLOR_GOOD + "性能统计已重置"));
             return;
         }
@@ -81,6 +82,37 @@ public class Perf extends AbstractCommand {
             }
 
             sender.sendMessage(ColorUtils.color(COLOR_LABEL + "提示: 使用 " + COLOR_TEXT + "/yuki perf reset" + COLOR_LABEL + " 重置统计"));
+
+            // --- Detection outcome statistics (Intave-style) ---
+            List<Map.Entry<String, cn.aetheris.yuki.check.CheckStatistics>> topVl =
+                    cn.aetheris.yuki.check.CheckStatistics.topByViolations(5);
+            if (!topVl.isEmpty()) {
+                sender.sendMessage(ColorUtils.color(COLOR_ACCENT + "--- 检测统计: 违规最多 (Top 5) ---"));
+                for (Map.Entry<String, cn.aetheris.yuki.check.CheckStatistics> entry : topVl) {
+                    cn.aetheris.yuki.check.CheckStatistics s = entry.getValue();
+                    if (s.totalViolations() == 0) break;
+                    sender.sendMessage(ColorUtils.color(
+                            COLOR_TEXT + entry.getKey()
+                                    + COLOR_LABEL + " - 违规 " + COLOR_BAD + s.totalViolations()
+                                    + COLOR_LABEL + " / 触发 " + COLOR_TEXT + s.totalProcessed()
+                                    + COLOR_LABEL + " / 放行 " + COLOR_GOOD + s.totalPassed()));
+                }
+                List<Map.Entry<String, cn.aetheris.yuki.check.CheckStatistics>> topGated =
+                        cn.aetheris.yuki.check.CheckStatistics.topByGated(3);
+                boolean gatedHeaderSent = false;
+                for (Map.Entry<String, cn.aetheris.yuki.check.CheckStatistics> entry : topGated) {
+                    cn.aetheris.yuki.check.CheckStatistics s = entry.getValue();
+                    if (s.totalFails() < 10) break;
+                    if (!gatedHeaderSent) {
+                        sender.sendMessage(ColorUtils.color(COLOR_ACCENT + "--- 被门控拦截最多 (Top 3, 可能配置问题) ---"));
+                        gatedHeaderSent = true;
+                    }
+                    sender.sendMessage(ColorUtils.color(
+                            COLOR_TEXT + entry.getKey()
+                                    + COLOR_LABEL + " - 拦截 " + COLOR_WARN + s.totalFails()
+                                    + COLOR_LABEL + " / 违规 " + COLOR_TEXT + s.totalViolations()));
+                }
+            }
         });
     }
 
