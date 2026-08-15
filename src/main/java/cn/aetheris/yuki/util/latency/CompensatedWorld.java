@@ -289,13 +289,13 @@ public class CompensatedWorld {
                 
                 
                 
-                chunk.set(null, 0, 0, 0, 0);
+                chunk.set(blockVersion, 0, 0, 0, 0);
             }
 
             
             player.pointThreeEstimator.handleChangeBlock(x, y, z, chunk.get(blockVersion, x & 0xF, offsetY & 0xF, z & 0xF));
 
-            chunk.set(null, x & 0xF, offsetY & 0xF, z & 0xF, combinedID);
+            chunk.set(blockVersion, x & 0xF, offsetY & 0xF, z & 0xF, combinedID);
 
             
             player.pointThreeEstimator.handleChangeBlock(x, y, z, WrappedBlockState.getByGlobalId(blockVersion, combinedID));

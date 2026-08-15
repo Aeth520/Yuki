@@ -71,5 +71,7 @@ nb-configuration.xml
 ##############################
 # Local jars not referenced by build.gradle.kts
 folia-*.jar
+# Reference anti-cheat jars/sources for study only (third-party licensed)
+anticheat/
 # AES key file (generated at runtime, must not be committed)
 aes.key

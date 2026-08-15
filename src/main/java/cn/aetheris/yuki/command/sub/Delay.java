@@ -42,29 +42,21 @@ public final class Delay extends AbstractCommand {
     }
 
     private void startStopRunnable(CommandSender sender, String command, int delay) {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(Yuki.getInstance(), new BukkitRunnable() {
+        new BukkitRunnable() {
             private boolean canRun = false;
 
             @Override
             public void run() {
                 if (canRun) {
                     this.cancel();
-
-                    if (sender instanceof Entity entity) {
-                        Bukkit.getScheduler().runTask(
-                                Yuki.getInstance(),
-                                () -> Bukkit.dispatchCommand(sender, command)
-                        );
-                    } else {
-                        Bukkit.getScheduler().runTask(
-                                Yuki.getInstance(),
-                                () -> Bukkit.dispatchCommand(sender, command)
-                        );
-                    }
+                    Bukkit.getScheduler().runTask(
+                            Yuki.getInstance(),
+                            () -> Bukkit.dispatchCommand(sender, command)
+                    );
                     return;
                 }
                 canRun = true;
             }
-        }, 0L, delay * 20L);
+        }.runTaskTimerAsynchronously(Yuki.getInstance(), 0L, delay * 20L);
     }
 }

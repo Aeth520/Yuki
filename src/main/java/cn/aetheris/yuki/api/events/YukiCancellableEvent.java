@@ -22,7 +22,11 @@ public abstract class YukiCancellableEvent extends Event implements Cancellable 
     private Reaction reaction = Reaction.INTERRUPT_AND_REPORT;
 
     protected YukiCancellableEvent() {
-        super(false);
+        super(true);
+    }
+
+    protected YukiCancellableEvent(boolean isAsync) {
+        super(isAsync);
     }
 
     public static HandlerList getHandlerList() {
