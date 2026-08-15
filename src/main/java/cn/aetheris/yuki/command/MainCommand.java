@@ -47,7 +47,6 @@ public final class MainCommand implements TabExecutor {
         registerSubCommand("debug", new Debug());
         registerSubCommand("perf", new Perf());
         registerSubCommand("benchmark", new Perf());
-        registerSubCommand("menu", new Menu());
         registerSubCommand("consoledebug", new ConsoleDebug());
         registerSubCommand("sendalert", new SendAlert());
         registerSubCommand("alerts", new Alerts());
